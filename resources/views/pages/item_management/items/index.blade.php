@@ -59,6 +59,7 @@
                                             <th>Name</th>
                                             <th>Description</th>
                                             <th>UOM</th>
+                                            <th>Status</th>
                                             <th class="text-center">Action</th>
                                            
                                         </tr>
@@ -75,6 +76,13 @@
                                                     <td>{{$item->name}}</td>
                                                     <td>{{$item->description}}</td>
                                                     <td>{{$item->units}}</td>
+                                                    <td class="text-center">
+                                                        @IF($item->activated == 1)
+                                                            <label class="label label-info" >Active</label> 
+                                                        @ELSE
+                                                            <label class="label label-warning" >Inctive</label> 
+                                                        @ENDIF
+                                                    </td>
                                                     <td class="text-center">
                                                         @if (!can('item.edit'))
                                                         <div class="btn-group">
