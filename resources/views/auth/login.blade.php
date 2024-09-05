@@ -18,7 +18,7 @@
 
             </div>
 
-            <h3>Jhondel Sales and Inventory System</h3>
+            <h3>Sales and Inventory System</h3>
 
             @include('layouts.alert2')
 
