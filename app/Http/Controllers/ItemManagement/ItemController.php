@@ -78,6 +78,8 @@ class ItemController extends Controller
 
         $item->unit_cost = $request->unit_cost;
 
+        $item->activated = $request->activated;
+
         $item->created_by = $employee;
 
      
@@ -142,6 +144,8 @@ class ItemController extends Controller
         $item->srp = $request->srp;
 
         $item->unit_cost = $request->unit_cost;
+
+        $item->activated = $request->activated;
 
         $item->created_by = $employee;
 

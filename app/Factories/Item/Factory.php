@@ -105,7 +105,7 @@ class Factory implements SetInterface
         FROM items i 
         INNER JOIN unit_of_measure u
         ON i.unit_id = u.id
-        WHERE i.deleted_at is NULL and i.id =?
+        WHERE i.deleted_at is NULL AND i.id =?
         ORDER BY i.id;",[$id]);
 
         return collect($results);
@@ -128,7 +128,7 @@ class Factory implements SetInterface
                ON e.unit_id = u.id
                INNER JOIN supplier_items s
                ON s.item_id = i.item_id
-               WHERE s.supplier_id = ?;",[$id]);
+               WHERE e.activated = 1 AND s.supplier_id = ?;",[$id]);
 
          return collect($results);
     }

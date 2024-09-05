@@ -24,7 +24,7 @@ class Factory implements SetInterface
             i.`status`
         FROM inventory i
         INNER JOIN items e
-        ON i.item_id = e.id
+        ON i.item_id = e.id AND e.activated = 1
         INNER JOIN unit_of_measure u
         ON u.id = e.unit_id
         INNER JOIN warehouse_location w
@@ -42,7 +42,7 @@ class Factory implements SetInterface
                     FROM items i
                     LEFT JOIN unit_of_measure u
                     ON i.unit_id = u.id
-                    WHERE  i.deleted_at is NULL;');
+                    WHERE  i.deleted_at is NULL AND i.activated=1;');
           return collect($results);
     }
 
@@ -80,7 +80,7 @@ class Factory implements SetInterface
                     ON u.id = i.unit_id
                     INNER JOIN warehouse_location a
                     ON a.id = e.location
-                    WHERE i.id = ?',[$id]);
+                    WHERE i.activated = 1 AND i.id = ?',[$id]);
          return collect($results);
     }
 
@@ -102,7 +102,7 @@ class Factory implements SetInterface
             i.`status`
         FROM inventory i
         INNER JOIN items e
-        ON i.item_id = e.id
+        ON i.item_id = e.id AND e.activated = 1
         INNER JOIN unit_of_measure u
         ON u.id = e.unit_id
         INNER JOIN warehouse_location w
@@ -125,7 +125,7 @@ class Factory implements SetInterface
             i.`status`
         FROM inventory i
         INNER JOIN items e
-        ON i.item_id = e.id
+        ON i.item_id = e.id AND e.activated = 1
         INNER JOIN unit_of_measure u
         ON u.id = e.unit_id
         INNER JOIN warehouse_location w
