@@ -78,7 +78,7 @@
                                                     <td>{{$item->units}}</td>
                                                     <td class="text-center">
                                                         @IF($item->activated == 1)
-                                                            <label class="label label-info" >Active</label> 
+                                                            <label class="label label-success" >Active</label> 
                                                         @ELSE
                                                             <label class="label label-warning" >Inctive</label> 
                                                         @ENDIF
@@ -86,8 +86,18 @@
                                                     <td class="text-center">
                                                         @if (!can('item.edit'))
                                                         <div class="btn-group">
+                                                            <a class="btn-danger btn btn-xs edit-modal" 
+                                                            data-id="{{$item->id}}"
+                                                            data-srp="{{$item->srp}}"
+                                                            data-unit_cost="{{$item->unit_cost}}">
+                                                            <i class="fa fa-money"></i></a>
+                                                        </div>
+
+                                                        <div class="btn-group">
                                                             <a href="{{route('item.edit',$item->id)}}" class="btn-primary btn btn-xs"><i class="fa fa-pencil"></i></a>
                                                         </div>
+                                         
+                           
                                                         @endif
                                                         @if (!can('item.delete'))
                                                         <div class="btn-group">
@@ -116,7 +126,8 @@
             </div>
 
             
-          
+          @include('pages.item_management.items.price')
+
 @endsection
 
 
@@ -162,6 +173,21 @@
                 document.location.href="/item/delete/"+data;
             });
         }
+
+
+        $(document).on('click', '.add-modal', function() {
+            $('.modal-title').text('Add Area');
+            $('#myModal').modal('show');
+        });
+
+        // Edit a post
+        $(document).on('click', '.edit-modal', function() {
+            $('.modal-title').text('Update Cost/Srp');
+            $('#id_edit').val($(this).data('id'));
+            $('#srp_edit').val($(this).data('srp'));
+            $('#unit_cost_edit').val($(this).data('unit_cost'));
+            $('#editModal').modal('show');
+        });
 
            
     

@@ -15,7 +15,10 @@ Route::group(['prefix' => 'item'], function() {
     Route::post('add', 'ItemController@store')->name("item.store");
     Route::get('edit/{id}', 'ItemController@edit')->name("item.edit");    
     Route::post('edit/{id}', 'ItemController@update')->name("item.update"); 
-    Route::get('delete/{id}', 'ItemController@destroy')->name("item.delete");    
+    Route::get('delete/{id}', 'ItemController@destroy')->name("item.delete"); 
+
+    Route::post('update-price', 'ItemController@update_price')->name("item.update_price"); 
+     
 });
 
 

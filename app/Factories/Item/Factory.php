@@ -21,6 +21,7 @@ class Factory implements SetInterface
         u.code as units,
         i.picture,
         i.unit_cost,
+        i.srp,
         i.activated
         FROM items i 
         INNER JOIN unit_of_measure u

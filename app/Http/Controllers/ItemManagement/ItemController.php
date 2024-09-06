@@ -177,4 +177,20 @@ class ItemController extends Controller
             ->with('success','Item has been deleted successfully.');
     }
 
+
+    public function update_price(request $request)
+    {
+        $items = Item::findOrfail($request->id);
+    
+        $items->srp = $request->unit_srp;
+
+        $items->unit_cost = $request->unit_cost;
+
+        $items->save();
+
+        return redirect()->route('item.index')
+
+            ->with('success','Item SRP and Unit Cost has been update successfully.');
+    }
+
 }
