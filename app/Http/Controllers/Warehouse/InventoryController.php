@@ -140,7 +140,7 @@ class InventoryController extends Controller
     
         $pdf = new Fpdf('P');
         $pdf::AddPage('P','A4');
-        $pdf::Image('img/monsa-logo-header.jpg',10, 5, 30.00);
+        $pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
         //$pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
         $pdf::SetFont('Arial','B',12);
         $pdf::SetY(20);     
@@ -245,7 +245,7 @@ class InventoryController extends Controller
    
         $pdf = new Fpdf('P');
         $pdf::AddPage('P','A4');
-        $pdf::Image('img/monsa-logo-header.jpg',10, 5, 30.00);
+        $pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
         //$pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
         $pdf::SetFont('Arial','B',12);
         $pdf::SetY(20);     
