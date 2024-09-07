@@ -9,6 +9,7 @@ use App\Factories\Item\Factory as ItemFactory;
 use App\Item;
 use App\UnitOfMeasure; 
 use App\User as Users;
+use Fpdf;
 
 
 class ItemController extends Controller
