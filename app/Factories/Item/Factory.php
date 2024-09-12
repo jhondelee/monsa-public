@@ -152,5 +152,29 @@ class Factory implements SetInterface
       return collect($results);
       
    }
+
+
+   public function additemSupplier($id)
+   {
+      $results=DB::select("
+               SELECT e.id,
+                     e.name AS item_name,
+                     e.description,
+                     CONCAT('(',i.unit_quantity,') ',u.code) AS units,
+                     i.onhand_quantity,
+                     i.`status`
+               FROM inventory i
+               INNER JOIN items e
+               ON e.id = i.item_id
+               INNER JOIN unit_of_measure u
+               ON e.unit_id = u.id
+               INNER JOIN supplier_items s
+               ON s.item_id = i.item_id
+               WHERE e.activated = 1 AND s.supplier_id = ?;",[$id]);
+
+      return collect($results);
+      
+   }
   
 }
+

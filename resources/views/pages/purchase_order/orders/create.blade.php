@@ -66,42 +66,85 @@
 
 @endsection
 
-
+@section('styles')
+<link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+<link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+@endsection
 
 @section('scripts')
-
+    
 <script src="/js/plugins/toastr/toastr.min.js"></script>
 
 <script type="text/javascript">
 
 
- $(document).ready(function(){
-    
-        $('.dataTables-add-items').DataTable({
-                pageLength: 10,
-                responsive: true,
-            
-                dom: '<"html5buttons"B>lTfgitp',
-                buttons: [
-                    //{ extend: 'copy'},
-                    //{extend: 'csv'},
-                    //{extend: 'excel', title: 'ExampleFile'},
-                    //{extend: 'pdf', title: 'Inventory List'},
+        $('#supplier_id').on('change', function (e) {
 
-                    {extend: 'print',
-                     customize: function (win){
-                            $(win.document.body).addClass('white-bg');
-                            $(win.document.body).css('font-size', '10px');
-                            $(win.document.body).find('table')
-                                    .addClass('compact')
-                                    .css('font-size', 'inherit');
-                    }
-                    }
-                ]
+            var id = this.value;
 
-            });
+            var sup_name = $('#supplier_id :selected').text();
 
-    });
+            //$('.dTable-selected-item-table').DataTable().destroy();
+            //$('.dTable-selected-item-table').empty();
+
+            $.ajax({
+                url:  '{{ url('order/orderToSupplier') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: { _token: "{{ csrf_token() }}",
+                id: id}, 
+                success:function(results){
+
+                    toastr.success(sup_name + 'Its working now','success!')
+
+                    $('.dTable-selected-item-table').DataTable({
+                        destroy: true, 
+                        pageLength: 100,
+                        responsive: true,
+                        retrieve: true,
+                        data: results,
+                        dom: '<"html5buttons"B>lTfgitp',
+                        buttons: [],
+                        columns: [
+                            {data: 'id', title: 'Id'},
+                            {data: 'name', title: 'Name'},
+                            {data: 'description', title: 'Description'},                             
+                            {data: 'onhand_quantity', title: 'On-Hand'}, 
+                            {data: 'units', title: 'Units'},
+                            {data: 'status', title: 'Status',
+                                render: function(data){
+                                    return '@IF('+data+'=="In Stock")\
+                                            <label class="label label-warning" >In Stock</label>\
+                                            @ELSE\
+                                            <label class="label label-info" >Out of Stock</label>@ENDIF';
+                                }
+                            },
+                            {data: null ,title: 'Order Qty', orderable: false,searching: false,
+                                render: function(data){
+                                return '<input type="text" name="quantity[]" class="form-control input-sm text-center quantity" required="true" size="10"  placeholder="0.00"  id ="order_quantity">';
+                                }
+                            },       
+                            {data: null ,title: 'Select', orderable: false,searching: false,
+                                render: function(data){
+                                    return '<div class="checkbox checkbox-success">\
+                                        <input type="checkbox" name="Select"><label for="Select"></label></div>';
+                                }
+                            }
+                        ]
+                    })
+                }
+            })
+
+        });
+
+        $(document).on('click', '.btn-show-item', function() {
+            var id = $('#supplier_id').val();
+            $('.modal-title').text('Add Item');
+            $('#myModal').modal('show'); 
+        });
+
+
+                    
 
     $('#discount').val('0.00');
     $('#total_amount').val('0.00');
@@ -167,12 +210,8 @@
         });
 
 
-       $(document).on('click', '.btn-show-item', function() {
-            var id = $('#supplier_id').val();
-                $('.modal-title').text('Add Item');
-                $('#myModal').modal('show'); 
-        });
 
+        
         
         $("#remove-row").click(function(){
             $("table tbody").find('input[name="remove"]').each(function(){
@@ -265,6 +304,8 @@
                 toastr.warning('No Items to be save!','Invalid!')
             }
          }
+
+
 
 
 </script>

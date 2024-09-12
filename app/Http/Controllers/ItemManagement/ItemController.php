@@ -181,11 +181,18 @@ class ItemController extends Controller
 
     public function update_price(request $request)
     {
+         $unit_cost = $request->unit_cost;
+
+        if ($unit_cost = 0) {
+           $unit_cost = 0.00;
+        }
+        
+
         $items = Item::findOrfail($request->id);
     
         $items->srp = $request->unit_srp;
 
-        $items->unit_cost = $request->unit_cost;
+        $items->unit_cost = $unit_cost;
 
         $items->save();
 

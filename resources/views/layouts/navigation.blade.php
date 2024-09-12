@@ -15,7 +15,7 @@
                             </ul>
                         </div>
                         <div class="logo-element">
-                            <img alt="image" class="img-circle" src="/img/logo_v2.jpg"/>
+                            <img alt="image" class="img-circle" src="/img/temp-logo.jpg"/>
                         </div>
                     </li> 
 

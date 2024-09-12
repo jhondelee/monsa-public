@@ -15,4 +15,7 @@ interface SetInterface {
      public function getsupplierItems($id);
 
      public function showSupplierItems($id);
+
+     public function additemSupplier($id);
+     
 }

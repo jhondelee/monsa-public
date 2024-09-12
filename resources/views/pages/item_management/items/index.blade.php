@@ -88,6 +88,7 @@
                                                         <div class="btn-group">
                                                             <a class="btn-danger btn btn-xs edit-modal" 
                                                             data-id="{{$item->id}}"
+                                                            data-descript="{{$item->description}}"
                                                             data-srp="{{$item->srp}}"
                                                             data-unit_cost="{{$item->unit_cost}}">
                                                             <i class="fa fa-money"></i></a>
@@ -141,7 +142,7 @@
 
         $(document).ready(function(){
               $('.dataTables-items').DataTable({
-                pageLength: 25,
+                pageLength: 10,
                 responsive: true,
                 dom: '<"html5buttons"B>lTfgitp',
                 buttons: [
@@ -184,6 +185,7 @@
         $(document).on('click', '.edit-modal', function() {
             $('.modal-title').text('Update Cost/Srp');
             $('#id_edit').val($(this).data('id'));
+            $('#descript_edit').val($(this).data('descript'));
             $('#srp_edit').val($(this).data('srp'));
             $('#unit_cost_edit').val($(this).data('unit_cost'));
             $('#editModal').modal('show');

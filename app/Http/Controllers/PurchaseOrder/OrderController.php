@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Factories\Item\Factory as ItemFactory;
 use App\Factories\Order\Factory as OrderFactory;
+use Yajra\Datatables\Datatables;
 use App\Item;
 use App\Order;
 use App\OrderItems;
@@ -157,6 +158,28 @@ class OrderController extends Controller
     }
 
 
+    public function additemSupplier(Request $request)
+    {
+        
+        $results = $this->items->additemSupplier($request->id);   
+
+        return response()->json($results);       
+        
+    }
+
+    public function orderToSupplier(Request $request)
+    {
+
+        $results = $this->orders->orderToSupplier($request->id);
+
+        return response()->json($results); 
+
+      
+    }
+
+              //return Datatables::of($this->orders->orderToSupplier($request->id))->make(true);
+              //return Datatables::of(Item::query())->make(true);
+    
     public function edit($id)
     {
 

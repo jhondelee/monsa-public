@@ -13,18 +13,26 @@
                 {!! Form::token(); !!}
                 {!! csrf_field() ; !!} 
                 {!! Form::hidden('id',null, ['class'=>'form-control','id'=>'id_edit']) !!}
-                
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Item: <span class="text-danger">*</span></label>
+                    <div class="col-sm-7"> 
+                        {!! Form::text('description',null, ['class'=>'form-control', 'readonly'=> true,'id'=>'descript_edit']) !!}
+                    </div>
+                </div>  
+
+                @if (!can('item.unit_cost'))
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Unit Cost <span class="text-danger">*</span></label>
                     <div class="col-sm-7">
-                        {!! Form::text('unit_cost',null, ['class'=>'form-control', 'required'=> true,'id'=>'unit_cost_edit']) !!}
+                        {!! Form::text('unit_cost',null, ['class'=>'form-control', 'required'=> false,'id'=>'unit_cost_edit']) !!}
                     </div>
                 </div>
-
+                @endif  
                 <div class="hr-line-dashed"></div>
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">Srp <span class="text-danger">*</span></label>
+                    <label class="col-sm-4 control-label">Srp: <span class="text-danger">*</span></label>
                     <div class="col-sm-7">
                         {!! Form::text('unit_srp',null, ['class'=>'form-control','placeholder'=>'0.00','id'=>'srp_edit']) !!}
                     </div>
