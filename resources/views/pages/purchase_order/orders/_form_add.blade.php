@@ -58,27 +58,17 @@
 
     <div class="form-group">
         <div class="col-sm-3">
-            <a class='btn btn-warning btn-sm btn-show-item' id="btn-show-item"><i class='fa fa-plus'></i> Item</a>
+            <a class='btn btn-primary btn-sm btn-show-item' id="btn-show-item"><i class='fa fa-eye'></i> Show Item</a>
         </div>
     </div>
                                 
     <div class="table-responsive">
                                  
-        <table class="table table-bordered" id="dTable-selected-item-table">                  
+        <table class="table table-bordered dTable-selected-item-table" id="dTable-selected-item-table">                  
 
             <thead> 
-                
-                <tr>
-                    
-                    <th class="text-center">Id</th>
-                    <th class="text-center">Item Name</th>
-                    <th>Description</th>
-                    <th>Unit</th>
-                    <th class="text-center">Quantity</th>
-                    <th class="text-center">Unit Cost</th>
-                    <th class="text-center">Amount</th>
-                    <th class="text-center">Remove <a class='btn btn-danger btn-xs btn-remove pull-right'><i class='fa fa-minus'></i></a>
-                </tr>
+
+
             </thead>
 
             <tbody>

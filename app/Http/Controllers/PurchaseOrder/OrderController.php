@@ -176,9 +176,7 @@ class OrderController extends Controller
 
       
     }
-
-              //return Datatables::of($this->orders->orderToSupplier($request->id))->make(true);
-              //return Datatables::of(Item::query())->make(true);
+    
     
     public function edit($id)
     {

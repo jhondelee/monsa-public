@@ -72,7 +72,6 @@
 @endsection
 
 @section('scripts')
-    
 <script src="/js/plugins/toastr/toastr.min.js"></script>
 
 <script type="text/javascript">
@@ -81,12 +80,18 @@
         $('#supplier_id').on('change', function (e) {
 
             var id = this.value;
+         
+            $('#dTable-selected-item-table').empty()
+            $('#dTable-selected-item-table').datatable().destroy()
 
+           
+        });
+
+        $(document).on('click', '.btn-show-item', function() {
+            var id = $('#supplier_id').val();
             var sup_name = $('#supplier_id :selected').text();
 
-            //$('.dTable-selected-item-table').DataTable().destroy();
-            //$('.dTable-selected-item-table').empty();
-
+            $(function() {
             $.ajax({
                 url:  '{{ url('order/orderToSupplier') }}',
                 type: 'POST',
@@ -95,13 +100,12 @@
                 id: id}, 
                 success:function(results){
 
-                    toastr.success(sup_name + 'Its working now','success!')
+                    toastr.success(sup_name + ' Supplier','Selected!')
 
-                    $('.dTable-selected-item-table').DataTable({
-                        destroy: true, 
+                    $('#dTable-selected-item-table').DataTable({
+                        destroy: true,
                         pageLength: 100,
                         responsive: true,
-                        retrieve: true,
                         data: results,
                         dom: '<"html5buttons"B>lTfgitp',
                         buttons: [],
@@ -121,7 +125,7 @@
                             },
                             {data: null ,title: 'Order Qty', orderable: false,searching: false,
                                 render: function(data){
-                                return '<input type="text" name="quantity[]" class="form-control input-sm text-center quantity" required="true" size="10"  placeholder="0.00"  id ="order_quantity">';
+                                return '<input type="text" name="quantity[]" class="form-control input-sm text-center quantity" required="true" size="12"  placeholder="0.00"  id ="order_quantity">';
                                 }
                             },       
                             {data: null ,title: 'Select', orderable: false,searching: false,
@@ -131,17 +135,14 @@
                                 }
                             }
                         ]
+
                     })
                 }
             })
 
-        });
+        })
 
-        $(document).on('click', '.btn-show-item', function() {
-            var id = $('#supplier_id').val();
-            $('.modal-title').text('Add Item');
-            $('#myModal').modal('show'); 
-        });
+    });
 
 
                     

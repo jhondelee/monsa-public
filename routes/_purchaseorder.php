@@ -24,6 +24,8 @@ Route::group(['prefix' => 'order'], function() {
     Route::post('getitems', 'OrderController@getItems')->name("order.getitems");
     Route::post('getpoitems', 'OrderController@getPOitems')->name("order.getpoitems");
     Route::post('supplieritems', 'OrderController@supplierItems')->name("order.supplieritems");
+    Route::post('additemSupplier', 'OrderController@additemSupplier')->name("order.additemSupplier");
+    Route::post('orderToSupplier', 'OrderController@orderToSupplier')->name("order.orderToSupplier");
 
 });
 
