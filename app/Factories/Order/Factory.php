@@ -51,7 +51,7 @@ class Factory implements SetInterface
                 i.description,
                 (case when ifnull(e.unit_quantity,0) > 0  then CONCAT('(',e.unit_quantity,') ',u.code) ELSE u.code END ) AS  units,
                 IFNULL(e.onhand_quantity,0) as onhand_quantity,
-                (case when e.onhand_quantity != 0 OR NULL then 'In Stock' ELSE 'Out of Stock'  END ) AS  status
+                (case when e.unit_quantity != 0 OR NULL then 'In Stock' ELSE 'Out of Stock'  END ) AS  status
             FROM supplier_items s
             INNER JOIN items i ON s.item_id = i.id
             LEFT  join inventory e ON e.item_id = s.item_id

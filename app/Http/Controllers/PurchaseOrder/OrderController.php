@@ -65,7 +65,7 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-       
+       dd($request->get('item_id'));
         $this->validate($request, [
             'po_date'       => 'required',
             'supplier_id'   => 'required',
@@ -176,7 +176,7 @@ class OrderController extends Controller
 
       
     }
-    
+
     
     public function edit($id)
     {

@@ -110,17 +110,22 @@
                         dom: '<"html5buttons"B>lTfgitp',
                         buttons: [],
                         columns: [
-                            {data: 'id', title: 'Id'},
+                            {data: id ,title: 'Id', 
+                                render: function(data,type,row){
+                                return '<input type="text" name="item_id[]" class="form-control input-sm text-center item_id" size="6"  readonly="true" id ="item_id" value="'+ row.id +'">';
+                                }
+                            },  
                             {data: 'name', title: 'Name'},
-                            {data: 'description', title: 'Description'},                             
+                            {data: 'description', title: 'Description'},                              
                             {data: 'onhand_quantity', title: 'On-Hand'}, 
                             {data: 'units', title: 'Units'},
                             {data: 'status', title: 'Status',
-                                render: function(data){
-                                    return '@IF('+data+'=="In Stock")\
-                                            <label class="label label-warning" >In Stock</label>\
-                                            @ELSE\
-                                            <label class="label label-info" >Out of Stock</label>@ENDIF';
+                                render: function(data, type, row){
+                                    if(row.status=='In Stock'){
+                                        return '<label class="label label-warning" >In Stock</label>  '
+                                    }else{
+                                        return '<label class="label label-danger" >Out of Stock</label>';
+                                    }   
                                 }
                             },
                             {data: null ,title: 'Order Qty', orderable: false,searching: false,
