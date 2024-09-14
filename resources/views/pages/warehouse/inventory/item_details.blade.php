@@ -79,6 +79,12 @@
                                 <label class="col-sm-4 control-label"><h4>{{$showItems->units}}</h4></label>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><h5>Supplier:</h5></label>
+                                <label class="col-sm-4 control-label"><h3>{{$showItems->supplier_name}}</h3></label>
+                            </div>
+                        </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>

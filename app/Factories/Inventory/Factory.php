@@ -56,11 +56,16 @@ class Factory implements SetInterface
                            i.srp,
                            i.description,
                            u.name as units,
-                           i.picture
+                           i.picture,
+                           e.name AS supplier_name
                     FROM items i
                     INNER JOIN unit_of_measure u
                     ON u.id = i.unit_id
-                    WHERE i.id  = ?',[$id]);
+                    INNER JOIN supplier_items s
+                    ON s.item_id = i.id
+                    INNER JOIN suppliers e
+                    ON e.id = s.supplier_id 
+                    WHERE i.id = ?',[$id]);
          return collect($results);
     } 
 
