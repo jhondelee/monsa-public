@@ -23,7 +23,7 @@
 
                 @if (!can('item.unit_cost'))
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">Unit Cost <span class="text-danger">*</span></label>
+                    <label class="col-sm-4 control-label">Unit Cost <span class="text-danger"></span></label>
                     <div class="col-sm-7">
                         {!! Form::text('unit_cost',null, ['class'=>'form-control', 'required'=> false,'id'=>'unit_cost_edit']) !!}
                     </div>
@@ -32,7 +32,7 @@
                 <div class="hr-line-dashed"></div>
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">Srp: <span class="text-danger">*</span></label>
+                    <label class="col-sm-4 control-label">Srp: <span class="text-danger"></span></label>
                     <div class="col-sm-7">
                         {!! Form::text('unit_srp',null, ['class'=>'form-control','placeholder'=>'0.00','id'=>'srp_edit']) !!}
                     </div>

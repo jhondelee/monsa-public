@@ -121,12 +121,13 @@
                 <tr>
                     
                     <th class="text-center">Item No.</th>
-                    <th class="text-center">Item Code</th>
                     <th>Description</th>
                     <th>Unit</th>
-                    <th>Unit Cost</th>
-                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Order Qty</th>
                     <th class="text-center">Rec'd Qty</th>
+                    <th>Unit Cost</th>
+                    <th>Total Amout</th>
+                        
                 </tr>
 
             </thead>
