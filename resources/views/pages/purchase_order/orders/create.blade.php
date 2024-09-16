@@ -109,6 +109,7 @@
                         destroy: true,
                         pageLength: 100,
                         responsive: true,
+                        fixedColumns: true,
                         data: results,
                         dom: '<"html5buttons"B>lTfgitp',
                         buttons: [],
