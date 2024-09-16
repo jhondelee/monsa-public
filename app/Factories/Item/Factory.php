@@ -21,12 +21,12 @@ class Factory implements SetInterface
         (case when ifnull(e.unit_quantity,0) > 0  then CONCAT('(',e.unit_quantity,') ',u.code) ELSE u.code END )as units,
         i.picture,
         i.unit_cost,
-        i.srp,
+        i.srp, 
         i.activated
         FROM items i 
         INNER JOIN unit_of_measure u
         ON i.unit_id = u.id
-        INNER JOIN inventory e 
+        LEFT JOIN inventory e 
         ON i.id = e.item_id
         WHERE i.deleted_at is NULL
         ORDER BY i.id;");

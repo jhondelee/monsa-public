@@ -263,7 +263,6 @@
             success:function(results){
                                                
                 $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='item_id[]' class='form-control input-sm text-center item_id' required=true size='4'  value="+ results.id +" readonly></td>\
-                        <td>"+ results.name +"</td>\
                         <td>"+ results.description +"</td>\
                         <td>"+ results.units +"</td>\
                         <td>\

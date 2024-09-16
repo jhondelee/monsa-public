@@ -70,7 +70,6 @@
                 <tr>
 
                     <th class="text-center">Id</th>
-                    <th class="text-center">Item Name</th>
                     <th>Description</th>
                     <th>Qty/Unit</th>
                     <th class="text-center">Order Qty</th>
