@@ -26,12 +26,10 @@ class ItemController extends Controller
 
      public function index()
     {
-        $items = $this->items->getindex();
+        $items = $this->items->getitemList();
 
         return view('pages.item_management.items.index',compact('items'));
     }
-
-
 
 
     public function create()
@@ -52,8 +50,7 @@ class ItemController extends Controller
         $this->validate($request, [
             'name'          => 'required',
             'description'   => 'required',
-            'unit_id'       => 'required',
-            'unit_quantity' => 'required'
+            'unit_id'       => 'required'
         ]);
 
 

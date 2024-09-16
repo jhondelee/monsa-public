@@ -65,7 +65,7 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-       dd($request->get('item_id'));
+
         $this->validate($request, [
             'po_date'       => 'required',
             'supplier_id'   => 'required',
@@ -97,8 +97,6 @@ class OrderController extends Controller
         $orders_id      = $orders->id;
         $item_id        = $request->get('item_id');
         $item_quantity  = $request->get('quantity');
-        $unit_cost      = $request->get('unit_cost');
-        $total_amount   = $request->get('total_amount');
         
 
         for ( $i=0 ; $i < count($item_id) ; $i++ ){
@@ -113,9 +111,9 @@ class OrderController extends Controller
 
             $order_items->quantity          = $item_quantity[$i];
 
-            $order_items->unit_cost         = $unit_cost[$i];
+            $order_items->unit_cost         = 0.00;
 
-            $order_items->unit_total_cost   = floatval($total_amount[$i]);
+            $order_items->unit_total_cost   = 0.00;
 
             $order_items->save();
 
@@ -360,8 +358,8 @@ class OrderController extends Controller
         
         $pdf = new Fpdf('P');
         $pdf::AddPage('P','A4');
-        $pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
-        //$pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
+        //$pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
+        $pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
         $pdf::SetFont('Arial','B',12);
         $pdf::SetY(20);     
 

@@ -69,11 +69,12 @@
             <thead> 
                 <tr>
 
-                    <th class="text-center">Id</th>
-                    <th class="text-center">Item Name</th>
+                    <th class="text-center">Id</th> 
                     <th>Description</th>
                     <th>Qty/Unit</th>
                     <th class="text-center">Order Qty</th>
+                    <th class="text-center">Unit Cost</th>
+                    <th class="text-center">Total Amount</th>
                     <th class="text-center">Remove <a class='btn btn-danger btn-xs btn-remove pull-right'><i class='fa fa-minus'></i></a>
                 </tr>   
             </thead>
@@ -94,15 +95,15 @@
                                 <div class="col-md-4 form-horizontal">
                                    
                                     <div class="form-group">
-                                        <!--<label class="col-md-6 control-label"> Discount</label>-->
+                                        <label class="col-md-6 control-label"> Discount</label>
                                         <div class="col-md-6">
-                                            {!! Form::hidden('discount',null, array('placeholder' => '0.00','class' => 'form-control text-right','id'=>'discount')) !!}
+                                            {!! Form::text('discount',null, array('placeholder' => '0.00','class' => 'form-control text-right','id'=>'discount')) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <!--<label class="col-md-6 control-label">Total Amount</label>-->
+                                        <label class="col-md-6 control-label">Total Amount</label>
                                         <div class="col-md-6">
-                                            {!! Form::hidden('grand_total',null, array('placeholder' => '0.00','class' => 'form-control text-right grand_total','id'=>'grand_total', 'readonly' => 'true' )) !!}
+                                            {!! Form::text('grand_total',null, array('placeholder' => '0.00','class' => 'form-control text-right grand_total','id'=>'grand_total', 'readonly' => 'true' )) !!}
                                         </div>
                                     </div>
                                 </div> 

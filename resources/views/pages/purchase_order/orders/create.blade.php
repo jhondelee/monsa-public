@@ -81,8 +81,8 @@
 
             var id = this.value;
          
-            $('#dTable-selected-item-table').empty()
-            $('#dTable-selected-item-table').datatable().destroy()
+            $('#dTable-ItemList-table').empty()
+            $('#dTable-ItemList-table').datatable().destroy()
 
            
         });
@@ -90,6 +90,9 @@
         $(document).on('click', '.btn-show-item', function() {
             var id = $('#supplier_id').val();
             var sup_name = $('#supplier_id :selected').text();
+
+            $('.modal-title').text('Add Item');
+            $('#myModal').modal('show'); 
 
             $(function() {
             $.ajax({
@@ -102,7 +105,7 @@
 
                     toastr.success(sup_name + ' Supplier','Selected!')
 
-                    $('#dTable-selected-item-table').DataTable({
+                    $('#dTable-ItemList-table').DataTable({
                         destroy: true,
                         pageLength: 100,
                         responsive: true,
@@ -112,12 +115,10 @@
                         columns: [
                             {data: id ,title: 'Id', 
                                 render: function(data,type,row){
-                                return '<input type="text" name="item_id[]" class="form-control input-sm text-center item_id" size="6"  readonly="true" id ="item_id" value="'+ row.id +'">';
+                                return '<input type="text" name="item_id[]" class="form-control input-sm text-center item_id" size="4"  readonly="true" id ="item_id" value="'+ row.id +'">';
                                 }
                             },  
-                            {data: 'name', title: 'Name'},
-                            {data: 'description', title: 'Description'},                              
-                            {data: 'onhand_quantity', title: 'On-Hand'}, 
+                            {data: 'description', title: 'Description'},                               
                             {data: 'units', title: 'Units'},
                             {data: 'status', title: 'Status',
                                 render: function(data, type, row){
@@ -128,29 +129,19 @@
                                     }   
                                 }
                             },
-                            {data: null ,title: 'Order Qty', orderable: false,searching: false,
-                                render: function(data){
-                                return '<input type="text" name="quantity[]" class="form-control input-sm text-center quantity" required="true" size="12"  placeholder="0.00"  id ="order_quantity">';
-                                }
-                            },       
-                            {data: null ,title: 'Select', orderable: false,searching: false,
-                                render: function(data){
-                                    return '<div class="checkbox checkbox-success">\
-                                        <input type="checkbox" name="Select"><label for="Select"></label></div>';
+                            {data: 'id', title: 'Action',
+                                render: function(data,type,row) {
+                                     return '<a class="btn-primary btn btn-xs btn-add-items" onclick="confirmAddItem('+ row.id +'); return false;"><i class="fa fa-plus"></i></a>';
                                 }
                             }
-                        ]
-
-                    })
+                            ]
+                    });
                 }
-            })
-
-        })
-
+            });
+        });
     });
 
-
-                    
+          
 
     $('#discount').val('0.00');
     $('#total_amount').val('0.00');
@@ -276,12 +267,6 @@
                         <td>"+ results.units +"</td>\
                         <td>\
                         <input type='text' name='quantity[]' class='form-control input-sm text-center quantity' required=true size='4'  placeholder='0.00'  id ='quantity'>\
-                        </td>\
-                         <td>\
-                        <input type='text' name='unit_cost[]' class='form-control input-sm text-center price' required=true size='4'  value="+ results.unit_cost +"  id ='price'>\
-                        </td>\
-                        <td>\
-                        <input type='text' name='total_amount[]' class='form-control input-sm text-right amount' required=true size='4'  placeholder='0.00'  id ='amount' readonly>\
                         </td>\
                         <td style='text-align:center;'>\
                             <div class='checkbox checkbox-success'>\

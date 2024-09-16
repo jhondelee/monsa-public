@@ -137,17 +137,10 @@
                             for( var i = 0 ; i <= results.length ; i++ ) {
 
                                     $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='id[]' class='form-control input-sm text-center id' required=true size='4'  value="+ results[i].id +" readonly></td>\
-                                        <td>"+ results[i].name +"</td>\
                                         <td>"+ results[i].description +"</td>\
                                         <td>"+ results[i].units +"</td>\
                                         <td>\
                                         <input type='text' name='quantity[]' class='form-control input-sm text-center item_quantity' required=true size='4'  placeholder='0.00' value="+ results[i].quantity +" id ='item_quantity'>\
-                                        </td>\
-                                         <td>\
-                                        <input type='text' name='unit_cost[]' class='form-control input-sm text-center item_unit_cost' required=true size='4'  value="+ results[i].unit_cost +"  id ='item_unit_cost'>\
-                                        </td>\
-                                        <td>\
-                                        <input type='text' name='unit_total_cost[]' class='form-control input-sm text-right item_unit_total_cost' id='item_unit_total_cost' value="+ results[i].unit_total_cost +" readonly>\
                                         </td>\
                                         <td style='text-align:center;'>\
                                             <div class='checkbox checkbox-success'>\
