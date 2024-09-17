@@ -112,7 +112,9 @@
                     <th>Unit</th>
                     <th class="text-center">Order Qty</th>
                     <th class="text-center">Rec'd Qty</th>
+                    @if (!can('item.unit_cost'))
                     <th class="text-center">Unit Cost</th>
+                    @endif 
                     <th class="text-center">Total Amout</th>
 
                 </tr>
@@ -135,9 +137,11 @@
                     <td>
                         <input type='text' name='received_qty[]' class='form-control input-sm text-center _received_qty' size='4'  placeholder='0.00'  id ='_received_qty' value ="{{$incoming_item->received_quantity}}">
                     </td>
-                        <td class='text-center'>
+                    @if (!can('item.unit_cost'))
+                    <td class='text-center'>
                          <input type='text' name='item_unit_cost[]' class='form-control input-sm text-right _item_unit_cost' size='4'  value ="{{$incoming_item->unit_cost}}" id ='_item_unit_cost'>
                      </td>
+                    @endif 
                     </td>
                         <td class='text-center'>
                         <input type='text' name='total_amount[]' class='form-control input-sm text-right _total_amount' size='4' readonly='true'  placeholder='0.00' value ="{{$incoming_item->unit_total_cost}}"  id ='_total_amount'>

@@ -49,7 +49,7 @@ class IncomingController extends Controller
 
     public function create()
     {
-        $po_number = Order::where('status','CLOSED')->pluck('po_number','id');
+        $po_number = Order::where('status','POSTED')->pluck('po_number','id');
 
         $received_by = $this->user->getemplist()->pluck('emp_name','id');
 
@@ -291,10 +291,16 @@ class IncomingController extends Controller
 
             }
 
+        $purchseOrder = Order::findOrfail($incomings->order_id);
+
+        $purchseOrder->status = 'CLOSED';
+
+        $purchseOrder->save();
+
         
         return redirect()->route('incoming.index')
 
-            ->with('success','Incoming item has been posted successfully.');
+            ->with('success','Incoming item has been Closed And Updated the Item Unit Cost successfully.');
 
     }
 
@@ -378,17 +384,19 @@ class IncomingController extends Controller
         
         $incoming_items   = $this->incomings->getIncomingItems($id);
         $ctr_item   = 0;
+        $subtotal_amount = 0;
         foreach ($incoming_items as $key => $value) {
 
             $pdf::Ln(5);
             $pdf::SetFont('Arial','',9);
-             $pdf::cell(10,6,$ctr_item = $ctr_item +1 ,0,"","C");
+            $pdf::cell(10,6,$ctr_item = $ctr_item +1 ,0,"","C");
             $pdf::cell(75,6,$value->description,0,"","L");
             $pdf::cell(10,6,$value->units,0,"","C");
             $pdf::cell(25,6,number_format($value->quantity,2),0,"","C");
             $pdf::cell(25,6,number_format($value->received_quantity,2),0,"","C");
             $pdf::cell(15,6,number_format($value->unit_cost,2),0,"","R");
             $pdf::cell(25,6,number_format($value->unit_total_cost,2),0,"","R");
+            $subtotal_amount = $subtotal_amount + $value->unit_total_cost;
         }
 
         $pdf::Ln(5);
@@ -404,7 +412,7 @@ class IncomingController extends Controller
         $pdf::SetFont('Arial','B',9);
         $pdf::cell(160,6,"Subtotal:",0,"","R");
         $pdf::SetFont('Arial','B',9);
-        $pdf::cell(25,6,number_format($incomings->total_amount,2),0,"","R");
+        $pdf::cell(25,6,number_format($subtotal_amount,2),0,"","R");
 
 
         $pdf::Ln(20);

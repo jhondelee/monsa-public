@@ -141,9 +141,11 @@
                                     <input type='text' name='item_quantity[]' class='form-control input-sm text-center item_quantity' size='4'  value ="+ results.po_items[i].quantity + " id ='item_quantity' readonly='true'></td>\
                                     <td>\
                                     <input type='text' name='received_qty[]' class='form-control input-sm text-center received_qty' size='4'   id ='received_qty'></td>\
+                                    @if (!can('item.unit_cost'))\
                                     <td>\
                                     <input type='text' name='item_unit_cost[]' class='form-control input-sm text-right item_unit_cost' size='4'  placeholder='0.00'  id ='item_unit_cost' value ="+ results.po_items[i].unit_cost + ">\
                                     </td>\
+                                    @endif\
                                     <td>\
                                     <input type='text' name='total_amount[]' class='form-control input-sm text-right total_amount' size='4' readonly='true'  placeholder='0.00'  id ='total_amount'>\
                                     </td>\

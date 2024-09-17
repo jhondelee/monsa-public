@@ -110,7 +110,9 @@
                     <th>Unit</th>
                     <th class="text-center">Order Qty</th>
                     <th class="text-center">Rec'd Qty</th>
+                    @if (!can('item.unit_cost'))
                     <th>Unit Cost</th>
+                    @endif
                     <th>Total Amout</th>
 
                 </tr>
