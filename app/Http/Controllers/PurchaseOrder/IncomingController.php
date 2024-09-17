@@ -49,7 +49,7 @@ class IncomingController extends Controller
 
     public function create()
     {
-        $po_number = Order::where('status','POSTED')->pluck('po_number','id');
+        $po_number = Order::where('status','CLOSED')->pluck('po_number','id');
 
         $received_by = $this->user->getemplist()->pluck('emp_name','id');
 
@@ -99,7 +99,7 @@ class IncomingController extends Controller
 
         $incomings->discount        = $request->discount_input;
 
-        $incomings->total_amount    = $request->total_amount_input;
+        $incomings->total_amount    = $request->grand_total_amount;
 
         $incomings->received_by     = $request->received_by;
 
@@ -110,7 +110,8 @@ class IncomingController extends Controller
         $incoming_id            = $incomings->id;
         $item_id                = $request->get('item_id');
         $received_qty           = $request->get('received_qty');
-        $item_unit_cost         = $request->get('unit_cost');
+        $item_unit_cost         = $request->get('item_unit_cost');
+        $item_total_cost        = $request->get('total_amount');
 
 
         for ( $i=0 ; $i < count($item_id) ; $i++ ){
@@ -127,7 +128,7 @@ class IncomingController extends Controller
 
             $incoming_items->unit_cost              = $item_unit_cost[$i];
 
-            $incoming_items->unit_total_cost        = $items->unit_total_cost;
+            $incoming_items->unit_total_cost        = $item_total_cost[$i];
 
             $incoming_items->save();
 
@@ -213,7 +214,7 @@ class IncomingController extends Controller
 
         $incomings->discount        = $request->discount_input;
 
-        $incomings->total_amount    = $request->total_amount_input;
+        $incomings->total_amount    = $request->grand_total_amount;
 
         $incomings->received_by     = $request->received_by;
 
@@ -224,8 +225,8 @@ class IncomingController extends Controller
         $incoming_id            = $incomings->id;
         $item_id                = $request->get('item_id');
         $received_qty           = $request->get('received_qty');
-        $item_unit_cost         = $request->get('unit_cost');
-
+        $item_unit_cost         = $request->get('item_unit_cost');
+        $total_unit_cost        = $request->get('total_amount');
 
         $incomingitems = IncomingItem::where('incoming_id',$id)->get();
 
@@ -239,8 +240,6 @@ class IncomingController extends Controller
                 }
 
             }
-
-
 
         for ( $i=0 ; $i < count($item_id) ; $i++ ){
 
@@ -256,7 +255,7 @@ class IncomingController extends Controller
 
             $incoming_items->unit_cost              = $item_unit_cost[$i];
 
-            $incoming_items->unit_total_cost        = $items->unit_total_cost;
+            $incoming_items->unit_total_cost        = $total_unit_cost[$i];
 
             $incoming_items->save();
 
@@ -284,7 +283,7 @@ class IncomingController extends Controller
 
             for ( $i=0 ; $i < count($itemid) ; $i++ ){
 
-                $items              = Item::findOrfail($itemid[i]);
+                $items              = Item::findOrfail($itemid[$i]);
 
                 $items->unit_cost   = $items->unit_cost;
 
@@ -307,8 +306,8 @@ class IncomingController extends Controller
         
         $pdf = new Fpdf('P');
         $pdf::AddPage('P','A4');
-        $pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
-        //$pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
+        //$pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
+        $pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
         $pdf::SetFont('Arial','B',12);
         $pdf::SetY(20);     
 
@@ -365,30 +364,31 @@ class IncomingController extends Controller
         //Column Name
             $pdf::Ln(15);
             $pdf::SetFont('Arial','B',9);
-            $pdf::cell(25,6,"Item No.",0,"","C");
-            $pdf::cell(75,6,"Item Name",0,"","L");
-
-            $pdf::cell(20,6,"Unit",0,"","C");
-            $pdf::cell(30,6,"Quantity",0,"","C");
-            $pdf::cell(30,6,"Received Qty",0,"","C");
-
+            $pdf::cell(10,6,"No.",0,"","C");
+            $pdf::cell(75,6,"Item Description",0,"","L");
+            $pdf::cell(10,6,"Unit",0,"","C");
+            $pdf::cell(25,6,"Order Qty",0,"","C");
+            $pdf::cell(25,6,"Rec'd Qty",0,"","C");
+            $pdf::cell(15,6,"Unit Cost",0,"","R");
+            $pdf::cell(25,6,"Amount",0,"","R");
 
          $pdf::Ln(1);
         $pdf::SetFont('Arial','',9);
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
         
         $incoming_items   = $this->incomings->getIncomingItems($id);
-        
+        $ctr_item   = 0;
         foreach ($incoming_items as $key => $value) {
 
             $pdf::Ln(5);
             $pdf::SetFont('Arial','',9);
-            $pdf::cell(25,6,$value->code,0,"","C");
-            $pdf::cell(75,6,$value->name,0,"","L");
-
-            $pdf::cell(20,6,$value->units,0,"","C");
-            $pdf::cell(30,6,number_format($value->quantity,2),0,"","C");
-            $pdf::cell(30,6,number_format($value->received_quantity,2),0,"","C");
+             $pdf::cell(10,6,$ctr_item = $ctr_item +1 ,0,"","C");
+            $pdf::cell(75,6,$value->description,0,"","L");
+            $pdf::cell(10,6,$value->units,0,"","C");
+            $pdf::cell(25,6,number_format($value->quantity,2),0,"","C");
+            $pdf::cell(25,6,number_format($value->received_quantity,2),0,"","C");
+            $pdf::cell(15,6,number_format($value->unit_cost,2),0,"","R");
+            $pdf::cell(25,6,number_format($value->unit_total_cost,2),0,"","R");
         }
 
         $pdf::Ln(5);
@@ -400,18 +400,24 @@ class IncomingController extends Controller
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
 
 
-
-        $pdf::Ln(10);
-        $pdf::SetFont('Arial','B',9);
-        $pdf::cell(150,6,"Discount :",0,"","R");
-        $pdf::SetFont('Arial','',9);
-        $pdf::cell(30,6,number_format($orders->discount,2),0,"","R");
-
         $pdf::Ln(5);
         $pdf::SetFont('Arial','B',9);
-        $pdf::cell(150,6,"Total Amount :",0,"","R");
-        $pdf::SetFont('Arial','',9);
-        $pdf::cell(30,6,number_format($orders->grand_total,2),0,"","R");
+        $pdf::cell(160,6,"Subtotal:",0,"","R");
+        $pdf::SetFont('Arial','B',9);
+        $pdf::cell(25,6,number_format($incomings->total_amount,2),0,"","R");
+
+
+        $pdf::Ln(20);
+        $pdf::SetFont('Arial','B',10);
+        $pdf::cell(160,6,"Discount :",0,"","R");
+        $pdf::SetFont('Arial','B',10);
+        $pdf::cell(25,6,number_format($incomings->discount,2),0,"","R");
+
+        $pdf::Ln(5);
+        $pdf::SetFont('Arial','B',10);
+        $pdf::cell(160,6,"Total:",0,"","R");
+        $pdf::SetFont('Arial','B',10);
+        $pdf::cell(25,6,number_format($incomings->total_amount,2),0,"","R");
 
        
 

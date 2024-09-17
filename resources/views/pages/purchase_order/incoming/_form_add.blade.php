@@ -92,21 +92,6 @@
     </div>
 
 
-    <div class="hr-line-dashed"></div>
-
-        <div class="form-group">
-
-        <label class="col-sm-2 control-label">Discount :</label>
-        <div class="col-sm-2">
-            {!! Form::text('discount_input',null, ['class'=>'form-control discount_input' ,'id'=>'discount_input']) !!}
-        </div>
-
-        <label class="col-sm-2 control-label">Total Amount :</label>
-        <div class="col-sm-2">
-            {!! Form::text('total_amount_input',null, ['class'=>'form-control total_amount_input' ,'id'=>'total_amount_input', 'readonly' => 'true']) !!}
-        </div>
-
-    </div>
 
     <div class="hr-line-dashed"></div>
 
@@ -114,7 +99,7 @@
                                 
     <div class="table-responsive">
                                  
-        <table class="table table-bordered" id="dTable-receive-item-table">                  
+        <table class="table table-bordered dTable-receive-item-table" id="dTable-receive-item-table">                  
 
             <thead> 
                 
@@ -127,7 +112,7 @@
                     <th class="text-center">Rec'd Qty</th>
                     <th>Unit Cost</th>
                     <th>Total Amout</th>
-                        
+
                 </tr>
 
             </thead>
@@ -141,7 +126,26 @@
         
         <hr>
     </div>
-    
+                       <div class="row">
+                                <div class="col-md-8 form-horizontal"></div>
+                                
+                                <div class="col-md-4 form-horizontal">
+                                   
+                                    <div class="form-group">
+                                        <label class="col-md-6 control-label"> Amount Discount</label>
+                                        <div class="col-md-6">
+                                            {!! Form::text('discount_input',null, array('placeholder' => '0.00','class' => 'form-control text-right discount_input','id'=>'discount_input')) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-6 control-label">Total Amount</label>
+                                        <div class="col-md-6">
+                                            {!! Form::text('grand_total_amount',null, array('placeholder' => '0.00','class' => 'form-control text-right grand_total_amount','id'=>'grand_total_amount', 'readonly' => 'true' )) !!}
+                                        </div>
+                                    </div>
+                                </div>  
+                                          
+                            </div> 
                                
     <div class="hr-line-dashed"></div>
     <div class="row">

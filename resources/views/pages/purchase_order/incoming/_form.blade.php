@@ -97,28 +97,7 @@
 
     </div>
 
-
     <div class="hr-line-dashed"></div>
-
-        <div class="form-group">
-
-        <label class="col-sm-2 control-label">Discount :</label>
-        <div class="col-sm-3">
-            <div class="col-md-7"><p class="form-control-static h4" id="discount">{{$incomings->discount}}</p></div>
-            <input type="hidden" id="discount_input" name="discount_input" value="{{$incomings->discount}}" />
-        </div>
-
-        <label class="col-sm-2 control-label">Total Amount :</label>
-        <div class="col-sm-3">
-            <div class="col-md-7"><p class="form-control-static h4" id="total_amount">{{number_format($incomings->total_amount,2)}}</p></div>
-            <input type="hidden" id="total_amount_input" name="total_amount_input" value="{{$incomings->total_amount}}"/>
-        </div>
-
-    </div>
-
-    <div class="hr-line-dashed"></div>
-
-
                                 
     <div class="table-responsive">
                                  
@@ -129,12 +108,13 @@
                 <tr>
                     
                     <th class="text-center">Item No.</th>
-                    <th class="text-center">Item Code</th>
                     <th>Description</th>
                     <th>Unit</th>
-                    <th>Unit Cost</th>
-                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Order Qty</th>
                     <th class="text-center">Rec'd Qty</th>
+                    <th class="text-center">Unit Cost</th>
+                    <th class="text-center">Total Amout</th>
+
                 </tr>
 
             </thead>
@@ -146,18 +126,22 @@
                     <td>
                         <input type='input' name='item_id[]' class='form-control input-sm text-center item_id' size='2' value="{{$incoming_item->id}}" readonly>
                     </td>
-                    <td>{{$incoming_item->name}}</td>
                     <td>{{$incoming_item->description}}</td>
                     <td>{{$incoming_item->units}}</td>
-                     <td class='text-center'>
-                         <input type='text' name='unit_cost[]' class='form-control input-sm text-center unit_cost' size='4'  value ="{{$incoming_item->unit_cost}}" id ='unit_cost'>
-                     </td>
+
                     <td class='text-center'>
                          <input type='text' name='item_quantity[]' class='form-control input-sm text-center item_quantity' size='4'  value ="{{$incoming_item->quantity}}" id ='item_quantity' readonly='true'>
                      </td>
                     <td>
-                        <input type='text' name='received_qty[]' class='form-control input-sm text-center received_qty' size='4'  placeholder='0.00'  id ='received_qty' value ="{{$incoming_item->received_quantity}}">
+                        <input type='text' name='received_qty[]' class='form-control input-sm text-center _received_qty' size='4'  placeholder='0.00'  id ='_received_qty' value ="{{$incoming_item->received_quantity}}">
                     </td>
+                        <td class='text-center'>
+                         <input type='text' name='item_unit_cost[]' class='form-control input-sm text-right _item_unit_cost' size='4'  value ="{{$incoming_item->unit_cost}}" id ='_item_unit_cost'>
+                     </td>
+                    </td>
+                        <td class='text-center'>
+                        <input type='text' name='total_amount[]' class='form-control input-sm text-right _total_amount' size='4' readonly='true'  placeholder='0.00' value ="{{$incoming_item->unit_total_cost}}"  id ='_total_amount'>
+                     </td>
                 </tr>         
                 @endforeach
                                                                       
@@ -167,7 +151,25 @@
         
         <hr>
     </div>
-    
+      <div class="row">
+            <div class="col-md-8 form-horizontal"></div>
+                                
+           <div class="col-md-4 form-horizontal">
+                                   
+                <div class="form-group">
+                    <label class="col-md-6 control-label"> Amount Discount</label>
+                        <div class="col-md-6">
+                            {!! Form::text('discount_input',$incomings->discount, array('placeholder' => '0.00','class' => 'form-control text-right _discount_input','id'=>'_discount_input')) !!}
+                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-6 control-label">Total Amount</label>
+                        <div class="col-md-6">
+                            {!! Form::text('grand_total_amount',number_format($incomings->total_amount,2), array('placeholder' => '0.00','class' => 'form-control text-right _grand_total_amount','id'=>'_grand_total_amount', 'readonly' => 'true' )) !!}
+                        </div>
+                </div>
+            </div>  
+    </div> 
                                
     <div class="hr-line-dashed"></div>
     <div class="row">

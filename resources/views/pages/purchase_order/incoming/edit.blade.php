@@ -131,32 +131,12 @@
             });
         });
 
-        $(document).on("keyup", ".recvd_qty", function () {
-            $( "#dTable-receive-item-table tbody > tr" ).each( function() {
-                var $row = $( this );        
-                var _qty = $row.find( ".quantity" ).val();
-                var _recd_qty = $row.find( ".recvd_qty" ).val();
-                var _total_recd = $row.find( ".total_received").val();
-
-                _qty =parseFloat( ('0' + _qty).replace(/[^0-9-\.]/g, ''), 10 );
-                _recd_qty =parseFloat( ('0' + _recd_qty).replace(/[^0-9-\.]/g, ''), 10 );
-                _total_recd =parseFloat( ('0' + _total_recd).replace(/[^0-9-\.]/g, ''), 10 );
-
-                _recd_qty = _recd_qty + _total_recd;
-
-                   /* if( _recd_qty > _qty) {
-                        toastr.options ={ "closeButton": false,"positionClass": "toast-top-center","preventDuplicates": true}
-                        toastr.error('Over Quantity to be received!','Invalid')
-                        $row.find( ".recvd_qty" ).val('');
-                    }*/
-            });
-            
-        });
-
-          $('#dTable-receive-item-table').on('keyup','.item_quantity',function(e){
+       
+        // compute total by input in received quanity
+        $('#dTable-receive-item-table').on('keyup','._received_qty',function(e){
         //compute price
-        var _price = parseFloat($(this).closest( 'tr ').find( '#unit_cost' ).val());
-        var _quantity = parseFloat($(this).closest( 'tr' ).find( '#item_quantity' ).val());
+        var _price = parseFloat($(this).closest( 'tr ').find( '#_item_unit_cost' ).val());
+        var _quantity = parseFloat($(this).closest( 'tr' ).find( '#_received_qty' ).val());
         var _sub_amount = 0.00;
 
            if (isNaN(_price)){
@@ -166,31 +146,100 @@
             }
 
             _sub_amount = _sub_amount.toFixed(2);
-            $(this).closest('tr').find('#total_amount_input').val( _sub_amount );
+            $(this).closest('tr').find('#_total_amount').val( _sub_amount );
 
                 // sum of price
-                var _total_amount = 0.00;
+                var i_total_amount = 0.00;
                 $( "#dTable-receive-item-table tbody > tr" ).each( function() {
                         var $row = $( this );        
-                        var _subtotal = $row.find( ".total_amount_input" ).val();
+                        var _subtotal = $row.find( "._total_amount" ).val();
     
-                        total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+                        i_total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
                        
                 });
 
-                 total_amount = total_amount.toFixed(2);
-                $('input[name="grand_total"]').val(  total_amount  );
+                 i_total_amount = i_total_amount.toFixed(2);
+                $('input[name="grand_total_amount"]').val(  i_total_amount  );
+ 
+        }); 
+
+        // compute total by input in unitcost
+        $('#dTable-receive-item-table').on('keyup','._item_unit_cost',function(e){
+        //compute price
+        var _price = parseFloat($(this).closest( 'tr ').find( '#_item_unit_cost' ).val());
+        var _quantity = parseFloat($(this).closest( 'tr' ).find( '#_received_qty' ).val());
+        var _sub_amount = 0.00;
+
+           if (isNaN(_price)){
+                var _sub_amount =0.00;
+            }else{
+                var _sub_amount = ( _price * _quantity );
+            }
+
+            _sub_amount = _sub_amount.toFixed(2);
+            $(this).closest('tr').find('#_total_amount').val( _sub_amount );
+
+                // sum of price
+                var i_total_amount = 0.00;
+                $( "#dTable-receive-item-table tbody > tr" ).each( function() {
+                        var $row = $( this );        
+                        var _subtotal = $row.find( "._total_amount" ).val();
+    
+                        i_total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+                       
+                });
+
+                 i_total_amount = i_total_amount.toFixed(2);
+                $('input[name="grand_total_amount"]').val(  i_total_amount  );
   
         }); 
 
         // allow only numeric with decimal
-        $(".recvd_qty").on("keypress keyup blur",function (event) {
+        $("._received_qty").on("keypress keyup blur",function (event) {
             //this.value = this.value.replace(/[^0-9\.]/g,'');
          $(this).val($(this).val().replace(/[^0-9\.]/g,''));
                 if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
                     event.preventDefault();
                 }
         });
+
+        
+         $(document).on("keyup", "._discount_input", function () {
+
+                        if (var_discount == 0 || var_discount == null){
+
+                            var i_total_amount = 0;
+
+                            $( "#dTable-receive-item-table tbody > tr" ).each( function() {
+                                    var $row = $( this );        
+                                    var _subtotal = $row.find( "._total_amount" ).val();
+                
+                                    i_total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+                                   
+                            });
+
+                             i_total_amount = i_total_amount.toFixed(2);
+                            $('input[name="grand_total_amount"]').val(  i_total_amount  );
+
+                        }   
+      
+                var var_discount = $( "._discount_input" ).val();
+                var var_gtotal = $( "._grand_total_amount" ).val();
+
+                //var_discount =parseFloat( ('0' + var_discount).replace(/[^0-9-\.]/g, ''), 10 );
+                //var_gtotal =parseFloat( ('0' + var_gtotal).replace(/[^0-9-\.]/g, ''), 10 );
+
+                var var_Gtotal_amount = 0.00;
+           
+                    var_Gtotal_amount = var_gtotal - var_discount;
+
+                    var_Gtotal_amount = var_Gtotal_amount.toFixed(2);
+                    
+                    $('input[name="grand_total_amount"]').val(  var_Gtotal_amount  );
+
+
+              
+            });
 
 
         function confirmPost(data,model) {   

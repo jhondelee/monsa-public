@@ -39,6 +39,7 @@ class Factory implements SetInterface
                 e.unit_cost,
                 s.quantity,
                 i.received_quantity,
+                i.unit_total_cost,
                 n.status
             FROM incomings n
             INNER JOIN incoming_items i
