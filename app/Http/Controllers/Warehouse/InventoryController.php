@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Factories\Inventory\Factory as InventoryFactory;
 use App\Factories\Item\Factory as ItemFactory;
 use App\Factories\Incoming\Factory as IncomingFactory;
+use App\Factories\StockTransfer\Factory as StockTransferFactory;
 use App\User as Users;
 use App\Item;
 use App\Incoming;
@@ -24,19 +25,21 @@ class InventoryController extends Controller
             Users $user,
             ItemFactory $items,
             InventoryFactory $inventory,
-            IncomingFactory $incomings
+            IncomingFactory $incomings,
+            StockTransferFactory $stocktransfer
         )
     {
         $this->user = $user;
         $this->inventory = $inventory;
         $this->items = $items;
         $this->incomings = $incomings;
+        $this->stocktransfer =  $stocktransfer;
         $this->middleware('auth');  
     }
 
     public function index()
     {
-        $transferLists = InventoryMovement::all();
+        $transferLists = $this->stocktransfer->getTransferList();
        
         $inventories = $this->inventory->getindex();
 

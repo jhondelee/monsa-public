@@ -37,23 +37,48 @@ class Factory implements SetInterface
 
     public function AddTransferItem($source)
     {
-            $results = DB::SELECT ('
-                     SELECT  w.id as inventory_id,
+            $results = DB::SELECT ("
+                   SELECT  w.id as inventory_id,
                            i.id AS item_id,
                            i.code AS item_code,
                            i.name,
-                           w.onhand_quantity,
-                           w.location,
+                           u.code as units,
+                           w.unit_quantity as onhand_quantity,
+                           o.name AS location,
                            w.received_date
                     FROM inventory w
                     INNER JOIN items i
                     ON i.id = w.item_id
                     INNER JOIN unit_of_measure u
                     ON u.id = i.unit_id
+                    INNER JOIN warehouse_location o
+                    ON o.id = w.location
                     WHERE w.location = ? AND w.unit_quantity > 0
-                    ORDER BY w.received_date DESC;',[$source]);
+                    ORDER BY w.received_date DESC;",[$source]);
 
          return collect($results);
     }
+
+    
+    public function getTransferList()
+    {
+
+     $results = DB::select("
+        SELECT i.id,
+            i.reference_no,
+            a.name AS w_sourse,
+            b.name AS w_destination,
+            i.created_by,
+            i.transfer_date,
+            i.status
+        FROM inventory_movement i
+        INNER JOIN warehouse_location a
+        ON a.id = i.source
+        INNER JOIN warehouse_location b
+        ON b.id = i.destination;");
+
+        return collect($results);
+    } 
+
   
 }
