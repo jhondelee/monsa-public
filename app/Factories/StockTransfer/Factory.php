@@ -80,5 +80,23 @@ class Factory implements SetInterface
         return collect($results);
     } 
 
+    public function getforTransferitems($movement_id)
+    {
+        $results = DB::select("
+            SELECT 
+                m.inventory_id as item_id,
+                w.name AS to_location,
+                i.description,
+                u.code AS units,
+                m.quantity
+        FROM inventory_movement_items m
+        INNER JOIN items i ON i.id = m.item_id
+        INNER JOIN warehouse_location w ON w.id = m.to_location 
+        INNER JOIN unit_of_measure u ON u.id = i.unit_id 
+        WHERE m.inventory_movement_id  = ?;",[$movement_id]);
+
+        return collect($results);
+    }
+
   
 }

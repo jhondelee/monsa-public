@@ -119,6 +119,7 @@
                             destroy: true,
                             pageLength: 10,
                             responsive: true,
+                            fixedColumns: true,
                             data: results,
                             dom: '<"html5buttons"B>lTfgitp',
                             buttons: [],
@@ -191,9 +192,9 @@
                 });
 
                 $('#create_transfer_order tbody').append("<tr>\
-                    <td>"+ item_id +"<input type='hidden'  name='item_id[]' id='item_id' value="+ item_id +" readonly></td><td>"+ destination +"</td><td>"+ item_name +"</td><td>"+ units +"</td>\
-                    <td><input type='text'  name='qty_value[]' class='text-center' size='8' value="+ qty_value.toFixed(2) +" readonly></td>\
-                    <td><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td></tr>");
+                    <td>"+ item_id +"<input type='hidden'  name='item_id[]' id='item_id' value="+ item_id +" readonly></td><td>"+ destination +"</td><td>"+ item_name +"</td><td class='text-center'>"+ units +"</td>\
+                    <td class='text-center'><input type='text'  name='qty_value[]' class='text-center' size='8' value="+ qty_value.toFixed(2) +" readonly></td>\
+                    <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td></tr>");
                     toastr.warning(item_name + ' Added ' + qty_value,'Warning');
                     var qty_value = $(this).closest('tr').find('#qty_value').val('0');
 

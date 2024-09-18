@@ -56,8 +56,8 @@
                             <th>ID</th>
                             <th>Destination</th>
                             <th>Item Name</th>
-                            <th>Units</th>
-                            <th>Req Qty</th>
+                            <th class="text-center">Units</th>
+                            <th class="text-center">Req Qty</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>

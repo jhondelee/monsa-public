@@ -46,7 +46,9 @@ Route::group(['prefix' => 'transfer'], function() {
     Route::post('edit/{id}', 'StockTransferController@update')->name("transfer.update"); 
     Route::get('delete/{id}', 'StockTransferController@destroy')->name("transfer.delete");  
 
-    Route::post('source', 'StockTransferController@sourcedataTable')->name("transfer.source");   
+    Route::post('source', 'StockTransferController@sourcedataTable')->name("transfer.source");
+    Route::post('print', 'StockTransferController@print')->name("transfer.print"); 
+    Route::get('post/{id}', 'StockTransferController@posting')->name("transfer.post");   
 });
 
 
