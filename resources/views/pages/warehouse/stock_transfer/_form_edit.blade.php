@@ -91,7 +91,7 @@
         <p> 
             
 
-                <a href="{{route('inventory.index')}}" class="btn btn-primary btn-sm">
+                <a href="{{route('inventory.index')}}" class="btn btn-primary">
                     <i class="fa fa-reply">&nbsp;</i>Back
                 </a> 
 
