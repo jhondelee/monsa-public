@@ -90,11 +90,11 @@
     <div class="ibox-tools pull-right">
         <p> 
             
-            <div class="ibox-tools"> 
+
                 <a href="{{route('inventory.index')}}" class="btn btn-primary btn-sm">
                     <i class="fa fa-reply">&nbsp;</i>Back
                 </a> 
-            </div>
+
 
             @if ($inventorymovements->status == 'CREATED')
 
