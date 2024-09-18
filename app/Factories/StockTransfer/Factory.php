@@ -89,7 +89,7 @@ class Factory implements SetInterface
                 i.description,
                 u.code AS units,
                 m.quantity,
-                w.name AS from_location
+                o.name AS from_location
         FROM inventory_movement_items m
         INNER JOIN items i ON i.id = m.item_id
         INNER JOIN warehouse_location w ON w.id = m.to_location

@@ -317,7 +317,7 @@ class StockTransferController extends Controller
 
 
 
-     public function print(Request $request) 
+     public function print($id) 
     {
  
         $inv_movement = InventoryMovement::findorfail($id);
@@ -341,42 +341,51 @@ class StockTransferController extends Controller
         $pdf::SetXY($pdf::getX(), $pdf::getY());
         $pdf::cell(185,1,"Stock Transfer Report",0,"","C");
 
+        $pdf::Ln(6);
+        $pdf::SetFont('Arial','B',9);
+        $pdf::cell(160,6,"Reference No.:",0,"","R");
+        $pdf::SetFont('Arial','',9);
+        $today_date = Carbon::parse();
+        $pdf::cell(25,6,$inv_movement->reference_no,0,"","R");
+
         $pdf::Ln(4);
         $pdf::SetFont('Arial','B',9);
-        $pdf::cell(86,6,"As of",0,"","R");
+        $pdf::cell(160,6,"Transfer Date:",0,"","R");
         $pdf::SetFont('Arial','',9);
         $today_date = Carbon::parse($inv_movement->transfer_date);
-        $pdf::cell(25,6,': '.$today_date->format('M d, Y'),0,"","L");
+        $pdf::cell(25,6,''.$today_date->format('M d, Y'),0,"","R");
     
         //Column Name
-            $pdf::Ln(15);
+            $pdf::Ln(10);
             $pdf::SetFont('Arial','B',9);
             $pdf::cell(25,6,"No.",0,"","C");
+            $pdf::cell(25,6,"Source",0,"","C");
             $pdf::cell(25,6,"Destination",0,"","L");
             $pdf::cell(55,6,"Item Name",0,"","L");
-
             $pdf::cell(20,6,"Unit",0,"","C");
             $pdf::cell(30,6,"Request Qty",0,"","C");
-            $pdf::cell(33,6,"Source",0,"","C"); 
+             
 
 
          $pdf::Ln(1);
         $pdf::SetFont('Arial','',9);
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
         
-        $inventories = $this->inventory->getindex();
+        $transItems = $this->stocktransfer->getforTransferitems($id);
+        
+        $ctr_item = 0;
 
-        foreach ($inventories as $key => $value) {
+        foreach ($transItems as $key => $value) {
 
             $pdf::Ln(5);
             $pdf::SetFont('Arial','',9);
-            $pdf::cell(25,6,$value->item_id,0,"","C");
-            $pdf::cell(55,6,$value->name,0,"","L");
-
+            $pdf::cell(25,6,$ctr_item = $ctr_item + 1,0,"","C");
+            $pdf::cell(25,6,$value->from_location,0,"","L");
+            $pdf::cell(25,6,$value->to_location,0,"","L");
+            $pdf::cell(55,6,$value->description,0,"","L");
             $pdf::cell(20,6,$value->units,0,"","C");
-            $pdf::cell(30,6,number_format($value->onhand_quantity,2),0,"","C");
-             $pdf::cell(33,6,$value->location,0,"","C");
-            $pdf::cell(30,6,($value->status),0,"","C");
+            $pdf::cell(30,6,number_format($value->quantity,2),0,"","C");
+
         }
 
         $pdf::Ln(5);
@@ -387,7 +396,7 @@ class StockTransferController extends Controller
         $pdf::SetFont('Arial','',9);
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
 
-        $count = $this->inventory->getindex()->count();
+        $count = $this->stocktransfer->getforTransferitems($id)->count();
 
         $pdf::Ln(4);
         $pdf::SetFont('Arial','B',9);
@@ -396,21 +405,26 @@ class StockTransferController extends Controller
         $pdf::cell(25,6,$count,0,"","L");
 
         $prepared_by = $this->user->getCreatedbyAttribute(auth()->user()->id);
-       
-        $pdf::Ln(25);
-        $pdf::SetFont('Arial','',9);
-        $pdf::cell(35,6,"Prepared by",0,"","C");
-        $pdf::cell(60,6,"",0,"","C");
-
-       $pdf::Ln(10);
+        
+        $pdf::Ln(8);
         $pdf::SetFont('Arial','B',9);
-        $pdf::cell(60,6,"      ".$prepared_by."      ",0,"","C");
+        $pdf::cell(35,6,"Notes: ",0,"","C");
+        $pdf::SetFont('Arial','',9);
+        $pdf::cell(23,6,$inv_movement->notes,0,"","L");
+
+        $pdf::SetFont('Arial','',9);
+        $pdf::cell(155,6,"Prepared by:  ",0,"","C");
+        $pdf::cell(25,6,"",0,"","C");
+
+        $pdf::Ln(5);
+        $pdf::SetFont('Arial','B',9);
+        $pdf::cell(300  ,6,"      ".$prepared_by."      ",0,"","C");
         $pdf::cell(60,6,"      ".""."      ",0,"","C");
 
 
         $pdf::ln(0);
         $pdf::SetFont('Arial','',9);
-        $pdf::cell(60,6,"_________________________",0,"","C");
+        $pdf::cell(300,6,"_________________________",0,"","C");
         $pdf::cell(60,6,"",0,"","C");
 
 
