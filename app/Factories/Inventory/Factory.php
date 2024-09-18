@@ -140,5 +140,11 @@ class Factory implements SetInterface
 
         return collect($results);
     }
+
+
+     public function InventoryStatusUpdate($inventory_id)
+     {
+        
+     }
   
 }

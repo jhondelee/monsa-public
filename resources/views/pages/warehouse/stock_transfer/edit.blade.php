@@ -40,15 +40,15 @@
                         <div class="ibox-title">
 
                             <h5>Edit Stock Transfer</h5>
-                                <div class="ibox-tools"> 
-                                    <a href="{{route('inventory.index')}}" class="btn btn-primary btn-sm">
-                                        <i class="fa fa-reply">&nbsp;</i>Back
-                                    </a> 
+
+                               <div class="ibox-tools"> 
+                                   <a href="{{route('transfer.print',$inventorymovements->id)}}" class="btn btn-primary btn-print"><i class="fa fa-print">&nbsp;</i>Print</a>&nbsp;
                                 </div>
+                                                            
                         </div>
 
                         <div class="ibox-content">
-                            
+                                        
                             <div class="form-horizontal m-t-md">
                                 {!! Form::model($inventorymovements, ['route'=>['transfer.update', $inventorymovements->id], 'class'=>'form-horizontal']) !!}
 
@@ -88,7 +88,7 @@
          $('#confirmPost').modal({ backdrop: 'static', keyboard: false })
             .on('click', '#post-btn', function(){
                 $(this).attr("disabled","disabled");
-                document.location.href="/stock-transfer/post/"+data;
+                document.location.href="/transfer/post/"+data;
             });
         }
 

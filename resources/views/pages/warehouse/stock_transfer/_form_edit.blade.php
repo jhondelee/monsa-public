@@ -5,8 +5,9 @@
 
 
 <div class="row">
+
     <div class="col-sm-3">
-        <input type='hidden'  name='transfer_order' id='transfer_order' value="{{$inventorymovements->transfer_order}}">       <div class="form-group"><label>Reference No. <span class="text-danger">*</span></label> 
+        <div class="form-group"><label>Reference No. <span class="text-danger">*</span></label> 
          {!! Form::text('reference_no',$inventorymovements->reference_no, ['class'=>'form-control reference_no', 'required'=>true ,'id'=>'reference_no']) !!}
         </div>       
         <div class="form-group"><label>Source Location <span class="text-danger">*</span></label> 
@@ -44,7 +45,11 @@
 
                             
         <div class="col-sm-9">
-        	<button type="button" class="btn btn-rounded btn-xs btn-warning" id="add-item-modal"><i class="fa fa-plus">&nbsp;</i>Add Items</button>
+            @if ($inventorymovements->status == 'CREATED')
+            <button type="button" class="btn btn-w-m btn-xs btn-warning" id="add-item-modal"><i class="fa fa-plus">&nbsp;</i>Add Items</button>
+            @endif
+        	
+
             <div class="table-responsive">
             	<table class="table table-bordered" id="create_transfer_order" >
                     <thead > 
@@ -84,19 +89,18 @@
                             
     <div class="ibox-tools pull-right">
         <p> 
+            
+            <div class="ibox-tools"> 
+                <a href="{{route('inventory.index')}}" class="btn btn-primary btn-sm">
+                    <i class="fa fa-reply">&nbsp;</i>Back
+                </a> 
+            </div>
 
-
-
-            @if ($inventorymovements->status == 'POSTED')
-
-
-            @endif
             @if ($inventorymovements->status == 'CREATED')
+
                 @if (!can('transfer.post'))
                     <button type="button" class="btn btn-success" onclick="confirmPost('{{$inventorymovements->id}}'); return false;"><i class="fa fa-exclamation-circle">&nbsp;</i>Post&nbsp;</button>
                 @endif
-
-                <a href="{{route('transfer.print',$inventorymovements->id)}}" class="btn btn-primary btn-print"><i class="fa fa-print">&nbsp;</i>Print</a>&nbsp;
 
                 {!! Form::submit('Save Changes', ['class' => 'btn btn-primary']) !!}  
             @endif

@@ -247,7 +247,71 @@ class StockTransferController extends Controller
     public function posting($id)
     {
 
+        $Movementitems = InventoryMovementItems::where('inventory_movement_id',$id)->get();
 
+            if(count($Movementitems) > 0)
+            {
+                foreach ($Movementitems as $key => $Movementitem) 
+                {
+                    $ItemMoves = InventoryMovementItems::findOrfail($Movementitem->id);
+
+                    $itemsMngt = Item::findorfail($ItemMoves->item_id);
+
+                        $itemUnitQty = ($itemsMngt->unit_quantity) * ($ItemMoves->quantity);
+
+                        // Deduct to Inventory
+                        $getItemInven = Inventory::findorfail($ItemMoves->inventory_id);
+
+                        $getItemInven->unit_quantity    = $getItemInven->unit_quantity - $ItemMoves->quantity;
+
+                        $getItemInven->onhand_quantity  = $getItemInven->onhand_quantity - $itemUnitQty;
+
+                        $getItemInven->status           = 'In Stock';
+
+                        $getItemInven->save();
+
+                        // Add to other Warehouse
+                        $addInvenItem = New Inventory;
+
+                        $addInvenItem->item_id            = $ItemMoves->item_id;
+
+                        $addInvenItem->unit_quantity      = $ItemMoves->quantity;
+
+                        $addInvenItem->onhand_quantity    = $itemUnitQty;
+
+                        $addInvenItem->unit_cost          = $getItemInven->unit_cost;
+
+                        $addInvenItem->expiration_date    = $getItemInven->expiration_date;
+
+                        $addInvenItem->received_date      = $getItemInven->received_date;
+
+                        $addInvenItem->location           = $ItemMoves->to_location;
+
+                        $addInvenItem->consumable         = 0;
+
+                        $addInvenItem->created_by         = $getItemInven->created_by;
+
+                        $addInvenItem->save();
+
+                    $ItemMoves->posted = 1;
+
+                    $ItemMoves->save();
+
+                }
+
+            }
+
+        // Posting of record
+        $inv_movement = InventoryMovement::findorfail($id);
+
+        $inv_movement->status ='POSTED';
+
+        $inv_movement->save();
+
+
+        return redirect()->route('inventory.index')
+
+            ->with('success','Inventory Movement has been successfully posted and transferred!');
 
     }
 

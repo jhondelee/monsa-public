@@ -161,7 +161,7 @@
          $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
             .on('click', '#delete-btn', function(){
                 $(this).attr("disabled","disabled");
-                document.location.href="/stock-transfer/delete/"+data;
+                document.location.href="/transfer/delete/"+data;
             });
         }
 
