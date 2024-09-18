@@ -88,10 +88,12 @@ class Factory implements SetInterface
                 w.name AS to_location,
                 i.description,
                 u.code AS units,
-                m.quantity
+                m.quantity,
+                w.name AS from_location
         FROM inventory_movement_items m
         INNER JOIN items i ON i.id = m.item_id
-        INNER JOIN warehouse_location w ON w.id = m.to_location 
+        INNER JOIN warehouse_location w ON w.id = m.to_location
+        INNER JOIN warehouse_location o ON o.id = m.from_locaton  
         INNER JOIN unit_of_measure u ON u.id = i.unit_id 
         WHERE m.inventory_movement_id  = ?;",[$movement_id]);
 
