@@ -157,7 +157,7 @@ class ItemController extends Controller
 
         $item->save();
 
-          return redirect()->route('item.edit',$id)
+          return redirect()->route('item.index')
 
             ->with('success','Item has been updated successfully.');
 
