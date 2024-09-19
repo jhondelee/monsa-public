@@ -117,6 +117,26 @@ class Factory implements SetInterface
         return collect($results);
     } 
 
+    public function requestlist()
+    {
+        $results = DB::select("
+            SELECT i.id,
+                     i.reference_no,
+                     e.name AS item_name,
+                     e.description,
+                     u.code AS units,
+                     i.request_qty,
+                     i.posted,
+                     (CONCAT(o.firstname,SUBSTRING(o.middlename,1,1)+'.',o.lastname)) AS emp_name
+            FROM item_request i
+            INNER JOIN items e ON i.item_id = e.id
+            INNER JOIN unit_of_measure u ON u.id = e.unit_id 
+            INNER JOIN employees o ON o.user_id = i.created_by
+            ORDER BY id desc");
+
+        return collect($results);
+    }
+
     public function getinventory()
     {
      $results = DB::select("

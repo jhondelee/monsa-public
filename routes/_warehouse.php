@@ -62,7 +62,7 @@ Route::group(['prefix' => 'returns'], function() {
 });
 
 
-Route::group(['prefix' => 'consumables'], function() {    
+Route::group(['prefix' => 'consumables'], function() {   
     Route::get('/', 'ConsumablesController@index')->name("consumables.index");
     Route::get('add', 'ConsumablesController@create')->name("consumables.create");
     Route::post('add', 'ConsumablesController@store')->name("consumables.store");
@@ -72,6 +72,13 @@ Route::group(['prefix' => 'consumables'], function() {
 
     Route::get('show/{id}', 'ConsumablesController@show')->name("consumables.show");
     Route::get('print', 'ConsumablesController@print')->name("consumables.print");
+
+
+    Route::post('add-request', 'ConsumablesController@add_request')->name("consumables.add_request");
+    Route::post('update-request/{id}', 'ConsumablesController@update_request')->name("consumables.update_request");
+    Route::get('delete-request/{id}', 'ConsumablesController@delete_request')->name("consumables.delete_request");
+
+
 });
 
 Route::group(['prefix' => 'condemn'], function() {    
