@@ -5,6 +5,7 @@
 
             <tr>
                 <th>ID</th>
+                <th>Reference No.</th>
                 <th>Item Description</th>
                 <th>Unit</th>
                 <th>Request Qty</th>
@@ -26,7 +27,7 @@
                     <td>{{$request->description}}</td>
                     <td>{{$request->units}}</td>
                     <td>{{$request->request_qty}}</td>   
-
+                    
                     <td class="text-center">
                         @if ($request->posted == 0)
                             <label class="label label-warning " >Unpost</label>
@@ -34,13 +35,24 @@
                             <label class="label label-success " >Posted</label>
                         @endif
                     </td>
+
+                    <td>{{$request->emp_name}}</td> 
                     <td class="text-center">
                         <div class="btn-group">
-                            <a href="#" class="btn-primary btn btn-xs"><i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn-primary btn btn-xs" id="btn-edit-request"
+                            data-edt_id="{{$request->id}}"
+                            data-edit_ref_no="{{$request->reference_no}}"
+                            data-edit_name="{{$request->description}}"
+                            data-edit_units="{{$request->units}}"
+                            data-edit_req_qty="{{$request->request_qty}}"
+                            data-edit_status="{{$request->posted}}"><i class="fa fa-pencil"></i></a>
                         </div> 
                         @if ($request->posted == 0)
                         <div class="btn-group">
-                            <a href="{{route('consumables.delete_request',$request->id)}}" class="btn-primary btn btn-xs"><i class="fa fa-trash"></i></a>
+                            <a href="#" class="btn-success btn btn-xs" id="post-btn" title="Post" onclick="confirmPost('{{$request->id}}'); return false;"><i class="fa fa-exclamation-circle"></i></a>
+                        </div>
+                        <div class="btn-group">
+                            <a href="#" class="btn-primary btn btn-xs"  id="delete-btn" onclick="confirmDelete('{{$request->id}}'); return false;"><i class="fa fa-trash"></i></a>
                         </div>
                         @endif                
                     </td>

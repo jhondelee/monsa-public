@@ -86,6 +86,7 @@
 
 @include('pages.warehouse.consumables.add_item') 
 @include('pages.warehouse.consumables.item_request.add_request')    
+@include('pages.warehouse.consumables.item_request.edit_request')   
           
 @endsection
 
@@ -121,23 +122,38 @@
            $('#myModalrequest').modal('show');
         }); 
       
+        $(document).on('click', '#btn-edit-request', function() {
+           $('.modal-title').text('Add Request Item');
+            $('#request_id').val($(this).data('edt_id'));
+            $('#edit_reference_no').val($(this).data('edit_ref_no'));
+            $('#edit_item_name').val($(this).data('edit_name'));
+            $('#edit_item_units').val($(this).data('edit_units'));
+            $('#edit_req_quantity').val($(this).data('edit_req_qty'));
+            $hide = $(this).data('edit_status');
+            if ($hide == 0)   {
+                   $('#mdfooter').append("<button type='submit' class='btn btn-primary btn-save' name='btnSD' value='0'>Save Only</button>");
+            }
+           $('#myModalEditrequest').modal('show');
+        }); 
 
-        function confirmDelete(data,model) {   
-         $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
-            .on('click', '#delete-btn', function(){
+
+
+    function confirmPost(data,model) {   
+         $('#confirmPost').modal({ backdrop: 'static', keyboard: false })
+            .on('click', '#post-btn', function(){
                 $(this).attr("disabled","disabled");
-                document.location.href="/consumable/delete/"+data;
+                document.location.href="/consumables/post-request/"+data;
             });
         }
 
 
-     function confirmPost(data,model) {   
-
-                document.location.href="/consumable/deduct/"+data;
-    
+    function confirmDelete(data,model) {   
+         $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
+            .on('click', '#delete-btn', function(){
+                $(this).attr("disabled","disabled");
+                document.location.href="/consumables/delete-request/"+data;
+            });
         }
-
-
    
 
 

@@ -127,7 +127,8 @@ class Factory implements SetInterface
                      u.code AS units,
                      i.request_qty,
                      i.posted,
-                     (CONCAT(o.firstname,SUBSTRING(o.middlename,1,1)+'.',o.lastname)) AS emp_name
+                     (CONCAT(o.firstname,' ',o.lastname)) AS emp_name,
+                      i.inventory_id
             FROM item_request i
             INNER JOIN items e ON i.item_id = e.id
             INNER JOIN unit_of_measure u ON u.id = e.unit_id 

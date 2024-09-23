@@ -75,8 +75,9 @@ Route::group(['prefix' => 'consumables'], function() {
 
 
     Route::post('add-request', 'ConsumablesController@add_request')->name("consumables.add_request");
-    Route::post('update-request/{id}', 'ConsumablesController@update_request')->name("consumables.update_request");
+    Route::post('update-request', 'ConsumablesController@update_request')->name("consumables.update_request");
     Route::get('delete-request/{id}', 'ConsumablesController@delete_request')->name("consumables.delete_request");
+    Route::get('post-request/{id}', 'ConsumablesController@post_request')->name("consumables.post_request");
 
 
 });

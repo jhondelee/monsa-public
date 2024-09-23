@@ -1,7 +1,7 @@
     
-{!! Form::open(array('route' => array('consumables.add_request'),'class'=>'form-horizontal','role'=>'form')) !!} 
+{!! Form::open(array('route' => array('consumables.update_request'),'class'=>'form-horizontal','role'=>'form')) !!} 
 
- <div id="myModalrequest" class="modal fade" aria-hidden="true">
+ <div id="myModalEditrequest" class="modal fade" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,48 +14,39 @@
                 {!! csrf_field() ; !!} 
 
                 <div class="form-group">
-                    <input type="hidden" name="inven_id" id="inven_id">
+                    <input type="hidden" name="request_id" id="request_id">
                     <label class="col-sm-4 control-label">Reference No.<span class="text-danger">*</span></label>
                         <div class="col-sm-4">
-                            {!! Form::text('reference_no',null, ['class'=>'form-control reference_no', 'required'=>true ,'id'=>'reference_no']) !!}
+                            {!! Form::text('reference_no',null, ['class'=>'form-control reference_no', 'required'=>true ,'id'=>'edit_reference_no']) !!}
                         </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Item Name<span class="text-danger"></span></label>
                         <div class="col-sm-8">
-                            {!! Form::text('item_name',null, ['class'=>'form-control item_name', 'readonly'=>true ,'id'=>'item_name']) !!}
+                            {!! Form::text('item_name',null, ['class'=>'form-control item_name', 'readonly'=>true ,'id'=>'edit_item_name']) !!}
                         </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Units<span class="text-danger"></span></label>
                         <div class="col-sm-4">
-                            {!! Form::text('item_name',null, ['class'=>'form-control text-center item_name', 'readonly'=>true ,'id'=>'item_units']) !!}
+                            {!! Form::text('item_name',null, ['class'=>'form-control text-center item_name', 'readonly'=>true ,'id'=>'edit_item_units']) !!}
                         </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Request Quantity <span class="text-danger">*</span></label>
                     <div class="col-sm-4">
-                        {!! Form::text('quantity',null, ['class'=>'form-control text-center quantity','placeholder'=>'0.00', 'required'=>true ,'id'=>'quantity']) !!}
+                        {!! Form::text('req_quantity',null, ['class'=>'form-control text-center req_quantity','placeholder'=>'0.00', 'required'=>true ,'id'=>'edit_req_quantity']) !!}
                     </div>
                 </div>
 
-
             </div>
 
-                <div class="modal-footer">
+                <div class="modal-footer" id="mdfooter">
 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
-                    <button type="submit" class="btn btn-primary btn-save" name="btnSD" value="0">Save Only</button>
-
-                    <button type="submit" class="btn btn-success" name="btnSD" value="1"><i class="fa fa-exclamation-circle"></i>&nbsp;Save & Deduct</button>
-
-        
-                 
-
 
                 </div>
             

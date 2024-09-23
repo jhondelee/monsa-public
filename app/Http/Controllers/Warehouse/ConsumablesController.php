@@ -151,15 +151,65 @@ class ConsumablesController extends Controller
     }
 
 
-    public function update_request(Request $request,$id)
+    public function update_request(Request $request)
+    {
+        $itemSaveOnly =  ItemRequest::findorfail($request->request_id);
+
+            $itemSaveOnly->reference_no     = $request->reference_no;
+
+            $itemSaveOnly->request_qty      = $request->req_quantity;
+
+            $itemSaveOnly->created_by       = auth()->user()->id;
+
+            $itemSaveOnly->save();
+
+        return redirect()->route('consumables.index')
+
+            ->with('success','Item Request has been successfully updated.');
+    }
+
+
+    public function post_request($id)
     {
         
+        $itemSaveOnly =  ItemRequest::findorfail($id);
+
+        $itemSaveOnly->posted = 1;
+
+        $itemSaveOnly->save();
+
+
+            $valitem = Inventory::findorfail($itemSaveOnly->inventory_id);
+        
+                $getitem = Item::findorfail($valitem->item_id);
+
+                $onHandQty = ($getitem->unit_quantity) * ($itemSaveOnly->request_qty);
+
+            $valitem->unit_quantity = $valitem->unit_quantity - $itemSaveOnly->request_qty;
+
+            $valitem->onhand_quantity = $valitem->onhand_quantity - $onHandQty;
+
+            $valitem->save();
+
+
+        return redirect()->route('consumables.index')
+
+            ->with('success','Item Request has been successfully posted.');
     }
 
     public function delete_request($id)
     {
+
+        $itemSaveOnly =  ItemRequest::findorfail($id);
+
+        $itemSaveOnly->delete();
         
+
+        return redirect()->route('consumables.index')
+
+            ->with('success','Item Request has been successfully deleted.');
     }
+
 
 
      public function print(Request $request) 
