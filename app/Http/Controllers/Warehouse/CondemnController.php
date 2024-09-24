@@ -273,6 +273,20 @@ class CondemnController extends Controller
 
     }
 
+    public function post($id)
+    {
+
+        $condemn = Condemn::findorfail($id);
+
+        $creator = $this->user->getCreatedbyAttribute($condemn->created_by);
+
+        $approver = $this->user->getemplist()->pluck('emp_name','id');
+
+        $location = WarehouseLocation::pluck('name','id');
+
+        return view('pages.warehouse.condemn.edit',compact('condemn','approver','location','creator'));
+    }
+
 
     public function print($id)
     {

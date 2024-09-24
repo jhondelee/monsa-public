@@ -16,6 +16,7 @@ class CreateCondemnItemsTable extends Migration
         Schema::create('condemn_items', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('condemn_id')->unsigned();
+            $table->integer('inventory_id')->unsigned();
             $table->string('source',45)->required();
             $table->integer('item_id')->unsigned();
             $table->decimal('unit_quantity')->default(0.00)->nullable();
@@ -28,6 +29,9 @@ class CreateCondemnItemsTable extends Migration
                    
                 $table->foreign('item_id')
                   ->references('id')->on('items')->onDelete('cascade');
+
+                $table->foreign('inventory_id')
+                  ->references('id')->on('inventory')->onDelete('cascade');
         });
     }
 

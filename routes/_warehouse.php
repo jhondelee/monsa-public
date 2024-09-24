@@ -95,4 +95,5 @@ Route::group(['prefix' => 'condemn'], function() {
     Route::post('return-source', 'CondemnController@returnsourcedataTable')->name("condemn.return_source");
     Route::post('items', 'CondemnController@condemitemdataTable')->name("condemn.items");
     Route::get('print/{id}', 'CondemnController@print')->name("condemn.print");
+    Route::get('post/{id}', 'CondemnController@post')->name("condemn.post");
 });
