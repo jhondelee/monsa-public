@@ -291,7 +291,7 @@ class CondemnController extends Controller
 
                         $itemUnitQty = ($items->unit_quantity * $conitem[$i]->unit_quantity);
 
-                $inventoryItem->unit_quantity = $inventoryItem->unit_quantity - $items->unit_quantity;
+                $inventoryItem->unit_quantity = $inventoryItem->unit_quantity - $conitem[$i]->unit_quantity;
 
                 $inventoryItem->onhand_quantity = $inventoryItem->onhand_quantity - $itemUnitQty;
 
