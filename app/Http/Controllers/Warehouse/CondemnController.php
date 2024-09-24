@@ -277,6 +277,38 @@ class CondemnController extends Controller
 
     }
 
+    public function post($id)
+    {
+
+        $conitem = CondemnItems::where('condemn_id',$id)->get();
+
+
+            for ($i=0; $i < count($conitem); $i++) { 
+                
+                $inventoryItem = Inventory::findorfail($conitem[$i]->inventory_id);
+
+                        $items = Item::findorfail($inventoryItem->item_id);
+
+                        $itemUnitQty = ($items->unit_quantity * $conitem[$i]->unit_quantity);
+
+                $inventoryItem->unit_quantity = $inventoryItem->unit_quantity - $items->unit_quantity;
+
+                $inventoryItem->onhand_quantity = $inventoryItem->onhand_quantity - $itemUnitQty;
+
+                 $inventoryItem->save();
+            }
+
+        $condemn = Condemn::findorfail($id);
+
+        $condemn->status = 1;
+
+        $condemn->save();
+
+
+        return redirect()->route('condemn.index')
+
+            ->with('success','Condemn Item has been deleted successfully.');
+    }
 
 
     public function print($id)
@@ -349,7 +381,7 @@ class CondemnController extends Controller
             $pdf::cell(40,6,"Source",0,"","L");
             $pdf::cell(60,6,"Item Name",0,"","L");
             $pdf::cell(25,6,"Unit",0,"","C");
-            $pdf::cell(30,6,"Order Quantity",0,"","C");
+            $pdf::cell(30,6,"Quantity",0,"","C");
 
 
          $pdf::Ln(1);

@@ -145,23 +145,25 @@
                                 
                                 <hr>
                             </div>
+                            <div class="hr-line-dashed"></div>
+                                <div class="row">
+                                    <div class="col-md-12 form-horizontal">
+                             
+                                        <div class="ibox-tools pull-right">
+                                             
+                                                   
+                                        <a class="btn btn-primary btn-danger" href="{{ route('condemn.index') }}">Close</a> 
 
-                            <div class="form-group">
+                                                      
+                                                                                    
+                                        {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!}  
 
-                                <div class="col-sm-4 col-sm-offset-9">
 
-                                <a class="btn btn-warning" href="{{ route('condemn.index') }}">Cancel</a> 
+                                         </div>
 
-                                    &nbsp;
-                                    
-                                                                            
-                                {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!}  
+                                    </div>
+                                </div>
 
-                                </div>  
-
-                            </div>
-
-                                  
                             {!! Form::close() !!}
 
                             </div>

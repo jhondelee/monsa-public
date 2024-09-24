@@ -52,11 +52,11 @@
                                      <button type="button" class="btn btn-success" onclick="confirmPost('{{$condemn->id}}'); return false;" id="post-btn"><i class="fa fa-check">&nbsp;</i>Post&nbsp; </button>
                                 </div>
 
-                                @endif
+                            @endif
 
 
-                      
-                                     <a href="{{route('condemn.print',$condemn->id)}}" class="btn btn-primary btn-print"><i class="fa fa-print">&nbsp;</i>Print</a> 
+                                 <a href="{{route('condemn.print',$condemn->id)}}" class="btn btn-primary btn-print"><i class="fa fa-print">&nbsp;</i>Print</a> 
+
                             <div class="form-horizontal m-t-md">
 
                             {!! Form::model($condemn, ['route' => ['condemn.update', $condemn->id],'id'=>'condemn_form']) !!}
@@ -154,22 +154,26 @@
                                 
                                 <hr>
                             </div>
+                              <div class="hr-line-dashed"></div>
+                                <div class="row">
+                                    <div class="col-md-12 form-horizontal">
+                             
+                                        <div class="ibox-tools pull-right">
+                                             
+                                                   
+                                        <a class="btn btn-primary btn-danger" href="{{ route('condemn.index') }}">Close</a> 
 
-                            <div class="form-group">
+                                                      
+                                        @if ($condemn->status == 'Pending')
 
-                                <div class="col-sm-4 col-sm-offset-9">
+                                        {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!}  
 
-                                    <a class="btn btn-warning" href="{{ route('condemn.index') }}">Cancel</a> 
+                                        @endif
 
-                                    &nbsp;
-                                    
-                                                                            
-                                {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!}  
+                                         </div>
 
-                                </div>  
-
-                            </div>
-
+                                    </div>
+                                </div>
                                   
                             {!! Form::close() !!}
 
@@ -462,6 +466,15 @@ $(document).on('click', '#btn-return-item', function() {
     $('#dTable-condemnt-item-table ').on('click', '#delete_line', function(){
             $(this).closest('tr').remove();
     });
+
+
+    function confirmPost(data,model) {   
+         $('#confirmPost').modal({ backdrop: 'static', keyboard: false })
+            .on('click', '#post-btn', function(){
+                $(this).attr("disabled","disabled");
+                document.location.href="/condemn/post/"+data;
+            });
+        }
 
 
     

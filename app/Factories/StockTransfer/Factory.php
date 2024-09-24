@@ -53,7 +53,7 @@ class Factory implements SetInterface
                     ON u.id = i.unit_id
                     INNER JOIN warehouse_location o
                     ON o.id = w.location
-                    WHERE w.location = ? AND w.unit_quantity > 0
+                    WHERE w.location = ? AND w.unit_quantity > 0 AND w.consumable = 0
                     ORDER BY w.received_date DESC;",[$source]);
 
          return collect($results);
