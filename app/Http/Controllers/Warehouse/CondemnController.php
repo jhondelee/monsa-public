@@ -131,6 +131,8 @@ class CondemnController extends Controller
 
                     $condemnItems->condemn_id       = $condemn->id;
 
+                    $condemnItems->inventory_id     = $item_id[$i];
+
                     $condemnItems->source           = $source[$i];
 
                     $condemnItems->item_id          = $SetItems->id;
@@ -223,6 +225,8 @@ class CondemnController extends Controller
 
                     $condemnItems->condemn_id       = $condemn->id;
 
+                    $condemnItems->inventory_id     = $item_id[$i];
+
                     $condemnItems->source           = $source[$i];
 
                     $condemnItems->item_id          = $SetItems->id;
@@ -278,13 +282,12 @@ class CondemnController extends Controller
 
         $condemn = Condemn::findorfail($id);
 
-        $creator = $this->user->getCreatedbyAttribute($condemn->created_by);
+        $condem
 
-        $approver = $this->user->getemplist()->pluck('emp_name','id');
 
-        $location = WarehouseLocation::pluck('name','id');
+        return redirect()->route('condemn.index')
 
-        return view('pages.warehouse.condemn.edit',compact('condemn','approver','location','creator'));
+            ->with('success','Condemn Item has been deleted successfully.');
     }
 
 
