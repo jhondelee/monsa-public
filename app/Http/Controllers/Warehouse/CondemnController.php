@@ -277,18 +277,6 @@ class CondemnController extends Controller
 
     }
 
-    public function post($id)
-    {
-
-        $condemn = Condemn::findorfail($id);
-
-        $condem
-
-
-        return redirect()->route('condemn.index')
-
-            ->with('success','Condemn Item has been deleted successfully.');
-    }
 
 
     public function print($id)
