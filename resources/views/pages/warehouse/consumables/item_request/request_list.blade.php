@@ -10,6 +10,7 @@
                 <th>Unit</th>
                 <th>Request Qty</th>
                 <th>Status</th>
+                <th>Created At</th>
                 <th>Created by</th>
                 <th>Action</th>  
             </tr>
@@ -35,7 +36,8 @@
                             <label class="label label-success " >Posted</label>
                         @endif
                     </td>
-
+                    
+                    <td>{{ date('m-d-Y', strtotime($request->created_at))}}</td>
                     <td>{{$request->emp_name}}</td> 
                     <td class="text-center">
                         <div class="btn-group">

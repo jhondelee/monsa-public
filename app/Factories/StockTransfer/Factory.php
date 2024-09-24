@@ -41,7 +41,7 @@ class Factory implements SetInterface
                    SELECT  w.id as inventory_id,
                            i.id AS item_id,
                            i.code AS item_code,
-                           i.name,
+                           i.description as name,
                            u.code as units,
                            w.unit_quantity as onhand_quantity,
                            o.name AS location,

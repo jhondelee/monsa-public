@@ -83,10 +83,16 @@ Route::group(['prefix' => 'consumables'], function() {
 });
 
 Route::group(['prefix' => 'condemn'], function() {    
-    Route::get('/', 'CondemnItemsController@index')->name("condemn.index");
-    Route::get('add', 'CondemnItemsController@create')->name("condemn.create");
-    Route::post('add', 'CondemnItemsController@store')->name("condemn.store");
-    Route::get('edit/{id}', 'CondemnItemsController@edit')->name("condemn.edit");    
-    Route::post('edit/{id}', 'CondemnItemsController@update')->name("condemn.update"); 
-    Route::get('delete/{id}', 'CondemnItemsController@destroy')->name("condemn.delete");    
+    Route::get('/', 'CondemnController@index')->name("condemn.index");
+    Route::get('add', 'CondemnController@create')->name("condemn.create");
+    Route::post('add', 'CondemnController@store')->name("condemn.store");
+    Route::get('edit/{id}', 'CondemnController@edit')->name("condemn.edit");    
+    Route::post('edit/{id}', 'CondemnController@update')->name("condemn.update"); 
+    Route::get('delete/{id}', 'CondemnController@destroy')->name("condemn.delete");    
+
+    Route::post('inventory-source', 'CondemnController@inventorysourcedataTable')->name("condemn.inventory_source");
+    Route::post('consumable-source', 'CondemnController@consumablesourcedataTable')->name("condemn.consumable_source");
+    Route::post('return-source', 'CondemnController@returnsourcedataTable')->name("condemn.return_source");
+    Route::post('items', 'CondemnController@condemitemdataTable')->name("condemn.items");
+    Route::get('print/{id}', 'CondemnController@print')->name("condemn.print");
 });

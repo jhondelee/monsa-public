@@ -128,7 +128,8 @@ class Factory implements SetInterface
                      i.request_qty,
                      i.posted,
                      (CONCAT(o.firstname,' ',o.lastname)) AS emp_name,
-                      i.inventory_id
+                      i.inventory_id,
+                      i.created_at
             FROM item_request i
             INNER JOIN items e ON i.item_id = e.id
             INNER JOIN unit_of_measure u ON u.id = e.unit_id 
