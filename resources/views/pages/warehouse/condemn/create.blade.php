@@ -148,7 +148,7 @@
 
                             <div class="form-group">
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-4 col-sm-offset-9">
 
                                 <a class="btn btn-warning" href="{{ route('condemn.index') }}">Cancel</a> 
 
