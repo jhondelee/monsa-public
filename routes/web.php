@@ -48,5 +48,9 @@ Route::group(['middleware'=>'auth'],function(){
         Route::group(['namespace' => 'Warehouse'], function() {        
             require('_warehouse.php');
         });
+
+        Route::group(['namespace' => 'CustomerManagement'], function(){
+            require('_customermanagement.php');
+        });
 });
  
