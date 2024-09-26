@@ -52,5 +52,9 @@ Route::group(['middleware'=>'auth'],function(){
         Route::group(['namespace' => 'CustomerManagement'], function(){
             require('_customermanagement.php');
         });
+
+        Route::group(['namespace' => 'Sales'], function(){
+            require('_sales.php');
+        });
 });
  

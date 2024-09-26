@@ -46,7 +46,7 @@ class CondemnController extends Controller
 
     public function create()
     {
-        $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
+            $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
          $approver = $this->user->getemplist()->pluck('emp_name','id');
 

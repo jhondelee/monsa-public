@@ -43,6 +43,7 @@ class Factory implements SetInterface
         i.name,
         i.description,
          u.name as units,
+         u.code as unit_code,
         i.picture,
         i.unit_cost,
         i.srp,

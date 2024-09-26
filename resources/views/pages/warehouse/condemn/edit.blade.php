@@ -226,7 +226,7 @@ var get_source = "";
                             <td>"+ results[i].source +"<input type='hidden' name='get_source[]' id='get_source' value="+ results[i].source +" readonly></td>\
                             <td>"+ results[i].name +"</td>\
                             <td>"+ results[i].units +"</td>\
-                            <td><input type='text' name='qty_value[]' class='text-center item_quantity' readonly size='8' value="+ results[i].unit_quantity +" id ='qty_value'></td>\
+                            <td><input type='text' name='qty_value[]' class='form-control input-sm text-center item_quantity' readonly size='8' value="+ results[i].unit_quantity +" id ='qty_value'></td>\
                             <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
                         </tr>"); 
                                 
@@ -277,7 +277,7 @@ $(document).on('click', '#btn-add-item', function() {
                                     {data: 'name', name: 'name'},
                                     {data: 'units', name: 'units'},
                                     {data: 'onhand_quantity', name: 'onhand_quantity'},
-                                    {data: undefined, defaultContent: '{!! Form::text('req_quantity',null, array('id'=> 'req_quantity','placeholder' => '0', 'size' => '8','class'=>'text-center')) !!}'},
+                                    {data: undefined, defaultContent: '{!! Form::text('req_quantity',null, array('id'=> 'req_quantity','placeholder' => '0', 'size' => '8','class'=>'form-control input-sm text-center')) !!}'},
                                     {data: 'action', orderable: false, searchable: true},
                                 ],
                             columnDefs: [{
@@ -332,7 +332,7 @@ $(document).on('click', '#btn-consume-item', function() {
                                     {data: 'name', name: 'name'},
                                     {data: 'units', name: 'units'},
                                     {data: 'onhand_quantity', name: 'onhand_quantity'},
-                                    {data: undefined, defaultContent: '{!! Form::text('req_quantity',null, array('id'=> 'req_quantity','placeholder' => '0', 'size' => '8','class'=>'text-center')) !!}'},
+                                    {data: undefined, defaultContent: '{!! Form::text('req_quantity',null, array('id'=> 'req_quantity','placeholder' => '0', 'size' => '8','class'=>'form-control input-sm text-center')) !!}'},
                                     {data: 'action', orderable: false, searchable: true},
                                 ],
                             columnDefs: [{
@@ -386,7 +386,7 @@ $(document).on('click', '#btn-return-item', function() {
                                     {data: 'name', name: 'name'},
                                     {data: 'units', name: 'units'},
                                     {data: 'onhand_quantity', name: 'onhand_quantity'},
-                                    {data: undefined, defaultContent: '{!! Form::text('req_quantity',null, array('id'=> 'req_quantity','placeholder' => '0', 'size' => '8','class'=>'text-center')) !!}'},
+                                    {data: undefined, defaultContent: '{!! Form::text('req_quantity',null, array('id'=> 'req_quantity','placeholder' => '0', 'size' => '8','class'=>'form-control input-sm text-center')) !!}'},
                                     {data: 'action', orderable: false, searchable: true},
                                 ],
                             columnDefs: [{
@@ -450,7 +450,7 @@ $(document).on('click', '#btn-return-item', function() {
 
                 $('#dTable-condemnt-item-table tbody').append("<tr>\
                     <td>"+ item_id +"<input type='hidden'  name='item_id[]' id='item_id' value="+ item_id +" readonly></td><td>"+ get_source +"<input type='hidden'  name='get_source[]' id='get_source' value="+ get_source +" readonly></td><td>"+ item_name +"</td><td class='text-center'>"+ units +"</td>\
-                    <td class='text-center'><input type='text'  name='qty_value[]' class='text-center' size='8' value="+ qty_value.toFixed(2) +" readonly></td>\
+                    <td class='text-center'><input type='text'  name='qty_value[]' class='form-control input-sm text-center' size='8' value="+ qty_value.toFixed(2) +" readonly></td>\
                     <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td></tr>");
                     toastr.info(item_name + ' Added ' + qty_value,'Condemn Item');
                     var qty_value = $(this).closest('tr').find('#qty_value').val('0');

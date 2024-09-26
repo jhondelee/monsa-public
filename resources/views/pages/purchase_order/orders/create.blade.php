@@ -161,11 +161,12 @@
             }
 
             _sub_amount = _sub_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
             $(this).closest('tr').find('#amount').val( _sub_amount );
 
                 // sum of price
                 var _total_amount = 0.00;
-                $( "#dTable-selected-item-table tbody > tr" ).each( function() {
+                $("#dTable-selected-item-table tbody > tr" ).each( function() {
                         var $row = $( this );        
                         var _subtotal = $row.find( ".amount" ).val();
     
