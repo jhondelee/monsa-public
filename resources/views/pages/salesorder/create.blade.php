@@ -78,9 +78,7 @@
 
             var id = this.value;
          
-            $('#dTable-ItemList-table').empty()
-            $('#dTable-ItemList-table').datatable().destroy()
-
+            $('#dTable-selected-item-table').datatable().destroy()
            
         });
 
@@ -134,9 +132,9 @@
                                     {data: 'description', title: 'Item Description'},                               
                                     {data: 'untis', title: 'Units'},
                                     {data: 'srp', title: 'SRP'},
-                                    {data: '', title: 'Qty',
+                                    {data: 'unit_quantity', title: 'Qty',
                                         render: function(data, type, row){
-                                            return '<input type="input" size="4" name="setQty[]"  class="form-control input-sm text-right setQty" placeholder="0.00" id="setQty">';
+                                            return '<input type="input" size="4" name="setQty[]"  class="form-control input-sm text-right setQty" placeholder="0.00" id="setQty"><input type="hidden"  name="unitQty[]" id="unitQty" value="'+ row.unit_quantity +'">';
                                         }
                                     },
                                     {data: 'status', title: 'Status',
@@ -273,38 +271,59 @@
         $('.chosen-select').chosen({width: "100%"});
 
 
-        function confirmAddItem(data) {   
-            var _id = data;
-            var _cs = $('#customer_id').val();
-            $.ajax({
-            url:  '{{ url('sa-les/getcustomeritems') }}',
-            type: 'POST',
-            dataType: 'json',
-            data: { _token: "{{ csrf_token() }}",
-            id: _id, cs: _cs}, 
-            success:function(results){
+         $('#dTable-ItemList-table tbody').on('click','.btn-add-items',function(event){
+            var _setQty =  parseFloat($(this).closest( 'tr' ).find( '#setQty' ).val());
+            var _unitQty =  parseFloat($(this).closest( 'tr' ).find( '#unitQty' ).val());
+            var _itemID =  parseFloat($(this).closest( 'tr' ).find( '#item_id' ).val());
 
-                toastr.success( results.invenId.id,'Selected!')
 
-                  $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='item_id[]' class='form-control input-sm text-center item_id' required=true size='4'  value="+ results.id +" readonly></td>\
-                        <td>"+ results.description +"</td>\
-                        <td>"+ results.units +"</td>\
-                        <td>\
-                        <input type='text' name='quantity[]' class='form-control input-sm text-center quantity' required=true size='4'  placeholder='0.00'  id ='quantity'>\
-                        </td>\
-                        <td style='text-align:center;'>\
-                            <div class='checkbox checkbox-success'>\
-                                <input type='checkbox' name='remove'><label for='remove'></label>\
-                            </div>\
-                        </td>\
-                    </tr>"); 
+            if ( isNaN( _setQty) || !_setQty ){
 
-                    toastr.success(results.description +' has been added','Success!')
+                 toastr.warning('Item quantity is 0','Warning');
+                 return false;
+            } 
+
+            if ( _setQty > _unitQty ){
+
+                toastr.warning('Not enough stocks','Warning');
+                return false;
+
+            } else {
                 
-                }
-            });
-        }
+                var _id = _itemID;
+                var _cs = $('#customer_id').val();
+ 
+                $.ajax({
+                url:  '{{ url('sales/getcustomeritems') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: { _token: "{{ csrf_token() }}",
+                id: _id, cs: _cs}, 
+                success:function(results){
 
+                            var _Gamount = _setQty * parseFloat( results.csPrice.set_srp );
+
+                          $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='invenId[]' class='form-control input-sm text-center invenId' size='3'  value="+ results.invenId.id +" readonly></td>\
+                            <td>"+ results.csPrice.description +"</td>\
+                            <td>"+'('+ results.invenId.unit_quantity +') '+results.csPrice.units+"</td><td><input type='text' name='setQty[]' class='form-control input-sm text-center setQty' size='3'  value="+ _setQty.toFixed(2) +" readonly></td><td><input type='text' name='setPrice[]' class='form-control input-sm text-center setPrice' size='3'  id='setPrice' value="+results.csPrice.srp +" readonly></td><td><input type='text' name='dis_amount[]' class='form-control input-sm text-center dis_amount' size='3'  id='dis_amount' value="+results.csPrice.dis_amount+" readonly></td><td><input type='text' name='dis_percent[]' class='form-control input-sm text-center dis_percent' size='3'  id='dis_percent' value="+results.csPrice.dis_percent+" readonly></td><td><input type='text' name='setSRP[]' class='form-control input-sm text-center setSRP' size='3'  id='setSRP' value="+results.csPrice.set_srp+" readonly></td><td><b><input type='text' name='gAmount[]' class='form-control input-sm text-right gAmount' size='5'  id='gAmount' value="+_Gamount.toFixed(2)+" readonly></b></td>\
+                            <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
+                              </tr>");
+
+                        toastr.info(results.csPrice.description  +' has been added','Success!')
+                    
+                    }
+                });
+
+
+            }
+            
+         });
+
+   
+
+        $('#dTable-selected-item-table').on('click', '#delete_line', function(){
+            $(this).closest('tr').remove();
+        });
 
         $(document).ready(function(){
             $('#btn-close').on('click', function(){

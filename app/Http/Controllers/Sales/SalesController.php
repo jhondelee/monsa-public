@@ -150,9 +150,15 @@ class SalesController extends Controller
 
     public function getcustomeritems(Request $request)
     {
-        $invenId = Inventory::findOrfail($request->id);     
+       $invenId = Inventory::findOrfail($request->id);     
 
-       $csPrice = $this->salesorders->getCSitems($request->cs)->where('item_id',$invenId->item_id)->first();   
+       $csPrice = $this->salesorders->getCSitems($request->cs)->where('item_id',$invenId->item_id)->first(); 
+
+       if ( !$csPrice  )  {
+
+        $csPrice = $this->salesorders->getSetItems($invenId->item_id)->first();
+
+       }    
 
         return response()->json(['invenId' => $invenId, 'csPrice' => $csPrice]);;       
         

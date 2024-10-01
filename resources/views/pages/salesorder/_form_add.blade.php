@@ -83,15 +83,16 @@
             <thead> 
                 <tr>
 
-                    <th class="text-center">Inven-ID</th>
+                    <th class="text-center">Id</th>
                     <th>Item Description</th>
                     <th>#Stock/Unit</th>
                     <th class="text-center">Order Qty</th>
                     <th class="text-center">SRP</th>
                     <th class="text-center">$ Discount</th>
                     <th class="text-center">% Discount</th>
+                    <th class="text-center">Set Price</th>
                     <th class="text-center">Amount</th>
-                    <th class="text-center">Remove <a class='btn btn-danger btn-xs btn-remove pull-right'><i class='fa fa-minus'></i></a>
+                    <th class="text-center">Remove </th>    
                 </tr>   
             </thead>
 
@@ -113,13 +114,13 @@
                                     <div class="form-group">
                                         <!--<label class="col-md-6 control-label"> Discount</label>-->
                                         <div class="col-md-6">
-                                            {!! Form::text('total_discount',null, array('placeholder' => '0.00','class' => 'form-control text-right','id'=>'discount')) !!}
+                                            {!! Form::text('total_discount',null, array('placeholder' => '0.00','class' => 'form-control text-right total_discount','id'=>'total_discount')) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <!--<label class="col-md-6 control-label">Total Amount</label>-->
                                         <div class="col-md-6">
-                                            {!! Form::text('total_sales',null, array('placeholder' => '0.00','class' => 'form-control text-right grand_total','id'=>'grand_total', 'readonly' => 'true' )) !!}
+                                            {!! Form::text('total_sales',null, array('placeholder' => '0.00','class' => 'form-control text-right total_sales','id'=>'total_sales', 'readonly' => 'true' )) !!}
                                         </div>
                                     </div>
                                 </div> 

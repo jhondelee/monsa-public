@@ -205,7 +205,7 @@ class CustomerController extends Controller
 
             $getPercentDisc = $request->get('perD');
 
-            dd($activated = $request->get('disc_active'));
+            $activated = $request->get('disc_active');
 
             $getSetSRP = $request->get('setSRP');
 

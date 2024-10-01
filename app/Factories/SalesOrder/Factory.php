@@ -51,7 +51,7 @@ class Factory implements SetInterface
                     e.id AS item_id,
                      e.name AS item_name,
                      e.description,
-                     CONCAT('( ',i.unit_quantity,' )',u.code) AS untis,
+                     CONCAT(i.unit_quantity,' - ',u.code) AS untis,
                     i.unit_quantity,
                      i.onhand_quantity,
                      e.srp,
@@ -68,17 +68,37 @@ class Factory implements SetInterface
     public function getCSitems($cs)
     {
         $results = DB::select("
-            SELECT i.name AS item_name,
+            SELECT  c.item_id,
+                    i.name AS item_name,
                     i.description,
                     u.code AS units,
                     i.srp,
-                    c.srp_discounted,
-                    c.percentage_discount,
+                    ifnull(c.srp_discounted,0) as dis_amount,
+                    ifnull(c.percentage_discount,0) as dis_percent,
                     c.set_srp
             FROM customer_prices c
             INNER JOIN items i ON c.item_id = i.id
             INNER JOIN unit_of_measure u ON u.id = i.unit_id
             WHERE c.customer_id = ? AND activated_discount = 1",[$cs]);
+
+        return collect($results);
+
+    }
+
+   public function getSetItems($id)
+    {
+        $results = DB::select("
+            SELECT  i.id as item_id,
+                    i.name AS item_name,
+                    i.description,
+                    u.code AS units,
+                    i.srp,
+                    '0.00' AS  dis_amount,
+                    '0.00' AS dis_percent,
+                    i.srp as set_srp
+            FROM items i 
+            INNER JOIN unit_of_measure u ON u.id = i.unit_id
+            WHERE i.id = ?;",[$id]);
 
         return collect($results);
 
