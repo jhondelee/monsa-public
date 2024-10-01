@@ -114,7 +114,7 @@ class ItemController extends Controller
 
     public function update(request $request,$id)
     {
-
+        
         $this->validate($request, [
             'code'          => 'required',
             'name'          => 'required',
