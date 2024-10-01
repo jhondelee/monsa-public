@@ -83,11 +83,13 @@
             <thead> 
                 <tr>
 
-                    <th class="text-center">Id</th>
-                    <th>Description</th>
-                    <th>Qty/Unit</th>
+                    <th class="text-center">Inven-ID</th>
+                    <th>Item Description</th>
+                    <th>#Stock/Unit</th>
                     <th class="text-center">Order Qty</th>
                     <th class="text-center">SRP</th>
+                    <th class="text-center">$ Discount</th>
+                    <th class="text-center">% Discount</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">Remove <a class='btn btn-danger btn-xs btn-remove pull-right'><i class='fa fa-minus'></i></a>
                 </tr>   

@@ -115,7 +115,7 @@
                         id: _id}, 
                         success:function(results){
 
-                            toastr.success(_cs + ' Supplier','Selected!')
+       
 
                             $('#dTable-ItemList-table').DataTable({
                                 destroy: true,
@@ -126,14 +126,31 @@
                                 dom: '<"html5buttons"B>lTfgitp',
                                 buttons: [],
                                 columns: [
-                                    {data: 'id', title: 'id'},  
-                                    {data: 'item_name', title: 'Item'},  
-                                    {data: 'description', title: 'Description'},                               
+                                    {data: 'id', title: 'id',
+                                        render: function(data,type,row){
+                                        return '<input type="text" name="item_id[]" class="form-control input-sm text-center item_id" size="3"  readonly="true" id ="item_id" value="'+ row.id +'">';
+                                        }
+                                    },    
+                                    {data: 'description', title: 'Item Description'},                               
                                     {data: 'untis', title: 'Units'},
-                                    {data: 'status', title: 'Status'},
+                                    {data: 'srp', title: 'SRP'},
+                                    {data: '', title: 'Qty',
+                                        render: function(data, type, row){
+                                            return '<input type="input" size="4" name="setQty[]"  class="form-control input-sm text-right setQty" placeholder="0.00" id="setQty">';
+                                        }
+                                    },
+                                    {data: 'status', title: 'Status',
+                                        render: function(data, type, row){
+                                            if(row.status=='In Stock'){
+                                                return '<label class="label label-warning" >In Stock</label>  '
+                                            }else{
+                                                return '<label class="label label-danger" >Out of Stock</label>';
+                                            }   
+                                        }
+                                    },
                                     {data: 'id', title: 'Action',
                                         render: function(data,type,row) {
-                                             return '<a class="btn-primary btn btn-xs btn-add-items" onclick="confirmAddItem('+ row.id +'); return false;"><i class="fa fa-plus"></i></a>';
+                                             return '<a class="btn-primary btn btn-xs text-right btn-add-items" onclick="confirmAddItem('+ row.id +'); return false;"><i class="fa fa-plus"></i></a>';
                                         }
                                     }
                                     ]
@@ -257,16 +274,19 @@
 
 
         function confirmAddItem(data) {   
-            var id = data;
+            var _id = data;
+            var _cs = $('#customer_id').val();
             $.ajax({
-            url:  '{{ url('salesorder/getitems') }}',
+            url:  '{{ url('sa-les/getcustomeritems') }}',
             type: 'POST',
             dataType: 'json',
             data: { _token: "{{ csrf_token() }}",
-            id: id}, 
+            id: _id, cs: _cs}, 
             success:function(results){
-                                               
-                $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='item_id[]' class='form-control input-sm text-center item_id' required=true size='4'  value="+ results.id +" readonly></td>\
+
+                toastr.success( results.invenId.id,'Selected!')
+
+                  $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='item_id[]' class='form-control input-sm text-center item_id' required=true size='4'  value="+ results.id +" readonly></td>\
                         <td>"+ results.description +"</td>\
                         <td>"+ results.units +"</td>\
                         <td>\
@@ -280,8 +300,9 @@
                     </tr>"); 
 
                     toastr.success(results.description +' has been added','Success!')
+                
                 }
-            })
+            });
         }
 
 

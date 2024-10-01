@@ -27,7 +27,7 @@ Route::group(['prefix' => 'sales'], function() {
 
     Route::get('post/{id}', 'SalesController@post')->name("salesorder.post");   
 
-    Route::post('getitems', 'SalesController@getItems')->name("salesorder.getitems");
+    Route::post('getcustomeritems', 'SalesController@getcustomeritems')->name("salesorder.getcustomeritems");
 
     Route::post('getpoitems', 'SalesController@getPOitems')->name("salesorder.getpoitems");
 

@@ -64,4 +64,23 @@ class Factory implements SetInterface
         return collect($results);
 
     }
+
+    public function getCSitems($cs)
+    {
+        $results = DB::select("
+            SELECT i.name AS item_name,
+                    i.description,
+                    u.code AS units,
+                    i.srp,
+                    c.srp_discounted,
+                    c.percentage_discount,
+                    c.set_srp
+            FROM customer_prices c
+            INNER JOIN items i ON c.item_id = i.id
+            INNER JOIN unit_of_measure u ON u.id = i.unit_id
+            WHERE c.customer_id = ? AND activated_discount = 1",[$cs]);
+
+        return collect($results);
+
+    }
 }

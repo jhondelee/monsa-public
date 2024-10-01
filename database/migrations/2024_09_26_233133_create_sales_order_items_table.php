@@ -17,6 +17,7 @@ class CreateSalesOrderItemsTable extends Migration
             $table->increments('id');
             $table->integer('sales_order_id')->unsigned();
             $table->string('so_number')->required();
+            $table->integer('inventory_id')->required();
             $table->integer('item_id')->unsigned();
             $table->decimal('unit_cost')->nullable()->default(0);
             $table->decimal('srp')->nullable()->default(0);

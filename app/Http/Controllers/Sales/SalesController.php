@@ -9,6 +9,7 @@ use App\Factories\Item\Factory as ItemFactory;
 use App\Factories\SalesOrder\Factory as SalesOrderFactory;
 use Yajra\Datatables\Datatables;
 use App\Item;
+use App\Inventory;
 use App\SalesOrder;
 use App\SalesOrderItems;
 use App\UnitOfMeasure; 
@@ -145,6 +146,18 @@ class SalesController extends Controller
 
     }
 
+    // Get the Customer Price Setup
+
+    public function getcustomeritems(Request $request)
+    {
+        $invenId = Inventory::findOrfail($request->id);     
+
+       $csPrice = $this->salesorders->getCSitems($request->cs)->where('item_id',$invenId->item_id)->first();   
+
+        return response()->json(['invenId' => $invenId, 'csPrice' => $csPrice]);;       
+        
+    }
+
     public function getPOitems(Request $request)
     {
      
@@ -155,14 +168,6 @@ class SalesController extends Controller
     }
 
 
-    public function supplierItems(Request $request)
-    {
-        
-        $results = $this->items->GetItemsOfsupplier($request->id);   
-
-        return response()->json($results);       
-        
-    }
 
 
     public function additemSupplier(Request $request)
