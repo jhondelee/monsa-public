@@ -34,6 +34,30 @@ class Factory implements SetInterface
         return collect($results);
     } 
 
+   
+   public function getitemname($name)
+    {
+
+     $results = DB::select("
+             SELECT i.id,
+        i.code,
+        i.name,
+        i.description,
+         u.name as units,
+         u.code as unit_code,
+        i.picture,
+        i.unit_cost,
+        i.srp,
+        i.activated
+        FROM items i 
+        INNER JOIN unit_of_measure u
+        ON i.unit_id = u.id
+        WHERE i.deleted_at is NULL and i.name = ?
+        ORDER BY i.id;",[$name]);
+
+         return collect($results);
+    }
+
     public function getitemList()
     {
 
@@ -51,7 +75,7 @@ class Factory implements SetInterface
         FROM items i 
         INNER JOIN unit_of_measure u
         ON i.unit_id = u.id
-        WHERE i.deleted_at is NULL
+        WHERE i.deleted_at is NULL 
         ORDER BY i.id;");
 
         return collect($results);
@@ -200,6 +224,8 @@ class Factory implements SetInterface
       return collect($results);
       
    }
+
+
   
 }
 

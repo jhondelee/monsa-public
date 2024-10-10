@@ -19,5 +19,7 @@ interface SetInterface {
      public function additemSupplier($id);
 
      public function getitemList();
+
+       public function getitemname($name);
      
 }

@@ -27,6 +27,8 @@ Route::group(['prefix' => 'item'], function() {
 
     Route::post('datatable', 'ItemController@datatable')->name("item.datatable"); 
 
+    Route::post('getname', 'ItemController@getname')->name("item.getname"); 
+
 
      
 });

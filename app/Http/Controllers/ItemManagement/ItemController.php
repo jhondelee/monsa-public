@@ -25,20 +25,20 @@ class ItemController extends Controller
         $this->middleware('auth');
     }
 
-     public function index()
+     public function index(Request $request)
     {
-        $user = auth()->user();
-        $items = $this->items->getitemList();
+        $item_name = Item::pluck('name','name');
 
-        return view('pages.item_management.items.index',compact('items','user'));
+        $val = $request->val;
+
+        return view('pages.item_management.items.index',compact('item_name','val'));
+       
     }
 
 
     public function create()
     {
         
-       
-
         $units = UnitOfMeasure::pluck('name','id');
 
         return view('pages.item_management.items.create',compact('units'));
@@ -159,7 +159,9 @@ class ItemController extends Controller
 
         $item->save();
 
-          return redirect()->route('item.index')
+        $val = $request->name;
+
+        return redirect()->route('item.index',['val'=>$val])
 
             ->with('success','Item has been updated successfully.');
 
@@ -190,7 +192,9 @@ class ItemController extends Controller
 
         $items->save();
 
-        return redirect()->route('item.index')
+        $val = $items->name;
+
+        return redirect()->route('item.index',['val'=>$val])
 
             ->with('success','Item SRP and Unit Cost has been update successfully.');
     }
@@ -200,8 +204,26 @@ class ItemController extends Controller
     public function datatable(Request $request)
     {
 
+        if (!$request->value==true){
+           $results = $this->items->getitemList();
+        }else{
+            $results = $this->items->getitemname($request->value);
+            
+        }
+        
+        return response()->json($results);
 
-        $results = $this->items->getitemList();
+    }
+
+    public function getname(Request $request)
+    {
+
+        if (!$request->value==true){
+           $results = $this->items->getitemList();
+        }else{
+            $results = $this->items->getitemname($request->value);
+            
+        }
 
         return response()->json($results);
     }
