@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Factories\Item\Factory as ItemFactory;
+use Yajra\Datatables\Datatables;
 use App\Item;
 use App\UnitOfMeasure; 
 use App\User as Users;
@@ -26,9 +27,10 @@ class ItemController extends Controller
 
      public function index()
     {
+        $user = auth()->user();
         $items = $this->items->getitemList();
 
-        return view('pages.item_management.items.index',compact('items'));
+        return view('pages.item_management.items.index',compact('items','user'));
     }
 
 
@@ -191,6 +193,17 @@ class ItemController extends Controller
         return redirect()->route('item.index')
 
             ->with('success','Item SRP and Unit Cost has been update successfully.');
+    }
+
+
+
+    public function datatable(Request $request)
+    {
+
+
+        $results = $this->items->getitemList();
+
+        return response()->json($results);
     }
 
 }

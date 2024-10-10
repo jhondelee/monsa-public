@@ -25,6 +25,9 @@ Route::group(['prefix' => 'item'], function() {
 
     Route::post('update-price', 'ItemController@update_price')->name("item.update_price"); 
 
+    Route::post('datatable', 'ItemController@datatable')->name("item.datatable"); 
+
+
      
 });
 

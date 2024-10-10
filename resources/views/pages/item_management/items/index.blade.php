@@ -49,68 +49,13 @@
                               
                                 <div class="table-responsive">
                                     
-                                    <table class="table table-striped table-hover dataTables-items"data-toggle="dataTable" data-form="deleteForm" >
+                                    <table class="table table-striped table-hover dataTables-items"data-toggle="dataTable" data-form="deleteForm" id="dTable-ItemList-table">
                                         <thead>
-                                        <tr>
-
-                                            
-                                            <th>Id</th>
-                                            <th>Code</th>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>UOM</th>
-                                            <th>Status</th>
-                                            <th class="text-center">Action</th>
-                                           
-                                        </tr>
+       
                                         </thead>
                                         <tbody>
 
-                                            @foreach($items as $item)
-
-                                                <tr>
-
-                                                    
-                                                    <td>{{$item->id}}</td>
-                                                    <td>{{$item->code}}</td>
-                                                    <td>{{$item->name}}</td>
-                                                    <td>{{$item->description}}</td>
-                                                    <td>{{$item->units}}</td>
-                                                    <td class="text-center">
-                                                        @IF($item->activated == 1)
-                                                            <label class="label label-success" >Active</label> 
-                                                        @ELSE
-                                                            <label class="label label-warning" >Inctive</label> 
-                                                        @ENDIF
-                                                    </td>
-                                                    <td class="text-center">
-                                                        @if (!can('item.edit'))
-                                                        <div class="btn-group">
-                                                            <a class="btn-danger btn btn-xs edit-modal" 
-                                                            data-id="{{$item->id}}"
-                                                            data-descript="{{$item->description}}"
-                                                            data-srp="{{$item->srp}}"
-                                                            data-unit_cost="{{$item->unit_cost}}">
-                                                            <i class="fa fa-money"></i></a>
-                                                        </div>
-
-                                                        <div class="btn-group">
-                                                            <a href="{{route('item.edit',$item->id)}}" class="btn-primary btn btn-xs"><i class="fa fa-pencil"></i></a>
-                                                        </div>
-                                         
-                           
-                                                        @endif
-                                                        @if (!can('item.delete'))
-                                                        <div class="btn-group">
-                                                          <a class="btn-primary btn btn-xs delete" onclick="confirmDelete('{{$item->id}}'); return false;"><i class="fa fa-trash"></i></a>
-                                                        </div>
-                                                        @endif
-                                                    </td>
-
-                                                </tr>
-
-                                            @endforeach
-                                                                               
+                                                                
                                         </tbody>
 
                                     </table>
@@ -135,21 +80,58 @@
 @section('scripts')
 
 <script src="/js/plugins/footable/footable.all.min.js"></script>
-
+<script src="/js/plugins/toastr/toastr.min.js"></script>
 <script type="text/javascript">
-    
 
 
-        $(document).ready(function(){
-              $('.dataTables-items').DataTable({
-                pageLength: 100,
-                responsive: true,
-                dom: '<"html5buttons"B>lTfgitp',
-                buttons: []
 
-            });
+ $(document).ready(function(){
+    var _id = 0;
+    $.ajax({
+        url:  '{{ url('item/datatable') }}',
+        type: 'POST',
+        dataType: 'json',
+        data: { _token: "{{ csrf_token() }}",
+        id: _id},  
+        success:function(results){
+                        //
+           $('#dTable-ItemList-table').DataTable({
+                                destroy: true,
+                                pageLength: 100,
+                                responsive: true,
+                                fixedColumns: true,
+                                data: results,
+                                dom: '<"html5buttons"B>lTfgitp',
+                                buttons: [],
+                                columns: [
+                                    {data: 'id', title: 'Id'}, 
+                                    {data: 'code', title: 'Code'},  
+                                    {data: 'name', title: 'Name'},    
+                                    {data: 'description', title: 'Item Description'},                               
+                                    {data: 'units', title: 'Units'},
+                                    {data: 'activated', title: 'Status',
+                                        render: function(data, type, row){
+                                            if(row.activated=='1'){
+                                                return '<label class="label label-success" >Active</label>  '
+                                            }else{
+                                                return '<label class="label label-warning" >Inctive</label>';
+                                            }   
+                                        }
+                                    },
+                                    {data: null, title: 'Action',
+                                        render: function(data, type, row){
+                                                return '@if (!can('item.edit'))<a class="btn-danger btn btn-xs edit-modal" data-id="'+ row.id +'" data-descript="'+ row.description +'" data-srp="'+ row.srp +'"  data-unit_cost="'+ row.unit_cost +'"><i class="fa fa-money"></i></a>&nbsp;<a href="item/edit/'+row.id+'" class="btn-primary btn btn-xs"><i class="fa fa-pencil"></i></a>@endif&nbsp;@if (!can('item.delete'))<a class="btn-primary btn btn-xs delete" onclick="confirmDelete('+row.id+'); return false;"><i class="fa fa-trash"></i></a>@endif';
+                                        }
+                                    },
+                         
+                                ],
+                            })
 
-        });
+        }
+    }); 
+
+});
+
 
         function confirmDelete(data,model) {   
          $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
@@ -175,7 +157,8 @@
             $('#editModal').modal('show');
         });
 
-           
+        
+
     
     
 </script>
