@@ -114,7 +114,7 @@ $(document).ready(function(){
                                     {data: 'code', title: 'Code'},  
                                     {data: 'name', title: 'Name'},    
                                     {data: 'description', title: 'Item Description'},
-                                    {data: 'units', title: 'Units'},
+                                    {data: 'unit_code', title: 'Units'},
                                     {data: 'activated', title: 'Status',
                                         render: function(data, type, row){
                                             if(row.activated=='1'){
@@ -187,7 +187,7 @@ $(document).ready(function(){
                                             {data: 'code', title: 'Code'},  
                                             {data: 'name', title: 'Name'},    
                                             {data: 'description', title: 'Item Description'},
-                                            {data: 'units', title: 'Units'},
+                                            {data: 'unit_code', title: 'Units'},
                                             {data: 'activated', title: 'Status',
                                                 render: function(data, type, row){
                                                     if(row.activated=='1'){
