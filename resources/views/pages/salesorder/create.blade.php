@@ -120,6 +120,7 @@
                                 pageLength: 100,
                                 responsive: true,
                                 fixedColumns: true,
+                                autoWidth: true,
                                 data: results,
                                 dom: '<"html5buttons"B>lTfgitp',
                                 buttons: [],
@@ -161,69 +162,7 @@
         });
 
           
-
-    $('#discount').val('0.00');
-    $('#total_amount').val('0.00');
-
-    //Compute Price * Quanity = Total
-     $('#dTable-selected-item-table').on('keyup','.quantity',function(e){
-        //compute price
-        var _price = parseFloat($(this).closest( 'tr ').find( '#price' ).val());
-        var _quantity = parseFloat($(this).closest( 'tr' ).find( '#quantity' ).val());
-        var _sub_amount = 0.00;
-
-           if (isNaN(_price)){
-                var _sub_amount =0.00;
-            }else{
-                var _sub_amount = ( _price * _quantity );
-            }
-
-            _sub_amount = _sub_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-
-            $(this).closest('tr').find('#amount').val( _sub_amount );
-
-                // sum of price
-                var _total_amount = 0.00;
-                $("#dTable-selected-item-table tbody > tr" ).each( function() {
-                        var $row = $( this );        
-                        var _subtotal = $row.find( ".amount" ).val();
-    
-                        _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
-                       
-                });
-
-                 _total_amount = _total_amount.toFixed(2);
-                $('input[name="grand_total"]').val(  _total_amount  );
-  
-        }); 
-
-        // Compute Discount
-        $(document).on('keyup', '#discount', function() {
-            var _total_amount = parseFloat($( '#grand_total' ).val());
-            var _discount = parseFloat($( '#discount' ).val());
-            var _total_discounted = 0.00;
-
-            if (isNaN(_discount)){
-                var _total_amount = 0.00;
-                $( "#dTable-selected-item-table tbody > tr" ).each( function() {
-                        var $row = $( this );        
-                        var _subtotal = $row.find( ".amount" ).val();
-    
-                        _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
-                       
-                });
-
-                 _total_amount = _total_amount.toFixed(2);
-                $('input[name="grand_total"]').val(  _total_amount  );
-            }else{
-                var _total_discounted = ( _total_amount - _discount );
-
-                _total_discounted = _total_discounted.toFixed(2);
-                $('input[name="grand_total"]').val(  _total_discounted  );
-
-            }
-
-        });
+//
 
  
         $('.chosen-select').chosen({width: "100%"});
