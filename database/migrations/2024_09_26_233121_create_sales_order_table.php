@@ -20,9 +20,11 @@ class CreateSalesOrderTable extends Migration
             $table->string('remarks',65)->nullable();
             $table->integer('customer_id')->unsigned();
             $table->integer('employee_id')->unsigned();
+            $table->integer('sub_employee_id')->nullable();
             $table->decimal('unit_cost_total')->nullable()->default(0);
             $table->decimal('total_sales')->nullable()->default(0);
-            $table->decimal('total_discount')->nullable()->default(0);
+            $table->decimal('total_amount_discount')->nullable()->default(0);
+            $table->decimal('total_percent_discount')->nullable()->default(0);
             $table->integer('location')->required();
             $table->integer('approved_by')->nullable();
             $table->integer('created_by')->required();

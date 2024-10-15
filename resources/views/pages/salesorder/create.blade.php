@@ -223,59 +223,19 @@
 
             }
 
-
         });
-
-
-
-        
-        
-        $("#remove-row").click(function(){
-            $("table tbody").find('input[name="remove"]').each(function(){
-                if($(this).is(":checked")){
-                    $(this).parents("tr").remove();
-                }
-            });
-        });
-
-         $(".btn-remove").click(function(){
-            $("table tbody").find('input[name="remove"]').each(function(){
-                if($(this).is(":checked")){
-                    $(this).parents("tr").remove();
-                }
-            });
-        });
-
-
-        $('.date').datepicker({
-            autoclose: true,
-            format:'yyyy-mm-dd'
-         });
-
-        $(".btn-remove").click(function(){
-
-            $("table tbody").find('input[name="remove"]').each(function(){
-                var _total_amount = 0.00;
-                $( "#dTable-selected-item-table tbody > tr" ).each( function() {
-                    var $row = $( this );        
-                    var _subtotal = $row.find( ".amount" ).val();
-    
-                    _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );     
-                });
-                    _total_amount = _total_amount.toFixed(2);
-                    $('input[name="grand_total"]').val(  _total_amount  );
-                });
-            });
 
  
         $('.chosen-select').chosen({width: "100%"});
 
 
-         $('#dTable-ItemList-table tbody').on('click','.btn-add-items',function(event){
+        $('#dTable-ItemList-table tbody').on('click','.btn-add-items',function(event){
             var _setQty =  parseFloat($(this).closest( 'tr' ).find( '#setQty' ).val());
             var _unitQty =  parseFloat($(this).closest( 'tr' ).find( '#unitQty' ).val());
             var _itemID =  parseFloat($(this).closest( 'tr' ).find( '#item_id' ).val());
-
+            var _total_amount = 0.00;
+            var _total_dis_amount = 0.00;
+            var _total_dis_percent = 0.00;
 
             if ( isNaN( _setQty) || !_setQty ){
 
@@ -292,7 +252,7 @@
                 
                 var _id = _itemID;
                 var _cs = $('#customer_id').val();
- 
+            //
                 $.ajax({
                 url:  '{{ url('sales/getcustomeritems') }}',
                 type: 'POST',
@@ -302,32 +262,85 @@
                 success:function(results){
 
                             var _Gamount = _setQty * parseFloat( results.csPrice.set_srp );
-
+                //
                           $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='invenId[]' class='form-control input-sm text-center invenId' size='3'  value="+ results.invenId.id +" readonly></td>\
                             <td>"+ results.csPrice.description +"</td>\
-                            <td>"+'('+ results.invenId.unit_quantity +') '+results.csPrice.units+"</td><td><input type='text' name='setQty[]' class='form-control input-sm text-center setQty' size='3'  value="+ _setQty.toFixed(2) +" readonly></td><td><input type='text' name='setPrice[]' class='form-control input-sm text-center setPrice' size='3'  id='setPrice' value="+results.csPrice.srp +" readonly></td><td><input type='text' name='dis_amount[]' class='form-control input-sm text-center dis_amount' size='3'  id='dis_amount' value="+results.csPrice.dis_amount+" readonly></td><td><input type='text' name='dis_percent[]' class='form-control input-sm text-center dis_percent' size='3'  id='dis_percent' value="+results.csPrice.dis_percent+" readonly></td><td><input type='text' name='setSRP[]' class='form-control input-sm text-center setSRP' size='3'  id='setSRP' value="+results.csPrice.set_srp+" readonly></td><td><b><input type='text' name='gAmount[]' class='form-control input-sm text-right gAmount' size='5'  id='gAmount' value="+_Gamount.toFixed(2)+" readonly></b></td>\
+                            <td>"+'('+ results.invenId.unit_quantity +') '+results.csPrice.units+"</td><td><input type='text' name='setQty[]' class='form-control input-sm text-center setQty' size='3'  value="+ _setQty.toFixed(2) +" readonly></td><td><input type='text' name='setPrice[]' class='form-control input-sm text-center setPrice' size='6'  id='setPrice' value="+results.csPrice.srp +" readonly></td><td><input type='text' name='dis_amount[]' class='form-control input-sm text-center dis_amount' size='6'  id='dis_amount' value="+results.csPrice.dis_amount+" readonly></td><td><input type='text' name='dis_percent[]' class='form-control input-sm text-center dis_percent' size='3'  id='dis_percent' value="+results.csPrice.dis_percent+" readonly></td><td><input type='text' name='setSRP[]' class='form-control input-sm text-center setSRP' size='6'  id='setSRP' value="+results.csPrice.set_srp+" readonly></td><td><b><input type='text' name='gAmount[]' class='form-control input-sm text-right gAmount' size='6'  id='gAmount' value="+_Gamount.toFixed(2)+" readonly></b></td>\
                             <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
                               </tr>");
 
                         toastr.info(results.csPrice.description  +' has been added','Success!')
-                    
+
+
+                        $( "#dTable-selected-item-table tbody > tr" ).each( function() {
+                                var $row = $( this );        
+                                var _subtotal = $row.find( ".gAmount" ).val();
+                                var _dis_amount = $row.find( ".dis_amount" ).val();
+                                var _dis_percent = $row.find( ".dis_percent" ).val();
+            
+                        _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+                        
+                         _total_dis_amount += parseFloat( ('0' + _dis_amount).replace(/[^0-9-\.]/g, ''), 10 );
+                           
+                        _total_dis_percent += parseFloat( ('0' + _dis_percent).replace(/[^0-9-\.]/g, ''), 10 );
+
+                        });
+
+                         _total_amount = _total_amount.toFixed(2);
+                        $('#total_sales').val(  _total_amount  );
+
+                         _total_dis_amount = _total_dis_amount.toFixed(2);
+                        $('#total_amount_discount').val(  _total_dis_amount  );
+
+                         _total_dis_percent = _total_dis_percent.toFixed(2);
+                        $('#total_percent_discount').val(  _total_dis_percent  );
                     }
                 });
-
-
-            }
-            
+            }   
          });
 
-   
 
-        $('#dTable-selected-item-table').on('click', '#delete_line', function(){
-            $(this).closest('tr').remove();
+       $('#dTable-selected-item-table').on('click', '#delete_line', function(){
+
+            $(this).closest('tr').remove();  
+                
+                var _total_amount = 0;
+                var _total_dis_amount = 0;
+                var _total_dis_percent = 0;
+                    
+                     $( "#dTable-selected-item-table tbody > tr" ).each( function() {
+                            var $row = $( this );        
+                            var _subtotal = $row.find( ".gAmount" ).val();
+                            var _dis_amount = $row.find( ".dis_amount" ).val();
+                            var _dis_percent = $row.find( ".dis_percent" ).val();
+                    
+                        _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+                            
+                        _total_dis_amount += parseFloat( ('0' + _dis_amount).replace(/[^0-9-\.]/g, ''), 10 );
+                           
+                        _total_dis_percent += parseFloat( ('0' + _dis_percent).replace(/[^0-9-\.]/g, ''), 10 ); 
+                    });
+
+                _total_amount = _total_amount.toFixed(2);
+                $('#total_sales').val(  _total_amount  );
+
+                _total_dis_amount = _total_dis_amount.toFixed(2);
+                $('#discount_amount').val(  _total_dis_amount  );
+
+                _total_dis_percent = _total_dis_percent.toFixed(2);
+                $('#discount_percentage').val(  _total_dis_percent  );
+
         });
 
         $(document).ready(function(){
             $('#btn-close').on('click', function(){
                 document.location.href="/sales"; 
+            });
+        });
+
+        $(document).ready(function(){
+            $('.btn-add-items').on('click', function(){
+                toastr.info(' YEs Pwede!!','Success!')
             });
         });
 

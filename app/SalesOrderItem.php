@@ -8,6 +8,7 @@ class SalesOrderItem extends Model
 {
 	protected $table = 'sales_order_items'; 
 
+    public $timestamps = false;
 
     public function sales_ordet()
     {

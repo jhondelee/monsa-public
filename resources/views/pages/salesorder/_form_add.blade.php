@@ -10,7 +10,7 @@
         <div  class="col-sm-3 ">
             <div class="input-group date">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                {!! Form::text('so_date',null, ['class'=>'form-control', 'required'=>true]) !!}
+                {!! Form::text('so_date',null, ['class'=>'form-control so_date', 'required'=>true, 'id'=>'so_date']) !!}
             </div>
         </div>
     </div>
@@ -23,9 +23,9 @@
             {!! Form::select ('customer_id',$customer_id, null,['placeholder' => 'Select Customer...','class'=>'chosen-select','required'=>true, 'id'=>'customer_id'])!!}
         </div>
 
-        <label class="col-sm-2 control-label">Sales Agent <span class="text-danger">*</span></label>
+        <label class="col-sm-2 control-label">Main Agent <span class="text-danger">*</span></label>
         <div class="col-sm-3">
-            {!! Form::select ('employee_id',$employee, null,['placeholder' => 'Select Sales Agent...','class'=>'chosen-select','required'=>true])!!}
+            {!! Form::select ('employee_id',$employee, null,['placeholder' => 'Select Main Agent...','class'=>'chosen-select','required'=>true])!!}
         </div>
 
 
@@ -40,11 +40,12 @@
             {!! Form::text('prepared_by',$creator, ['class'=>'form-control', 'readonly']) !!}
         </div>
 
-        <label class="col-sm-2 control-label">Approved by <span class="text-danger">*</span></label>
+        <label class="col-sm-2 control-label">Sub Agent</label>
         <div class="col-sm-3">
-            {!! Form::select ('approved_by',$employee, null,['placeholder' => 'Select Approver...','class'=>'chosen-select','required'=>true])!!}
-            
+            {!! Form::select ('sub_employee_id',$employee, null,['placeholder' => 'Select Sub Agent...','class'=>'chosen-select'])!!}
         </div>
+
+
     </div>
 
     <div class="form-group">
@@ -54,14 +55,22 @@
              {!! Form::textarea('remarks',null, array('class' => 'form-control', 'rows' => 3)) !!}
         </div>
 
-        <label class="col-sm-2 control-label">Warehouse <span class="text-danger">*</span></label>
-                <div class="col-sm-3">
-            {!! Form::select ('location',$location, null,['placeholder' => 'Select Warehouse...','class'=>'chosen-select', 'id'=>'location'])!!} 
+        <label class="col-sm-2 control-label">Approved by <span class="text-danger">*</span></label>
+        <div class="col-sm-3">
+            {!! Form::select ('approved_by',$employee, null,['placeholder' => 'Select Approver...','class'=>'chosen-select','required'=>true])!!}
+            
         </div>
+
+
 
     </div>
 
-
+     <div class="form-group">
+                 <label class="col-sm-2 control-label">Warehouse <span class="text-danger">*</span></label>
+                <div class="col-sm-3">
+            {!! Form::select ('location',$location, null,['placeholder' => 'Select Warehouse...','class'=>'chosen-select', 'id'=>'location'])!!} 
+        </div>
+     </div>
 
 
     <div class="hr-line-dashed"></div>
@@ -110,15 +119,21 @@
                                 <div class="col-md-8 form-horizontal"></div>
                                 
                                 <div class="col-md-4 form-horizontal">
-                                   
                                     <div class="form-group">
-                                        <!--<label class="col-md-6 control-label"> Discount</label>-->
+                                        <label class="col-md-6 control-label">$ Discount</label>
                                         <div class="col-md-6">
-                                            {!! Form::text('total_discount',null, array('placeholder' => '0.00','class' => 'form-control text-right total_discount','id'=>'total_discount')) !!}
+                                            {!! Form::text('total_amount_discount',null, array('placeholder' => '0.00','class' => 'form-control text-right total_amount_discount','id'=>'total_amount_discount', 'readonly' => 'true')) !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-6 control-label">% Discount</label>
+                                        <div class="col-md-6">
+                                            {!! Form::text('total_percent_discount',null, array('placeholder' => '0.00','class' => 'form-control text-right total_percent_discount','id'=>'total_percent_discount', 'readonly' => 'true')) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <!--<label class="col-md-6 control-label">Total Amount</label>-->
+                                        <label class="col-md-6 control-label">Total Amount</label>
                                         <div class="col-md-6">
                                             {!! Form::text('total_sales',null, array('placeholder' => '0.00','class' => 'form-control text-right total_sales','id'=>'total_sales', 'readonly' => 'true' )) !!}
                                         </div>
@@ -141,8 +156,8 @@
 
                 @if ($salesorder_status == 'NEW')
                         
-                <button type="button" class="btn btn-primary" onclick="submit_validate()"> Save Changes</button>
-                <button type="submit" id="btn-submit" style="display:none;"></button>                       
+
+                {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!}                       
         
                 @endif  
 

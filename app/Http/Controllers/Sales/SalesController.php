@@ -11,7 +11,7 @@ use Yajra\Datatables\Datatables;
 use App\Item;
 use App\Inventory;
 use App\SalesOrder;
-use App\SalesOrderItems;
+use App\SalesOrderItem;
 use App\UnitOfMeasure; 
 use App\Customer; 
 use App\WarehouseLocation;
@@ -72,9 +72,9 @@ class SalesController extends Controller
     public function store(Request $request)
     {
 
-        $this->validate($request, [
-            'po_date'       => 'required',
-            'supplier_id'   => 'required',
+       $this->validate($request, [
+            'so_date'       => 'required',
+            'employee_id'   => 'required',
             'approved_by'   => 'required'
         ]);
 
@@ -90,11 +90,19 @@ class SalesController extends Controller
 
         $salesorder->customer_id        = $request->customer_id;
 
-        $salesorder->unti_cost_total    = $unitCostTotal;
+        $salesorder->employee_id        = $request->employee_id;
 
-        $salesorder->total_discount     = $request->discount;
+        $salesorder->sub_employee_id    = $request->sub_employee_id;
 
-        $salesorder->total_sales        = $request->grand_total;
+        $salesorder->unit_cost_total    = $unitCostTotal;
+
+        $salesorder->total_amount_discount     = $request->total_amount_discount;
+
+        $salesorder->total_percent_discount     = $request->total_percent_discount;
+
+        $salesorder->location           = $request->location;
+
+        $salesorder->total_sales        = $request->total_sales;
 
         $salesorder->approved_by        = $request->approved_by;
 
@@ -104,29 +112,44 @@ class SalesController extends Controller
 
         $salesorder->save();
 
-        $orders_id      = $orders->id;
-        $item_id        = $request->get('item_id');
-        $item_quantity  = $request->get('quantity');
+        $salesorder_id  = $salesorder->id;
+        $salesorder_no  = $salesorder->so_number;
+        $inven_Id       = $request->get('invenId');
+        $setQty         = $request->get('setQty');
+        $setPrice       = $request->get('setPrice');
+        $disAmount      = $request->get('dis_amount');
+        $disPercent     = $request->get('dis_percent');
+        $subAmount      = $request->get('gAmount');
         
 
-        for ( $i=0 ; $i < count($item_id) ; $i++ ){
+        for ( $i=0 ; $i < count($inven_Id) ; $i++ ){
 
-            $items = $this->items->getindex()->where('id', $item_id[$i])->first();
+            $Inventory = Inventory::findOrfail($inven_Id[$i]);
+            $Items  = Item::findOrfail($Inventory->item_id);
 
-            $order_items                    = New OrderItems;
+            $salesorder_items                       = New SalesOrderItem;
 
-            $order_items->order_id          = $orders_id;
+            $salesorder_items->sales_order_id       = $salesorder_id;
 
-            $order_items->item_id           = $items->id;
+            $salesorder_items->so_number            = $salesorder_no;  
 
-            $order_items->quantity          = $item_quantity[$i];
+            $salesorder_items->inventory_id         = $inven_Id[$i];
 
-            $order_items->unit_cost         = 0.00;
+            $salesorder_items->item_id              = $Inventory->item_id;
 
-            $order_items->unit_total_cost   = 0.00;
+            $salesorder_items->order_quantity       = $setQty[$i];
 
-            $order_items->save();
+            $salesorder_items->unit_cost            = $Items->unit_cost;
 
+            $salesorder_items->srp                  = $setPrice[$i];
+
+            $salesorder_items->discount_amount      = $disAmount[$i];
+
+            $salesorder_items->discount_percentage  = $disPercent[$i];
+
+            $salesorder_items->sub_amount           = $subAmount[$i];
+
+            $salesorder_items->save();
 
         }
 
@@ -134,7 +157,7 @@ class SalesController extends Controller
         return redirect()->route('salesorder.index')
 
             ->with('success','Order has been saved successfully.');
-    }
+        }
     
 
     public function getInventoryItems(Request $request)
@@ -203,15 +226,17 @@ class SalesController extends Controller
 
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
-        $approver = $this->user->getemplist()->pluck('emp_name','id');
+        $employee = $this->user->getemplist()->pluck('emp_name','id');
 
-        $supplier = Supplier::pluck('name','id');
+        $customer_id = Customer::pluck('name','id');
 
-        $order = Order::find($id);
+        $location  = WarehouseLocation::pluck('name','id');
 
-        $order_status = $order->status;
+        $salesorder = SalesOrder::find($id);
 
-        return view('pages.salesorder.edit',compact('order','creator','approver','supplier','items','order_status'));
+        $salesorder_status = $salesorder->status;
+
+        return view('pages.salesorder.edit',compact('salesorder','creator','employee','customer_id','items','salesorder_status','location'));
 
     }
 

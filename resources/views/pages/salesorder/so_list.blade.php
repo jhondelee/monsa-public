@@ -24,7 +24,7 @@
                     <td>{{ date('m-d-y', strtotime($salesorders_open->so_date))}}</td>
                     <td>{{$salesorders_open->customer}}</td>
                     <td>{{$salesorders_open->sales_agent}}</td>
-                    <td>{{$salesorders_open->sales_total}}</td>
+                    <td>{{$salesorders_open->total_sales}}</td>
                     <td class="text-center">
                         @IF($salesorders_open->status == 'NEW')
                             <label class="label label-info" >NEW</label> 
