@@ -221,6 +221,7 @@ $(document).on('click', '#btn-add-item', function() {
                             destroy: true,
                             pageLength: 10,
                             responsive: true,
+                            autoWidth: true,
                             fixedColumns: true,
                             data: results,
                             dom: '<"html5buttons"B>lTfgitp',

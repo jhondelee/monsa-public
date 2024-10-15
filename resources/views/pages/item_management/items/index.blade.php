@@ -179,6 +179,7 @@ $(document).ready(function(){
                                         pageLength: 100,
                                         responsive: true,
                                         data: results,
+                                        autoWidth: true,
                                         dom: '<"html5buttons"B>lTfgitp',
                                         buttons: [],
                                         fixedColumns: true,

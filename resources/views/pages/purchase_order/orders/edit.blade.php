@@ -124,6 +124,7 @@
                         pageLength: 100,
                         responsive: true,
                         fixedColumns: true,
+                        autoWidth: true,
                         data: results,
                         dom: '<"html5buttons"B>lTfgitp',
                         buttons: [],
