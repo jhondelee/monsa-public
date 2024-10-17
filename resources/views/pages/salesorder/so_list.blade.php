@@ -27,7 +27,7 @@
                     <td>{{$salesorders_open->total_sales}}</td>
                     <td class="text-center">
                         @IF($salesorders_open->status == 'NEW')
-                            <label class="label label-info" >NEW</label> 
+                            <label class="label label-danger" >NEW</label> 
                         @ELSE
                             {{$salesorders_open->status}}
                         @ENDIF

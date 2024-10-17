@@ -35,6 +35,7 @@
                                         <i class="fa fa-plus">&nbsp;</i>Create Sales Order
                                     </a>
                                  @endif
+                                  
                                 <div class="row m-t-lg">
                                     <div class="col-lg-12">
                                         <div class="tabs-container">

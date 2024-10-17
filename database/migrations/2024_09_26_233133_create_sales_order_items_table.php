@@ -22,6 +22,7 @@ class CreateSalesOrderItemsTable extends Migration
             $table->decimal('order_quantity')->nullable()->default(0);
             $table->decimal('unit_cost')->nullable()->default(0);
             $table->decimal('srp')->nullable()->default(0);
+            $table->decimal('set_srp')->nullable()->default(0);
             $table->decimal('discount_amount')->nullable()->default(0);
             $table->decimal('discount_percentage')->nullable()->default(0);
             $table->decimal('sub_amount')->nullable()->default(0);

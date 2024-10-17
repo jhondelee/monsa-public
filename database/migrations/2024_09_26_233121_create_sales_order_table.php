@@ -26,6 +26,7 @@ class CreateSalesOrderTable extends Migration
             $table->decimal('total_amount_discount')->nullable()->default(0);
             $table->decimal('total_percent_discount')->nullable()->default(0);
             $table->integer('location')->required();
+            $table->integer('inventory_deducted')->nullable()->default(0);
             $table->integer('approved_by')->nullable();
             $table->integer('created_by')->required();
             $table->integer('updated_by')->nullable();

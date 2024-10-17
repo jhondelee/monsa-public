@@ -23,9 +23,12 @@
                     <td>{{ date('d-M-y', strtotime($posted->so_date))}}</td>
                     <td>{{$posted->customer}}</td>
                     <td>{{$posted->sales_agent}}</td>
-                    <td class="text-right">{{number_format($posted->sales_total,2)}}</td>
+                    <td class="text-right">{{number_format($posted->total_sales,2)}}</td>
                     <td class="text-center">
-                        <label class="label label-warning" >{{$posted->status}}</label> 
+                        <label class="label label-warning" >{{$posted->status}}</label>
+                        @if ($posted->inventory_deducted == 1)
+                        <label class="label label-danger" >DEDUCTED</label>
+                        @endif
                     </td>
           
                     <td class="text-center">

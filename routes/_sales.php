@@ -21,21 +21,23 @@ Route::group(['prefix' => 'sales'], function() {
 
     Route::get('delete/{id}', 'SalesController@destroy')->name("salesorder.delete");    
 
-    Route::get('print/{id}', 'SalesController@print')->name("salesorder.print"); 
+    Route::get('printDraft/{id}', 'SalesController@printDraft')->name("salesorder.printDraft"); 
+
+    Route::get('print/{id}', 'SalesController@printSO')->name("salesorder.print"); 
 
     Route::get('cancel/{id}', 'SalesController@cancel')->name("salesorder.cancel");
 
-    Route::get('post/{id}', 'SalesController@post')->name("salesorder.post");   
+    Route::get('post/{id}', 'SalesController@post')->name("salesorder.post"); 
+
+    Route::get('deduct/{id}', 'SalesController@deduct')->name("salesorder.deduct");   
 
     Route::post('getcustomeritems', 'SalesController@getcustomeritems')->name("salesorder.getcustomeritems");
 
-    Route::post('getpoitems', 'SalesController@getPOitems')->name("salesorder.getpoitems");
+    Route::post('getforsoitems', 'SalesController@getForSOitems')->name("salesorder.getforsoitems");
 
-    Route::post('supplieritems', 'SalesController@supplierItems')->name("salesorder.supplieritems");
+    Route::post('additem', 'SalesController@getInventoryItems')->name("salesorder.getInventoryItems");
 
-    Route::post('additemSupplier', 'SalesController@additemSupplier')->name("salesorder.additemSupplier");
 
-    Route::post('additem', 'SalesController@getInventoryItems')->name("salesorder.getInventoryItems");  
 
 });
 

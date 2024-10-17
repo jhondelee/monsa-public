@@ -52,12 +52,21 @@
                                      <button type="button" class="btn btn-success" onclick="confirmPost('{{$salesorder->id}}'); return false;" id="post-btn"><i class="fa fa-check">&nbsp;</i>Post&nbsp; </button>
                                 </div>
 
+                             
                                 @endif
 
 
-                            @endif
-                                     <a href="{{route('salesorder.print',$salesorder->id)}}" class="btn btn-primary btn-print"><i class="fa fa-print">&nbsp;</i>Print</a> 
 
+                            @endif
+                               <a href="{{route('salesorder.printDraft',$salesorder->id)}}" class="btn btn-primary btn-print"><i class="fa fa-print">&nbsp;</i>Print - Draft</a>
+
+                                     @if ($salesorder->status == 'POSTED')
+                                     <a href="{{route('salesorder.print',$salesorder->id)}}" class="btn btn-info btn-print"><i class="fa fa-print">&nbsp;</i>Print - SO</a>
+
+                                         @if ($deductStatus==0)
+                                         <button type="button" class="btn btn-danger" onclick="confirmDeduct('{{$salesorder->id}}'); return false;" id="deduct-btn"><i class="fa fa-exclamation-circle">&nbsp;</i>Inventory Deduct&nbsp; </button>
+                                         @endif
+                                     @endif
                             <div class="form-horizontal m-t-md">
                  
                            
@@ -287,23 +296,30 @@
 
         });
 
-        
-        $("#remove-row").click(function(){
-            $("table tbody").find('input[name="remove"]').each(function(){
-                if($(this).is(":checked")){
-                    $(this).parents("tr").remove();
-                }
-            });
-        });
 
-         $(".btn-remove").click(function(){
-            $("table tbody").find('input[name="remove"]').each(function(){
-                if($(this).is(":checked")){
-                    
-                    $(this).parents("tr").remove();
+        $(document).ready(function(){
+            var _id = $('#salesorder_id').val();
+
+                $.ajax({
+                url:  '{{ url('sales/getforsoitems') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: { _token: "{{ csrf_token() }}",
+                id: _id}, 
+                success:function(results){
+
+                //  
+                        for( var i = 0 ; i <= results.length ; i++ ) {
+
+                          $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='invenId[]' class='form-control input-sm text-center invenId' size='3'  value="+ results[i].id +" readonly></td>\
+                            <td>"+ results[i].description +"</td>\
+                            <td>"+results[i].units+"</td><td><input type='text' name='setQty[]' class='form-control input-sm text-center setQty' size='3'  value="+ results[i].order_quantity+" readonly></td><td><input type='text' name='setPrice[]' class='form-control input-sm text-center setPrice' size='6'  id='setPrice' value="+results[i].srp +" readonly></td><td><input type='text' name='dis_amount[]' class='form-control input-sm text-center dis_amount' size='6'  id='dis_amount' value="+results[i].discount_amount+" readonly></td><td><input type='text' name='dis_percent[]' class='form-control input-sm text-center dis_percent' size='3'  id='dis_percent' value="+results[i].discount_percentage+" readonly></td><td><input type='text' name='setSRP[]' class='form-control input-sm text-center setSRP' size='6'  id='setSRP' value="+results[i].set_srp+" readonly></td><td><b><input type='text' name='gAmount[]' class='form-control input-sm text-right gAmount' size='6'  id='gAmount' value="+results[i].sub_amount+" readonly></b></td>\
+                            <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
+                              </tr>");
+                        }
 
                     }
-            });
+                });
         });
 
 
@@ -312,77 +328,32 @@
             format:'yyyy-mm-dd'
          });
 
-        $(".btn-remove").click(function(){
-
-            $("table tbody").find('input[name="remove"]').each(function(){
-
-                var _total_amount = 0.00;
-                $( "#dTable-selected-item-table tbody > tr" ).each( function() {
-                    var $row = $( this );        
-                    var _subtotal = $row.find( ".item_unit_total_cost" ).val();
-    
-                    _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );     
-                });
-                    _total_amount = _total_amount.toFixed(2);
-                    $('input[name="grand_total"]').val(  _total_amount  );
-                });
-
-        });
  
         $('.chosen-select').chosen({width: "100%"});
+
 
         
         function confirmPost(data,model) {   
          $('#confirmPost').modal({ backdrop: 'static', keyboard: false })
             .on('click', '#post-btn', function(){
                 $(this).attr("disabled","disabled");
-                document.location.href="/salesorder/post/"+data;
+                document.location.href="/sales/post/"+data;
             });
         }
 
-        function confirmAddItem(data) {   
-            var id = data;
-            $.ajax({
-            url:  '{{ url('salesorder/getitems') }}',
-            type: 'POST',
-            dataType: 'json',
-            data: { _token: "{{ csrf_token() }}",
-            id: id}, 
-            success:function(results){
-                                               
-                $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='id[]' class='form-control input-sm text-center id' required=true size='4'  value="+ results.id +" readonly></td>\
-                        <td>"+ results.description +"</td>\
-                        <td>"+ results.units +"</td>\
-                        <td>\
-                        <input type='text' name='quantity[]' class='form-control input-sm text-center item_quantity' required=true size='4'  placeholder='0.00'  id ='item_quantity'>\
-                        </td>\
-                        <td style='text-align:center;'>\
-                            <div class='checkbox checkbox-success'>\
-                                <input type='checkbox' name='remove'><label for='remove'></label>\
-                            </div>\
-                        </td>\
-                    </tr>"); 
-
-                    toastr.success(results.description +' has been added','Success!')
-                }
-            })
+        function confirmDeduct(data,model) {   
+         $('#confirmDeduct').modal({ backdrop: 'static', keyboard: false })
+            .on('click', '#deduct-btn', function(){
+                $(this).attr("disabled","disabled");
+                document.location.href="/sales/deduct/"+data;
+            });
         }
-
 
         $(document).ready(function(){
             $('#btn-close').on('click', function(){
-                document.location.href="/order"; 
+                document.location.href="/sales"; 
             });
         });
-
-        function submit_validate() {
-            var ctr = $('#dTable-selected-item-table>tbody>tr').length;
-            if (ctr > 0){
-                $('#orders_form').submit();
-            }else{
-                toastr.warning('No Items to be save!','Invalid!')
-            }
-         }
 
 
 </script>

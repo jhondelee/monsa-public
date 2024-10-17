@@ -17,6 +17,7 @@ use App\Customer;
 use App\WarehouseLocation;
 use App\User as Users;
 use Carbon\Carbon;
+use App\Factories\SalesOrder\PDF_MC_Table;
 use Fpdf;
 use DB;
 
@@ -45,6 +46,7 @@ class SalesController extends Controller
         $cancel_salesorder   = $this->salesorders->getindex()->where('status','CANCELED')->sortByDesc('id');
         $closed_salesorder   = $this->salesorders->getindex()->where('status','CLOSED')->sortByDesc('id');
         
+        
 
         return view('pages.salesorder.index',compact('salesorders','posted_salesorder','cancel_salesorder','closed_salesorder'));
     }
@@ -64,6 +66,8 @@ class SalesController extends Controller
         $location  = WarehouseLocation::pluck('name','id');
 
         $salesorder_status = "NEW";
+
+  
 
           return view('pages.salesorder.create',compact('employee','creator','customer_id','items','salesorder_status','location'));
     }
@@ -117,6 +121,7 @@ class SalesController extends Controller
         $inven_Id       = $request->get('invenId');
         $setQty         = $request->get('setQty');
         $setPrice       = $request->get('setPrice');
+        $setSRP         = $request->get('setSRP');
         $disAmount      = $request->get('dis_amount');
         $disPercent     = $request->get('dis_percent');
         $subAmount      = $request->get('gAmount');
@@ -143,6 +148,8 @@ class SalesController extends Controller
 
             $salesorder_items->srp                  = $setPrice[$i];
 
+            $salesorder_items->set_srp              = $setSRP[$i];
+
             $salesorder_items->discount_amount      = $disAmount[$i];
 
             $salesorder_items->discount_percentage  = $disPercent[$i];
@@ -150,6 +157,8 @@ class SalesController extends Controller
             $salesorder_items->sub_amount           = $subAmount[$i];
 
             $salesorder_items->save();
+
+
 
         }
 
@@ -187,34 +196,13 @@ class SalesController extends Controller
         
     }
 
-    public function getPOitems(Request $request)
-    {
-     
-        $results = $this->items->getForPO($request->id);   
 
-        return response()->json($results);       
-        
-    }
-
-
-
-
-    public function additemSupplier(Request $request)
-    {
-        
-        $results = $this->items->additemSupplier($request->id);   
-
-        return response()->json($results);       
-        
-    }
-
-    public function orderToSupplier(Request $request)
+    public function getForSOitems(Request $request)
     {
 
-        $results = $this->orders->orderToSupplier($request->id);
+        $results = $this->salesorders->getForSOitems($request->id);
 
         return response()->json($results); 
-
       
     }
 
@@ -236,109 +224,133 @@ class SalesController extends Controller
 
         $salesorder_status = $salesorder->status;
 
-        return view('pages.salesorder.edit',compact('salesorder','creator','employee','customer_id','items','salesorder_status','location'));
+        $deductStatus = $salesorder->inventory_deducted;
+
+        return view('pages.salesorder.edit',compact('salesorder','creator','employee','customer_id','items','salesorder_status','location','deductStatus'));
 
     }
 
 
     public function update(Request $request,$id)
     {
-          $this->validate($request, [
-            'po_date'       => 'required',
-            'supplier_id'   => 'required',
+
+        $this->validate($request, [
+            'so_date'       => 'required',
+            'employee_id'   => 'required',
             'approved_by'   => 'required'
         ]);
 
+        $unitCostTotal=0;
 
-        $orders                  = Order::find($id);
+        $salesorder                     = SalesOrder::findOrfail($id);
 
-        $orders->po_number      = $request->po_number;
+        $salesorder->so_number          = $request->so_number;
 
-        $orders->po_date        = $request->po_date;
+        $salesorder->so_date            = $request->so_date;
 
-        $orders->remarks        = $request->remarks;
+        $salesorder->remarks            = $request->remarks;
 
-        $orders->supplier_id    = $request->supplier_id;
+        $salesorder->customer_id        = $request->customer_id;
 
-        $orders->discount       = 0;
+        $salesorder->employee_id        = $request->employee_id;
 
-        $orders->grand_total    = 0;
+        $salesorder->sub_employee_id    = $request->sub_employee_id;
 
-        $orders->approved_by    = $request->approved_by;
+        $salesorder->unit_cost_total    = $unitCostTotal;
 
-        $orders->save();
+        $salesorder->total_amount_discount     = $request->total_amount_discount;
 
-        $item_id        = $request->get('id');
-        $item_quantity  = $request->get('quantity');
+        $salesorder->total_percent_discount     = $request->total_percent_discount;
+
+        $salesorder->location           = $request->location;
+
+        $salesorder->total_sales        = $request->total_sales;
+
+        $salesorder->approved_by        = $request->approved_by;
+
+        $salesorder->updated_by         = auth()->user()->id;
+
+        $salesorder->status             = 'NEW';
+
+        $salesorder->save();
+
+        $salesorder_id  = $salesorder->id;
+        $salesorder_no  = $salesorder->so_number;
+        $inven_Id       = $request->get('invenId');
+        $setQty         = $request->get('setQty');
+        $setPrice       = $request->get('setPrice');
+        $setSRP         = $request->get('setSRP');
+        $disAmount      = $request->get('dis_amount');
+        $disPercent     = $request->get('dis_percent');
+        $subAmount      = $request->get('gAmount');
         
-
-
-         if(count($request->get('id')) > 0);
+        if(count($request->get('invenId')) > 0);
         {
 
-            $order_items = OrderItems::where('order_id',$id)->get();
+            $so_items = SalesOrderItem::where('sales_order_id',$id)->get();
 
-             if(count($order_items) > 0)
+             if(count($so_items) > 0)
              {
-                foreach ($order_items as $key => $order_item) 
+                foreach ($so_items as $key => $so_item) 
                 {
-                    $orderitems = OrderItems::findOrfail($order_item->id);
+                    $salesorderitems = SalesOrderItem::findOrfail($so_item->id);
 
-                    $orderitems->delete();
+                    $salesorderitems->delete();
                 }
 
              }
+        }
 
 
+        for ( $i=0 ; $i < count($inven_Id) ; $i++ ){
 
-            for ( $i=0 ; $i < count($item_id) ; $i++ ){
+            $Inventory = Inventory::findOrfail($inven_Id[$i]);
+            $Items  = Item::findOrfail($Inventory->item_id);
 
-                $items = $this->items->getindex()->where('id', $item_id[$i])->first();
+            $salesorder_items                       = New SalesOrderItem;
 
-                $order_items                    = New OrderItems;
+            $salesorder_items->sales_order_id       = $salesorder_id;
 
-                $order_items->order_id          = $id;
+            $salesorder_items->so_number            = $salesorder_no;  
 
-                $order_items->item_id           = $items->id;
+            $salesorder_items->inventory_id         = $inven_Id[$i];
 
-                $order_items->quantity          = $item_quantity[$i];
+            $salesorder_items->item_id              = $Inventory->item_id;
 
-                $order_items->unit_cost         = 0;
+            $salesorder_items->order_quantity       = $setQty[$i];
 
-                $order_items->unit_total_cost   = 0;
+            $salesorder_items->unit_cost            = $Items->unit_cost;
 
-                $order_items->save();
+            $salesorder_items->srp                  = $setPrice[$i];
 
-                               
-            }
+            $salesorder_items->set_srp              = $setSRP[$i];
 
-             return redirect()->route('salesorder.index')
+            $salesorder_items->discount_amount      = $disAmount[$i];
 
-                ->with('success','Order has been saved successfully.');
+            $salesorder_items->discount_percentage  = $disPercent[$i];
 
+            $salesorder_items->sub_amount           = $subAmount[$i];
 
-        } 
-   
-        {
-
-            return redirect()->back()->with('error','Please add item to purchase!');
+            $salesorder_items->save();
 
         }
 
-        
 
+        return redirect()->route('salesorder.index')
 
+            ->with('success','Sales Order has been updated successfully.');
+    
     }
 
 
     public function cancel($id)
     {
 
-        $order = Order::find($id);
+        $salesorder = SalesOrder::findOrfail($id);
 
-        $order->status = 'CANCELED';
+        $salesorder->status = 'CANCELED';
 
-         $order->save();
+        $salesorder->save();
 
         
         return redirect()->route('salesorder.index')
@@ -351,11 +363,11 @@ class SalesController extends Controller
     public function post($id)
     {
 
-        $order = Order::find($id);
+        $salesorder = SalesOrder::findOrfail($id);
 
-        $order->status = 'POSTED';
+        $salesorder->status = 'POSTED';
 
-         $order->save();
+        $salesorder->save();
 
         
         return redirect()->route('salesorder.index')
@@ -364,45 +376,77 @@ class SalesController extends Controller
 
     }
 
+    public function deduct($id)
+    {
+
+        $so_items = SalesOrderItem::where('sales_order_id',$id)->get();
+
+            if(count($so_items) > 0)
+            {
+                foreach ($so_items as $key => $so_item) 
+                {                        
+                    $salesorderitems = SalesOrderItem::findOrfail($so_item->id);
+
+                    $items = Item::findOrfail($salesorderitems->item_id);
+
+                        $inventory = Inventory::findOrfail($salesorderitems->inventory_id);
+
+                        $inventory->unit_quantity = $inventory->unit_quantity - $salesorderitems->order_quantity;
+
+                        $inventory->onhand_quantity = ($inventory->unit_quantity * $items->unit_quantity);
+
+                        $inventory->save();
+                }
+            }
+
+        $salesorder = SalesOrder::findOrfail($id);
+
+        $salesorder->inventory_deducted = 1;
+
+        $salesorder->save();
+        
+        return redirect()->route('salesorder.index')
+
+            ->with('success','Sales Order has been deducted to Invntory successfully.');
+
+    }
 
 
     public function destroy($id)
     {
 
-        $order = Order::find($id);
+        $salesorder = SalesOrder::find($id);
 
-        $order_items = OrderItems::where('order_id',$id)->get();
+        $salesorder_items = SalesOrderItem::where('sales_order_id',$id)->get();
 
-          if(count($order_items) > 0)
+          if(count($salesorder_items) > 0)
             {
-                foreach ($order_items as $key => $order_item) 
+                foreach ($salesorder_items as $key => $salesorder_item) 
                 {
-                    $orderitems = OrderItems::findOrfail($order_item->id);
+                    $salesorderitems = SalesOrderItem::findOrfail($salesorder_item->id);
 
-                    $orderitems->delete();
+                    $salesorderitems->delete();
                 }
 
             }
 
-        $order->delete();
+        $salesorder->delete();
 
         
         return redirect()->route('salesorder.index')
 
-            ->with('success','Order has been canceled successfully.');
+            ->with('success','Order has been deleted successfully.');
 
     }
 
-
-    public function print($id)
+     public function printSO($id)
     {
-
-        $orders = Order::find($id);       
+        $salesorders = SalesOrder::find($id);       
         
         $pdf = new Fpdf('P');
         $pdf::AddPage('P','A4');
         //$pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
-        $pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
+        $pdf::Image('img/temporary-logo.jpg',3, 3, 40.00);
         $pdf::SetFont('Arial','B',12);
         $pdf::SetY(20);     
 
@@ -416,100 +460,181 @@ class SalesController extends Controller
         $pdf::Ln(2);
         $pdf::SetFont('Arial','B',12);
         $pdf::SetXY($pdf::getX(), $pdf::getY());
-        $pdf::cell(185,1,"Purchse Order",0,"","C");
+        $pdf::cell(185,1,"Sales Order",0,"","C");
 
-        $pdf::Ln(18);
+        $pdf::Ln(15);
         $pdf::SetFont('Arial','B',9);
         $pdf::SetXY($pdf::getX(), $pdf::getY());
-        $pdf::cell(20,6,"PO Number",0,"","L");
+        $pdf::cell(20,6,"SO Number",0,"","L");
         $pdf::SetFont('Arial','',9);
-        $pdf::cell(40,6,': '.$orders->po_number,0,"","L");
+        $pdf::cell(40,6,': '.$salesorders->so_number,0,"","L");
         $pdf::SetFont('Arial','B',9);
-        $pdf::cell(100,6,"PO Date",0,"","R");
+        $pdf::cell(100,6,"SO Date",0,"","R");
         $pdf::SetFont('Arial','',9);
-        $po_date = Carbon::parse($orders->po_date);
-        $pdf::cell(30,6,': '.$po_date->format('M d, Y'),0,"","L");
+        $so_date = Carbon::parse($salesorders->so_date);
+        $pdf::cell(30,6,': '.$so_date->format('M d, Y'),0,"","L");
         
 
-        $pdf::Ln(6);
+        $pdf::Ln(4);
         $pdf::SetFont('Arial','B',9);
         $pdf::SetXY($pdf::getX(), $pdf::getY());
-        $pdf::cell(20,6,"Supplier",0,"","L");
+        $pdf::cell(20,6,"Customer",0,"","L");
         $pdf::SetFont('Arial','',9);
-        $supplier = Supplier::find($orders->supplier_id);
-        $pdf::cell(40,6,': '.$supplier->name,0,"","L");
+        $customer = Customer::find($salesorders->customer_id);
+        $pdf::cell(40,6,': '.$customer->name,0,"","L");
 
-        $pdf::Ln(6);
+        $pdf::Ln(4);
         $pdf::SetFont('Arial','B',9);
         $pdf::SetXY($pdf::getX(), $pdf::getY());
         $pdf::cell(20,6,"Status",0,"","L");
         $pdf::SetFont('Arial','',9);
-        $pdf::cell(40,6,': '.$orders->status,0,"","L");
+        $pdf::cell(40,6,': '.$salesorders->status.'',0,"","L");
 
-        $pdf::Ln(6);
+        $pdf::Ln(4);
         $pdf::SetFont('Arial','B',9);
         $pdf::SetXY($pdf::getX(), $pdf::getY());
         $pdf::cell(20,6,"Remarks",0,"","L");
         $pdf::SetFont('Arial','',9);
-        $pdf::cell(40,6,': '.$orders->remarks,0,"","L");
+        $pdf::cell(40,6,': '.$salesorders->remarks,0,"","L");
 
 
         //Column Name
-            $pdf::Ln(15);
+            $pdf::Ln(10);
             $pdf::SetFont('Arial','B',9);
             $pdf::cell(10,6,"No.",0,"","L");
-            $pdf::cell(40,6,"Item Name",0,"","L");
-            $pdf::cell(75,6,"Description",0,"","L");
-            $pdf::cell(25,6,"Unit",0,"","C");
-            $pdf::cell(30,6,"Order Quantity",0,"","C");
+            if(($salesorders->total_amount_discount == 0) && ($salesorders->total_percent_discount == 0)){
+                $pdf::cell(70,6,"Item Name",0,"","L");
+                $pdf::cell(15,6,"Unit",0,"","L");
+                $pdf::cell(30,6,"Qty",0,"","C");
+                $pdf::cell(30,6,"SRP",0,"","R");
+                $pdf::cell(30,6,"Amount",0,"","R");
+            }elseif(($salesorders->total_amount_discount > 0) && ($salesorders->total_percent_discount == 0)){
+                $pdf::cell(60,6,"Item Name",0,"","L");
+                $pdf::cell(15,6,"Unit",0,"","L");
+                $pdf::cell(15,6,"Qty",0,"","C");
+                $pdf::cell(20,6,"SRP",0,"","R");
+                $pdf::cell(20,6,"$ Disc.",0,"","C");
+                $pdf::cell(20,6,"Price",0,"","R");
+                $pdf::cell(25,6,"Amount",0,"","R");
+            }elseif (($salesorders->total_amount_discount == 0) && ($salesorders->total_percent_discount > 0)){
+                $pdf::cell(60,6,"Item Name",0,"","L");
+                $pdf::cell(15,6,"Unit",0,"","L");
+                $pdf::cell(15,6,"Qty",0,"","C");
+                $pdf::cell(20,6,"SRP",0,"","R");
+                $pdf::cell(20,6,"% Disc.",0,"","C");
+                $pdf::cell(20,6,"Price",0,"","R");
+                $pdf::cell(25,6,"Amount",0,"","R");
+            }elseif (($salesorders->total_amount_discount > 0) && ($salesorders->total_percent_discount > 0)){
+                $pdf::cell(60,6,"Item Name",0,"","L");
+                $pdf::cell(10,6,"Unit",0,"","L");
+                $pdf::cell(10,6,"Qty",0,"","C");
+                $pdf::cell(20,6,"SRP",0,"","R");
+                $pdf::cell(15,6,"$ Disc.",0,"","C");
+                $pdf::cell(15,6,"% Disc.",0,"","C");
+                $pdf::cell(20,6,"Price",0,"","R");
+                $pdf::cell(25,6,"Amount",0,"","R");
+            }
 
 
-         $pdf::Ln(1);
+        $pdf::Ln(1);
         $pdf::SetFont('Arial','',9);
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
 
-        $orde_items = $this->items->getForPO($id);;
-        $order_number = 0;
-        foreach ($orde_items as $key => $value) {
 
+        $sales_order_items = $this->salesorders->getForSOitems($id);;
+        $order_number = 0;
+
+        foreach ($sales_order_items as $key => $value) {
             $pdf::Ln(5);
             $pdf::SetFont('Arial','',9);
-            $pdf::cell(10,6,$order_number=$order_number+1,0,"","L");
-            $pdf::cell(40,6,$value->name,0,"","L");
-            $pdf::cell(75,6,$value->description,0,"","L");
-  
-            $pdf::cell(25,6,$value->units,0,"","C");
-            $pdf::cell(30,6,number_format($value->quantity,2),0,"","C");
+            if(($salesorders->total_amount_discount == 0) && ($salesorders->total_percent_discount == 0)){
+                $pdf::cell(10,6,$order_number=$order_number+1,0,"","L");
+                $pdf::cell(70,6,$value->description,0,"","L");
+                $pdf::cell(15,6,$value->unti_code,0,"","L");
+                $pdf::cell(30,6,$value->order_quantity,0,"","C");
+                $pdf::cell(30,6,number_format($value->srp,2),0,"","R");
+                $pdf::cell(30,6,number_format($value->sub_amount,2),0,"","R");
+            }elseif(($salesorders->total_amount_discount > 0) && ($salesorders->total_percent_discount == 0)){
+                $pdf::cell(10,6,$order_number=$order_number+1,0,"","L");
+                $pdf::cell(60,6,$value->description,0,"","L");
+                $pdf::cell(15,6,$value->unti_code,0,"","L");
+                $pdf::cell(15,6,$value->order_quantity,0,"","C");
+                $pdf::cell(20,6,number_format($value->srp,2),0,"","R");
+                $pdf::cell(20,6,number_format($value->discount_amount,2),0,"","C");
+                $pdf::cell(20,6,number_format($value->set_srp,2),0,"","R");
+                $pdf::cell(25,6,number_format($value->sub_amount,2),0,"","R");
+            }elseif (($salesorders->total_amount_discount == 0) && ($salesorders->total_percent_discount > 0)){
+                $pdf::cell(10,6,$order_number=$order_number+1,0,"","L");
+                $pdf::cell(60,6,$value->description,0,"","L");
+                $pdf::cell(15,6,$value->unti_code,0,"","L");
+                $pdf::cell(15,6,$value->order_quantity,0,"","C");
+                $pdf::cell(20,6,number_format($value->srp,2),0,"","R");
+                $pdf::cell(20,6,number_format($value->discount_percentage,2),0,"","C");
+                $pdf::cell(20,6,number_format($value->set_srp,2),0,"","R");
+                $pdf::cell(25,6,number_format($value->sub_amount,2),0,"","R");
+            }elseif (($salesorders->total_amount_discount > 0) && ($salesorders->total_percent_discount > 0)){
+                $pdf::cell(10,6,$order_number=$order_number+1,0,"","L");
+                $pdf::cell(60,6,$value->description,0,"","L");
+                $pdf::cell(10,6,$value->unti_code,0,"","L");
+                $pdf::cell(10,6,$value->order_quantity,0,"","C");
+                $pdf::cell(20,6,number_format($value->srp,2),0,"","R");
+                $pdf::cell(15,6,number_format($value->discount_amount,2),0,"","C");
+                $pdf::cell(15,6,number_format($value->discount_percentage,2),0,"","C");
+                $pdf::cell(20,6,number_format($value->set_srp,2),0,"","R");
+                $pdf::cell(25,6,number_format($value->sub_amount,2),0,"","R");
+            } 
+              
         }
+
+           
 
         $pdf::Ln(5);
             $pdf::SetFont('Arial','I',8);
+
             $pdf::cell(185,6,"--Nothing Follows--",0,"","C");
 
         $pdf::Ln(3);
         $pdf::SetFont('Arial','',9);
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
 
+            if(($salesorders->total_amount_discount > 0) && ($salesorders->total_percent_discount == 0)){
+                $pdf::Ln(5);
+                $pdf::SetFont('Arial','B',9);
+                $pdf::cell(155,6,"$ Discount :",0,"","R");
+                $pdf::SetFont('Arial','',9);
+                $pdf::cell(30,6,number_format($salesorders->total_amount_discount,2),0,"","R");
+            }elseif (($salesorders->total_amount_discount == 0) && ($salesorders->total_percent_discount > 0)){
+                $pdf::Ln(5);
+                $pdf::SetFont('Arial','B',9);
+                $pdf::cell(155,6,"% Discount :",0,"","R");
+                $pdf::SetFont('Arial','',9);
+                $pdf::cell(30,6,number_format($salesorders->total_percent_discount,2),0,"","R");
+            }elseif (($salesorders->total_amount_discount > 0) && ($salesorders->total_percent_discount > 0)){
+                $pdf::Ln(5);
+                $pdf::SetFont('Arial','B',9);
+                $pdf::cell(155,6,"$ Discount :",0,"","R");
+                $pdf::SetFont('Arial','',9);
+                $pdf::cell(30,6,number_format($salesorders->total_amount_discount,2),0,"","R");
 
-        /*
-        $pdf::Ln(10);
-        $pdf::SetFont('Arial','B',9);
-        $pdf::cell(150,6,"Discount :",0,"","R");
-        $pdf::SetFont('Arial','',9);
-        $pdf::cell(30,6,number_format($orders->discount,2),0,"","R");
+                $pdf::Ln(5);
+                $pdf::SetFont('Arial','B',9);
+                $pdf::cell(155,6,"% Discount :",0,"","R");
+                $pdf::SetFont('Arial','',9);
+                $pdf::cell(30,6,number_format($salesorders->total_percent_discount,2),0,"","R");
+            }
 
         $pdf::Ln(5);
         $pdf::SetFont('Arial','B',9);
-        $pdf::cell(150,6,"Total Amount :",0,"","R");
-        $pdf::SetFont('Arial','',9);
-        $pdf::cell(30,6,number_format($orders->grand_total,2),0,"","R");
-        */
+        $pdf::cell(155,6,"Total Amount :",0,"","R");
+        $pdf::SetFont('Arial','B',9);
+        $pdf::cell(30,6,number_format($salesorders->total_sales,2),0,"","R");
+
        
 
-        $preparedby = $this->user->getCreatedbyAttribute($orders->created_by);
+        $preparedby = $this->user->getCreatedbyAttribute($salesorders->created_by);
        
 
-        $approveddby = $this->user->getCreatedbyAttribute($orders->approved_by);
+        $approveddby = $this->user->getCreatedbyAttribute($salesorders->approved_by);
        
 
         $pdf::Ln(25);
@@ -535,6 +660,80 @@ class SalesController extends Controller
         $pdf::Ln();
         $pdf::Output();
         exit;
+    }
+
+
+
+    public function printDraft($id)
+    {
+
+        $salesorders = SalesOrder::find($id);       
+        
+        $pdf = new Fpdf('P');
+        $pdf::AddPage('P','A4');
+ 
+        $pdf::Ln(2);
+        $pdf::SetFont('Arial','B',8);
+        $pdf::SetXY($pdf::getX(), $pdf::getY());
+        $pdf::cell(10,1,"Sales Order",0,"","L");
+
+        $pdf::Ln(2);
+        $pdf::SetFont('Arial','B',8);
+        $pdf::SetXY($pdf::getX(), $pdf::getY());
+        $pdf::cell(17,6,"SO Number",0,"","L");
+        $pdf::SetFont('Arial','',8);
+        $pdf::cell(40,6,': '.$salesorders->so_number,0,"","L");
+        $pdf::Ln(3);
+        $pdf::SetFont('Arial','B',8);
+        $pdf::cell(17,6,"SO Date",0,"","L");
+        $pdf::SetFont('Arial','',8);
+        $so_date = Carbon::parse($salesorders->so_date);
+        $pdf::cell(30,6,': '.$so_date->format('M d, Y'),0,"","L");
+
+        //Column Name
+            $pdf::Ln(3);
+            $pdf::SetFont('Arial','B',8);
+            $pdf::cell(5,6,"No.",0,"","L");
+            $pdf::cell(60,6,"Description",0,"","L");
+
+        $salesorder_items = $this->salesorders->getForSOitems($id);
+        
+        $order_number = 0;
+
+            foreach ($salesorder_items as $key => $value) {
+
+                $pdf::Ln(3);
+                $pdf::SetFont('Arial','',8);
+                $pdf::SetXY($pdf::getX(), $pdf::getY());
+                $order_number = $order_number+1;
+                if ($order_number <= 83){
+                    $pdf::SetX(5);
+                    $pdf::cell(5,6,$order_number ,0,"","L");
+                    $pdf::cell(60,6,$value->draftname,0,"L",false);
+                }
+                if ($order_number >= 84 AND $order_number  <= 166){ 
+ 
+                    $pdf::SetX(75);
+                    $pdf::cell(5,6,$order_number ,0,"","L");
+                    $pdf::cell(60,6,$value->draftname,0,"L",false);
+                }
+                if ($order_number >= 167 AND $order_number  <= 249){
+
+                    $pdf::SetX(140);
+                    $pdf::cell(5,6,$order_number ,0,"","L");
+                    $pdf::cell (60,6,$value->draftname,0,"L",false);
+                }
+                
+            }
+
+        $pdf::Ln(3);
+        $pdf::SetFont('Arial','I',6);
+        $pdf::cell(20,6,"--Nothing Follows--",0,"","C");
+
+        $pdf::Ln();
+        $pdf::Output();
+        exit;
 
     }
+
 }   

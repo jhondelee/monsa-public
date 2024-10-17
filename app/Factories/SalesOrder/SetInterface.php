@@ -9,6 +9,12 @@ interface SetInterface {
      public function getSONo();
 
      public function getInventoryItems($id);
+
+     public function getCSitems($cs);
+
+     public function getSetItems($id);
+
+     public function getForSOitems($id);
      
 
 }

@@ -17,7 +17,8 @@ class Factory implements SetInterface
             s.name AS customer,
             CONCAT(e.firstname,' ',e.middlename,'. ',e.lastname) AS sales_agent,
             o.total_sales,
-            o.status
+            o.status,
+            o.inventory_deducted
         FROM sales_order o
         INNER JOIN customers s
         ON o.customer_id = s.id
@@ -99,6 +100,35 @@ class Factory implements SetInterface
             FROM items i 
             INNER JOIN unit_of_measure u ON u.id = i.unit_id
             WHERE i.id = ?;",[$id]);
+
+        return collect($results);
+
+    }
+
+   public function getForSOitems($id)
+    {
+        $results = DB::select("
+                SELECT i.id,
+                     e.name AS item_name,
+                     e.description,
+                     CONCAT('(',i.unit_quantity,') ',u.code) AS units,
+                     u.code as unti_code,
+                     s.order_quantity,
+                    s.unit_cost,
+                    s.srp,
+                    s.set_srp,
+                    s.discount_amount,
+                    s.discount_percentage,
+                    s.sub_amount,
+                    CONCAT(e.description,' - ',s.order_quantity,u.code) as draftname
+               FROM inventory i
+               INNER JOIN items e
+               ON e.id = i.item_id
+               INNER JOIN unit_of_measure u
+               ON e.unit_id = u.id
+               INNER JOIN sales_order_items s
+               ON s.item_id = i.item_id
+               WHERE  i.consumable = 0  AND s.sales_order_id = ?;",[$id]);
 
         return collect($results);
 
