@@ -43,7 +43,7 @@
                         </div>
                         
                         <div class="ibox-content">
-                             <input type="text" name="yesy" value="{{$yesy}}">  
+                             
                             <div class="form-horizontal m-t-md">
 
                             {!! Form::open(array('route' => array('salesorder.store','method'=>'POST'),'id'=>'orders_form')) !!}
@@ -274,12 +274,6 @@
         $(document).ready(function(){
             $('#btn-close').on('click', function(){
                 document.location.href="/sales"; 
-            });
-        });
-
-        $(document).ready(function(){
-            $('.btn-add-items').on('click', function(){
-                toastr.info(' YEs Pwede!!','Success!')
             });
         });
 
