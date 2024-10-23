@@ -10,7 +10,7 @@ class SalesPayment extends Model
     protected $table = 'sales_payment'; 
 
 
-    public function sales_ordet()
+    public function sales_order()
     {
         return $this->belongsTo('App\SalesOrder', 'id', 'sales_order_id');
     }

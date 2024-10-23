@@ -14,7 +14,7 @@ class AddActivatedToItemsTable extends Migration
     public function up()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->tinyInteger('activated')->nullable()->default(0)->after('picture');; 
+            $table->tinyInteger('activated')->nullable()->default(0)->after('picture');
         });
     }
 

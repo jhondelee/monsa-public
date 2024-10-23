@@ -58,7 +58,7 @@
 
     <div class="form-group">
         <div class="col-sm-3">
-            <a class='btn btn-primary btn-sm btn-show-item' id="btn-show-item"><i class='fa fa-plus'></i> Item</a>
+            <a class='btn btn-primary btn-xs btn-show-item' id="btn-show-item"><i class='fa fa-plus'></i> Item</a>
         </div>
     </div>
                                 

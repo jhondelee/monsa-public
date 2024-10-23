@@ -9,6 +9,8 @@ class SalesPaymentTerm extends Model
     //sales_payment_terms
     protected $table = 'sales_payment_terms'; 
 
+    public $timestamps = false;
+
     public function sales_payment()
     {
         return $this->belongsTo('App\SalesPayment', 'id', 'sale_payment_id');

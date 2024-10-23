@@ -37,9 +37,39 @@ Route::group(['prefix' => 'sales'], function() {
 
     Route::post('additem', 'SalesController@getInventoryItems')->name("salesorder.getInventoryItems");
 
-
-
 });
 
+// Sales Payment
+Route::group(['prefix' => 'sales-payment'], function() {  
+
+    Route::get('/', 'SalesPaymentController@index')->name("sales_payment.index");
+    
+    Route::get('add', 'SalesPaymentController@create')->name("sales_payment.create");
+
+    Route::post('add', 'SalesPaymentController@store')->name("sales_payment.store");
+
+    Route::get('update/{id}', 'SalesPaymentController@update')->name("sales_payment.update"); 
+
+    Route::post('addterm', 'SalesPaymentController@storeitems')->name("sales_payment.storeitems");   
+
+    Route::get('edit/{id}', 'SalesPaymentController@edit')->name("sales_payment.edit");
+
+    Route::get('remove/{id}', 'SalesPaymentController@remove')->name("sales_payment.remove");  
+
+    Route::get('delete/{id}', 'SalesPaymentController@destroy')->name("sales_payment.delete");    
+
+    Route::get('print/{id}', 'SalesPaymentController@print')->name("sales_payment.print"); 
+ 
+    Route::post('getforsoitems', 'SalesPaymentController@getForSOitems')->name("sales_payment.getforsoitems");
+
+    Route::post('datatable', 'SalesPaymentController@datatable')->name("sales_payment.datatable");
+
+    Route::post('getsoinifo', 'SalesPaymentController@getSOinfo')->name("sales_payment.getsoinifo");
+
+    Route::post('showpayments', 'SalesPaymentController@showpayments')->name("sales_payment.showpayments");
+
+    Route::post('details', 'SalesPaymentController@details')->name("sales_payment.details");
+
+});
     
 

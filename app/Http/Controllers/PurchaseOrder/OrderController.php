@@ -423,7 +423,7 @@ class OrderController extends Controller
         $pdf::SetFont('Arial','',9);
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
 
-        $orde_items = $this->items->getForPO($id);;
+        $orde_items = $this->items->getForPO($id);
         $order_number = 0;
         foreach ($orde_items as $key => $value) {
 

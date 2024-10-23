@@ -18,9 +18,10 @@ class CreateSalesPaymentTermsTable extends Migration
             $table->integer('sales_payment_id')->unsigned();
             $table->date('date_payment')->required();
             $table->integer('payment_mode_id')->unsigned();
-            $table->string('trasanction_no')->nullable();
-            $table->string('bank_account_no')->nullable();
-            $table->string('bank_account_name')->nullable();
+            $table->string('trasanction_no',35)->nullable();
+            $table->string('bank_name',45)->nullable();
+            $table->string('bank_account_no',45)->nullable();
+            $table->string('bank_account_name',45)->nullable();
             $table->decimal('amount_collected')->nullable()->default(0);
             $table->integer('collected_by')->nullable();
             $table->integer('created_by')->nullable();

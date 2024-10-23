@@ -15,7 +15,7 @@ class CreateModeOfPaymentsTable extends Migration
     {
         Schema::create('mode_of_payments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->required();
+            $table->string('name',50)->required();
             $table->integer('created_by')->required();
             $table->timestamps();
         });

@@ -16,7 +16,7 @@ class CreateSalesPaymentTable extends Migration
         Schema::create('sales_payment', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sales_order_id')->unsigned();
-            $table->string('so_number')->required();
+            $table->string('so_number',35)->required();
             $table->decimal('sales_total')->nullable()->default(0);
             $table->enum('payment_type', array('Fully Paid','Partial','Credit'));
             $table->enum('payment_status', array('Completed','Existing Balance'));

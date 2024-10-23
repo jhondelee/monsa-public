@@ -23,7 +23,7 @@
                     <td>{{ date('m-d-y', strtotime($closed->so_date))}}</td>
                     <td>{{$closed->customer}}</td>
                     <td>{{$closed->sales_agent}}</td>
-                    <!--<td class="text-right">{{number_format($closed->sales_total,2)}}</td>-->
+                    <<td class="text-right">{{number_format($closed->total_sales,2)}}</td>
                     <td class="text-center">
                         <label class="label label-warning" >{{$closed->status}}</label> </td>
                     <td class="text-center">

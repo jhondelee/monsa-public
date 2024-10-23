@@ -56,3 +56,20 @@ Route::group(['prefix' => 'location'], function() {
 
     Route::get('delete/{id}', 'WarehouseLocationController@destroy')->name("location.delete");  
 });
+
+
+// Mode of Payment
+Route::group(['prefix' => 'mode-of-payment'], function() {    
+
+    Route::get('/', 'PaymentModeController@index')->name("payment_mode.index");
+
+    Route::get('add', 'PaymentModeController@create')->name("payment_mode.create");
+
+    Route::post('add', 'PaymentModeController@store')->name("payment_mode.store");
+
+    Route::get('edit/{id}', 'PaymentModeController@edit')->name("payment_mode.edit");    
+
+    Route::post('edit', 'PaymentModeController@update')->name("payment_mode.update"); 
+
+    Route::get('delete/{id}', 'PaymentModeController@destroy')->name("payment_mode.delete");  
+});
