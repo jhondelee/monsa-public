@@ -66,6 +66,7 @@
                                          @if ($deductStatus==0)
                                          <button type="button" class="btn btn-danger" onclick="confirmDeduct('{{$salesorder->id}}'); return false;" id="deduct-btn"><i class="fa fa-exclamation-circle">&nbsp;</i>Inventory Deduct&nbsp; </button>
                                          @endif
+                                         
                                      @endif
                             <div class="form-horizontal m-t-md">
                  

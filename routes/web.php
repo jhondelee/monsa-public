@@ -21,6 +21,8 @@ Route::get('/logout',function(){ Auth::logout(); return redirect('/'); });
 
 Route::group(['middleware'=>'auth'],function(){
 
+        Route::get('home', 'HomeController@index')->name('main');
+
         Route::get('/', 'HomeController@index')->name('main');
         
         Route::post('refresh','HomeController@index')->name("main.refresh"); 
@@ -55,6 +57,10 @@ Route::group(['middleware'=>'auth'],function(){
 
         Route::group(['namespace' => 'Sales'], function(){
             require('_sales.php');
+        });
+
+        Route::group(['namespace' => 'SalesCommission'], function(){
+            require('_salescommission.php');
         });
 });
  

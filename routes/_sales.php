@@ -59,8 +59,6 @@ Route::group(['prefix' => 'sales-payment'], function() {
     Route::get('delete/{id}', 'SalesPaymentController@destroy')->name("sales_payment.delete");    
 
     Route::get('print/{id}', 'SalesPaymentController@print')->name("sales_payment.print"); 
- 
-    Route::post('getforsoitems', 'SalesPaymentController@getForSOitems')->name("sales_payment.getforsoitems");
 
     Route::post('datatable', 'SalesPaymentController@datatable')->name("sales_payment.datatable");
 

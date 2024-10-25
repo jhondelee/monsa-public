@@ -275,7 +275,31 @@ class SalesPaymentController extends Controller
 
     public function destroy($id)
     {
-        dd($id);
+        $salespayment = SalesPayment::find($id);
+
+            $salesorder = SalesOrder::findOrfail($salespayment->sales_order_id);
+
+            $salesorder->status = 'POSTED';
+
+            $salesorder->save();
+            
+        
+                $terms = SalesPaymentTerm::where('sales_order_id',$id)->get();
+
+                for ( $i=0 ; $i < count($terms) ; $i++ ){
+
+                    $term = SalesPaymentTerm::findOrfail($terms[i]->id);
+
+                    $term->delete();
+
+                }
+
+        $salespayment->delete();
+
+        return redirect()->route('sales_payment.index')
+
+            ->with('success','Payment details has been deleted successfully.');
+
     }
 
     public function print($id)
@@ -379,25 +403,36 @@ class SalesPaymentController extends Controller
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
 
 
-        /*
-        $pdf::Ln(10);
-        $pdf::SetFont('Arial','B',9);
-        $pdf::cell(150,6,"Discount :",0,"","R");
-        $pdf::SetFont('Arial','',9);
-        $pdf::cell(30,6,number_format($orders->discount,2),0,"","R");
+        $total_paid =  $this->salespayment->totalpaid($id)->first();
 
-        $pdf::Ln(5);
+        $totalSales = $salesPayment->sales_total ;
+
+        $totalBalance =  $totalSales - $total_paid->amount;
+
+
+        $pdf::Ln(10);
         $pdf::SetFont('Arial','B',9);
         $pdf::cell(150,6,"Total Amount :",0,"","R");
         $pdf::SetFont('Arial','',9);
-        $pdf::cell(30,6,number_format($orders->grand_total,2),0,"","R");
-        */
-       
+        $pdf::cell(30,6,number_format($totalSales,2),0,"","R");
+
+        $pdf::Ln(5);
+        $pdf::SetFont('Arial','B',9);
+        $pdf::cell(150,6,"Total Paid :",0,"","R");
+        $pdf::SetFont('Arial','',9);
+        $pdf::cell(30,6,number_format($total_paid->amount,2),0,"","R");
+        
+        $pdf::Ln(5);
+        $pdf::SetFont('Arial','B',9);
+        $pdf::cell(150,6,"Total Balance :",0,"","R");
+        $pdf::SetFont('Arial','B',10);
+        $pdf::cell(30,6,number_format($totalBalance,2),0,"","R");
+
 
         $preparedby = $this->user->getCreatedbyAttribute($salesPayment->created_by);
-              
 
-        $pdf::Ln(25);
+
+        $pdf::Ln(10);
         $pdf::SetFont('Arial','B',9);
         $pdf::cell(60,6,"      ".$preparedby."      ",0,"","C");
         //$pdf::cell(60,6,"      ".""."      ",0,"","C");
