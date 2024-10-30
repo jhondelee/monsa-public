@@ -1,5 +1,5 @@
 
-{!! Form::open(array('route' => array('commission_rate.update'),'class'=>'form-horizontal','role'=>'form')) !!} 
+{!! Form::open(array('route' => array('commission.update'),'class'=>'form-horizontal','role'=>'form')) !!} 
 
  <div id="editModal" class="modal fade" aria-hidden="true">
     <div class="modal-dialog">

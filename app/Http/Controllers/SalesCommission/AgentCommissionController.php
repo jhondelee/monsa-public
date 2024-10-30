@@ -32,8 +32,17 @@ class AgentCommissionController extends Controller
         return view('pages.sales_commission.commission.index',compact('employee'));
     }
 
-        public function create(Request $request)
+    public function create(Request $request)
     {
+        $this->validate($request,[
+            'employee_id' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
+
+
+        dd($request);
+        
         $employee = $this->user->getemplist()->pluck('emp_name','id');
 
         return view('pages.sales_commission.commission.index',compact('employee'));
