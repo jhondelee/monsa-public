@@ -18,7 +18,7 @@ class Factory implements SetInterface
 		 		 so.total_sales
 		FROM sales_order so
 		INNER  JOIN employees sub ON sub.id = so.sub_employee_id
-		WHERE so.employee_id = ?;",[$empId]);
+		WHERE so.employee_id = ? AND so.status = 'POSTED';",[$empId]);
      
         return collect($results);
     } 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\User as Users;
+use App\CommissionRate;
 use App\AssignArea;
 use DB;
 

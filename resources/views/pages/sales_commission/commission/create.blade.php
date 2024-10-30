@@ -76,29 +76,44 @@
 
         $(document).ready(function(){
             $('#btn-generate').on('click', function(){
-                var _agentName = $('.employee_id').val();
+                var _agentID = $('.employee_id').val();
                 var _startDate = $('.start_date').val();
                 var _endDate = $('.end_date').val();
-           
-            if ( !_agentName ) {
 
-                toastr.warning('Please select Agent Name','Warning')
-                 return false;
-            }
+                if ( !_agentID ) {
 
-            if ( !_startDate ) {
+                    toastr.warning('Please select Agent Name','Warning')
+                    return false;
+                }
 
-                toastr.warning('Please select Start Date','Warning')
-                 return false;
-            }
+                if ( !_startDate ) {
 
-            if ( !_endDate ) {
+                    toastr.warning('Please select Start Date','Warning')
+                     return false;
+                }
 
-                toastr.warning('Please select End Date','Warning')
-                 return false;
-            }
+                if ( !_endDate ) {
 
+                    toastr.warning('Please select End Date','Warning')
+                     return false;
+                }
+              
+                $.ajax({
+                    url:  '{{ url('agent-commission/generate') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _agentID},  
+                    success:function(results){      
 
+                        for( var i = 0 ; i <= results.length ; i++ ) {
+
+                            toastr.info(results[i].so_number +'Selected ','success' )
+
+                        }
+                        
+                    }
+                })
             });
         });
       
@@ -107,15 +122,6 @@
                 document.location.href="/agent-commission"; 
             });
         });
-
-        function submit_validate() {
-            var ctr = $('#dTable-selected-item-table>tbody>tr').length;
-            if (ctr > 0){
-                $('#orders_form').submit();
-            }else{
-                toastr.warning('No Items to be save!','Invalid!')
-            }
-         }
 
 
 

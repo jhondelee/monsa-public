@@ -39,6 +39,7 @@ class AgentCommissionController extends Controller
 
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
+
         return view('pages.sales_commission.commission.create',compact('employee','creator'));
     }
 
@@ -58,7 +59,7 @@ class AgentCommissionController extends Controller
 
      }
 
-     public function generateCommission(Request $request)
+     public function getsalesCom(Request $request)
      {
         
         $results = $this->agentcommission->getsalesCom($request->id);   

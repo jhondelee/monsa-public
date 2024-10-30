@@ -60,6 +60,8 @@ Route::group(['prefix' => 'agent-commission'], function() {
 
     Route::get('print/{id}', 'AgentCommissionController@printSO')->name("commission.print"); 
 
+    Route::post('generate', 'AgentCommissionController@getsalesCom')->name("commission.generate"); 
+
 });
 
 
