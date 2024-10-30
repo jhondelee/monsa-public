@@ -16,7 +16,7 @@
                             <a href="{{route('main')}}">Home</a>
                         </li>
                         <li class="active">
-                            <strong>Rate List</strong>
+                            <strong>Commissions</strong>
                         </li>
                     </ol>
 
@@ -27,18 +27,16 @@
        @include('layouts.alert')
        @include('layouts.deletemodal')
     
-
-
         <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>Rate List</h5>
-                                 @if (!can('commission_rate.create'))
+                                <h5>Agent Commission List</h5>
+                                 @if (!can('commission.create'))
                                 <div class="ibox-tools"> 
                                     <a class="btn btn-primary btn-sm add-modal">
-                                        <i class="fa fa-plus">&nbsp;</i> Rate
+                                        <i class="fa fa-plus">&nbsp;</i> Agent Commission
                                     </a> 
                                 </div>
                                 @endif
@@ -54,7 +52,9 @@
                                         <tr>
 
                                             <th>ID</th>
-                                            <th>Rate</th>
+                                            <th>Employee</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Created At</th>
                                             <th class="text-center">Action</th>
                                            
@@ -62,32 +62,7 @@
                                         </thead>
                                         <tbody>
 
-                                            @foreach($rates as $rate)
 
-                                                <tr>
-
-                                                    <td>{{$rate->id}}</td>
-                                                    <td>{{$rate->rate}}</td>
-                                                    <td>{{$rate->created_at}}</td>
-                                                    <td class="text-center">
-                                                        @if (!can('commission_rate.edit'))
-                                                        <div class="btn-group">
-                                                            <a class="btn-info btn btn-xs edit-modal" 
-                                                            data-id="{{$rate->id}}"
-                                                            data-rate="{{$rate->rate}}">
-                                                            <i class="fa fa-pencil"></i></a>
-                                                        </div>
-                                                        @endif
-                                                        @if (!can('commission_rate.delete'))
-                                                        <div class="btn-group">
-                                                                   <a class="btn-danger btn btn-xs delete"onclick="confirmDelete('{{$rate->id}}'); return false;"><i class="fa fa-trash"></i></a>
-                                                        </div>
-                                                        @endif
-                                                    </td>
-
-                                                </tr>
-
-                                            @endforeach
                                                                                
                                         </tbody>
 
@@ -104,8 +79,8 @@
 
             </div>
 
-            @include('pages.sales_commission.rate.create')
-            @include('pages.sales_commission.rate.edit')
+            @include('pages.sales_commission.commission.create')
+            @include('pages.sales_commission.commission.edit')
 
             
           
@@ -146,12 +121,12 @@
          $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
             .on('click', '#delete-btn', function(){
                 $(this).attr("disabled","disabled");
-                document.location.href="/commission-rate/delete/"+data;
+                document.location.href="/agent-commission/delete/"+data;
             });
         }
 
         $(document).on('click', '.add-modal', function() {
-            $('.modal-title').text('Add Rate');
+            $('.modal-title').text('Generate Sales Commission');
             $('#myModal').modal('show');
         });
 

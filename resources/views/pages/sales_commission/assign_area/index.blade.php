@@ -157,13 +157,13 @@
         }
 
         $(document).on('click', '.add-modal', function() {
-            $('.modal-title').text('Add Area');
+            $('.modal-title').text('Add Assign Area');
             $('#myModal').modal('show');
         });
 
         // Edit a post
         $(document).on('click', '.edit-modal', function() {
-            $('.modal-title').text('Edit Area');
+            $('.modal-title').text('Edit Assign Area');
             $('#id_edit').val($(this).data('id'));
             $('#emp_id_edit').val($(this).data('name')).trigger('update');
             $('#rates_edit').val($(this).data('rate')).trigger('change');
