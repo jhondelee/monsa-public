@@ -42,9 +42,13 @@ class AgentCommissionController extends Controller
 
 
         dd($request);
-        
-        $employee = $this->user->getemplist()->pluck('emp_name','id');
 
-        return view('pages.sales_commission.commission.index',compact('employee'));
+       // $employee = $this->user->getemplist()->pluck('emp_name','id');
+
+       // return view('pages.sales_commission.commission.create',compact('employee'));
+
+        return redirect()->route('commission.index')
+
+            ->with('success','Rate has been update successfully.');
     }
 }

@@ -60,7 +60,7 @@
                             @endif
                                <a href="{{route('salesorder.printDraft',$salesorder->id)}}" class="btn btn-primary btn-print"><i class="fa fa-print">&nbsp;</i>Print - Draft</a>
 
-                                     @if ($salesorder->status == 'POSTED')
+                                     @if ($salesorder->status == 'POSTED' || $salesorder->status == 'CLOSED')
                                      <a href="{{route('salesorder.print',$salesorder->id)}}" class="btn btn-info btn-print"><i class="fa fa-print">&nbsp;</i>Print - SO</a>
 
                                          @if ($deductStatus==0)

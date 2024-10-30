@@ -80,9 +80,7 @@
             </div>
 
             @include('pages.sales_commission.commission.create')
-            @include('pages.sales_commission.commission.edit')
-
-            
+           
           
 @endsection
 

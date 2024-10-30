@@ -50,7 +50,7 @@ Route::group(['prefix' => 'agent-commission'], function() {
     
     Route::post('add', 'AgentCommissionController@create')->name("commission.create");
 
-    Route::post('add', 'AgentCommissionController@store')->name("commission.store");
+    //Route::post('add', 'AgentCommissionController@store')->name("commission.store");
 
     Route::get('edit/{id}', 'AgentCommissionController@edit')->name("commission.edit");    
 
