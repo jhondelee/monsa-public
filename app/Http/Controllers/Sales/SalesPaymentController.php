@@ -282,13 +282,13 @@ class SalesPaymentController extends Controller
             $salesorder->status = 'POSTED';
 
             $salesorder->save();
-            
+
         
-                $terms = SalesPaymentTerm::where('sales_order_id',$id)->get();
+                $terms = SalesPaymentTerm::where('sales_payment_id',$id)->get();
 
                 for ( $i=0 ; $i < count($terms) ; $i++ ){
 
-                    $term = SalesPaymentTerm::findOrfail($terms[i]->id);
+                    $term = SalesPaymentTerm::findOrfail($terms[$i]->id);
 
                     $term->delete();
 

@@ -48,9 +48,9 @@ Route::group(['prefix' => 'agent-commission'], function() {
 
     Route::get('/', 'AgentCommissionController@index')->name("commission.index");
     
-    Route::post('add', 'AgentCommissionController@create')->name("commission.create");
+    Route::get('add', 'AgentCommissionController@create')->name("commission.create");
 
-    //Route::post('add', 'AgentCommissionController@store')->name("commission.store");
+    Route::post('add', 'AgentCommissionController@store')->name("commission.store");
 
     Route::get('edit/{id}', 'AgentCommissionController@edit')->name("commission.edit");    
 
@@ -61,4 +61,5 @@ Route::group(['prefix' => 'agent-commission'], function() {
     Route::get('print/{id}', 'AgentCommissionController@printSO')->name("commission.print"); 
 
 });
+
 

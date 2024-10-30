@@ -35,10 +35,11 @@
                                 <h5>Agent Commission List</h5>
                                  @if (!can('commission.create'))
                                 <div class="ibox-tools"> 
-                                    <a class="btn btn-primary btn-sm add-modal">
-                                        <i class="fa fa-plus">&nbsp;</i> Agent Commission
+                                    <a href="{{route('commission.create')}}" class="btn btn-primary btn-sm">
+                                        <i class="fa fa-plus">&nbsp;</i>Agent Commission
                                     </a> 
                                 </div>
+                                             
                                 @endif
 
                             </div>
@@ -52,7 +53,7 @@
                                         <tr>
 
                                             <th>ID</th>
-                                            <th>Employee</th>
+                                            <th>Agent</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
                                             <th>Created At</th>
@@ -78,9 +79,7 @@
                 </div>
 
             </div>
-
-            @include('pages.sales_commission.commission.create')
-           
+   
           
 @endsection
 

@@ -1,63 +1,125 @@
+    
+@extends('layouts.app')
 
- 
-{!! Form::open(array('route' => array('commission.create','method'=>'POST'),'class'=>'form-horizontal','role'=>'form','id'=>'commission_form')) !!}
+@section('pageTitle','Sales Commission')
 
- <div id="myModal" class="modal fade" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h3 class="modal-title"></h3>
-            </div>
-            <div class="modal-body">
-           
-                {!! Form::token(); !!}
-                {!! csrf_field() ; !!} 
-
-                 <div class="form-group">
-                    <label class="col-sm-4 control-label">Employee <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        {!! Form::select ('employee_id',$employee, null,['placeholder' => 'Select Agent...','class'=>'chosen-select','required'=>true])!!}
-                    </div>
-                </div>
-
-                <div class="hr-line-dashed"></div>
-
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Start Date <span class="text-danger">*</span></label>
-                    <div  class="col-sm-7 ">
-                        <div class="input-group date">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            {!! Form::text('start_date',null, ['class'=>'form-control start_date', 'required'=>true, 'id'=>'start_date']) !!}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="hr-line-dashed"></div>
-
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">End Date <span class="text-danger">*</span></label>
-                    <div  class="col-sm-7 ">
-                        <div class="input-group date">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            {!! Form::text('end_date',null, ['class'=>'form-control end_date', 'required'=>true, 'id'=>'end_date']) !!}
-                        </div>
-                    </div>
-                </div>
+@section('content')
 
 
-                <div class="hr-line-dashed"></div>
+  <div class="row wrapper border-bottom white-bg page-heading">
+
+            <div class="col-lg-10">
+
+            <h2>Sales Commission</h2>
+
+                <ol class="breadcrumb">
+                    <li>
+
+                        Home
+
+                    </li>
+
+                    <li class="active">
+
+                        <strong>Commission</strong>
+
+                    </li>
+                                      
+                </ol>
 
             </div>
-            <div class="modal-footer">
-                {!! Form::submit('Generate', ['class' => 'btn btn-primary btn-save']) !!}
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>                                 
-            </div>
-            
+
         </div>
-     </div>
- </div>
+       @include('layouts.alert')
+       @include('layouts.deletemodal')
 
-{!! Form::close() !!} 
+        <div class="wrapper wrapper-content  animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Agent Commission</h5>
+
+                           
+                        </div>
+                        
+                        <div class="ibox-content">
+                            
+                            <div class="form-horizontal m-t-md">
+
+                            {!! Form::open(array('route' => array('commission.store','method'=>'POST'),'id'=>'commission_form')) !!}
+                                   
+                                @include('pages.sales_commission.commission._form')
+                                     
+                            {!! Form::close() !!} 
+
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>     
 
 
+@endsection
+
+@section('styles')
+<link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+<link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+<script src="/js/plugins/toastr/toastr.min.js"></script>
+
+<script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#btn-generate').on('click', function(){
+                var _agentName = $('.employee_id').val();
+                var _startDate = $('.start_date').val();
+                var _endDate = $('.end_date').val();
+           
+            if ( !_agentName ) {
+
+                toastr.warning('Please select Agent Name','Warning')
+                 return false;
+            }
+
+            if ( !_startDate ) {
+
+                toastr.warning('Please select Start Date','Warning')
+                 return false;
+            }
+
+            if ( !_endDate ) {
+
+                toastr.warning('Please select End Date','Warning')
+                 return false;
+            }
+
+
+            });
+        });
+      
+        $(document).ready(function(){
+            $('#btn-close').on('click', function(){
+                document.location.href="/agent-commission"; 
+            });
+        });
+
+        function submit_validate() {
+            var ctr = $('#dTable-selected-item-table>tbody>tr').length;
+            if (ctr > 0){
+                $('#orders_form').submit();
+            }else{
+                toastr.warning('No Items to be save!','Invalid!')
+            }
+         }
+
+
+
+
+</script>
+
+@endsection
