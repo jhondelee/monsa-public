@@ -17,13 +17,31 @@ Route::group(['prefix' => 'assign-area'], function() {
 
     Route::get('edit/{id}', 'AssignedAreaController@edit')->name("assign_area.edit");    
 
-    Route::post('edit/{id}', 'AssignedAreaController@update')->name("salesorder.update"); 
+    Route::post('edit', 'AssignedAreaController@update')->name("assign_area.update"); 
 
     Route::get('delete/{id}', 'AssignedAreaController@destroy')->name("assign_area.delete");    
 
     Route::get('print/{id}', 'AssignedAreaController@printSO')->name("assign_area.print"); 
 
 });
+
+
+// Rate
+Route::group(['prefix' => 'commission-rate'], function() {    
+
+    Route::get('/', 'RateController@index')->name("commission_rate.index");
+
+    Route::get('add', 'RateController@create')->name("commission_rate.create");
+
+    Route::post('add', 'RateController@store')->name("commission_rate.store");
+
+    Route::get('edit/{id}', 'RateController@edit')->name("commission_rate.edit");    
+
+    Route::post('edit', 'RateController@update')->name("commission_rate.update"); 
+
+    Route::get('delete/{id}', 'RateController@destroy')->name("commission_rate.delete");    
+});
+
 
 // Agent Commission
 Route::group(['prefix' => 'agent-commission'], function() {  
@@ -43,3 +61,4 @@ Route::group(['prefix' => 'agent-commission'], function() {
     Route::get('print/{id}', 'AgentCommissionController@printSO')->name("commission.print"); 
 
 });
+
