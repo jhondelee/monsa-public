@@ -165,14 +165,19 @@
         $(document).on('click', '.edit-modal', function() {
             $('.modal-title').text('Edit Assign Area');
             $('#id_edit').val($(this).data('id'));
-            $('#emp_id_edit').val($(this).data('name')).trigger('update');
-            $('#rates_edit').val($(this).data('rate')).trigger('change');
-            $('#area_edit').val($(this).data('area')).trigger('change');
+            $('#emp_id_edit').val($(this).data('name')).trigger("chosen:updated");
+            $('#rates_edit').val($(this).data('rate')).trigger("chosen:updated");
+            $('#area_edit').val($(this).data('area')).trigger("chosen:updated");
+
             $('#editModal').modal('show');
  
         });
 
-
+            /* if ($(this).data('status')==1)
+                $('#alive_status').attr("checked","checked"); 
+            else
+            $('#alive_status').attr("checked",false);
+            */
 </script>
 
 @endsection
