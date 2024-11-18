@@ -1,39 +1,217 @@
+        
+@extends('layouts.app')
 
-{!! Form::open(array('route' => array('commission.update'),'class'=>'form-horizontal','role'=>'form')) !!} 
+@section('pageTitle','Sales Commission')
 
- <div id="editModal" class="modal fade" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h3 class="modal-title"></h3>
+@section('content')
+
+
+  <div class="row wrapper border-bottom white-bg page-heading">
+
+            <div class="col-lg-10">
+
+            <h2>Sales Commission</h2>
+
+                <ol class="breadcrumb">
+                    <li>
+
+                        Home
+
+                    </li>
+
+                    <li class="active">
+
+                        <strong>Commission</strong>
+
+                    </li>
+                                      
+                </ol>
+
             </div>
-            <div class="modal-body">
-           
-                {!! Form::token(); !!}
-                {!! csrf_field() ; !!} 
-                {!! Form::hidden('id',null, ['class'=>'form-control','id'=>'id_edit']) !!}
-                
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Percentage Rate </label>
-                    <div class="col-sm-7">
-                        {!! Form::text('rate',null, ['class'=>'form-control', 'required'=> true,'id'=>'rate_edit']) !!}
+
+        </div>
+       @include('layouts.alert')
+       @include('layouts.deletemodal')
+
+        <div class="wrapper wrapper-content  animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Agent Commission</h5>
+
+                           
+                        </div>
+                        
+                        <div class="ibox-content">
+                            
+                            <div class="form-horizontal m-t-md">
+
+                            {!! Form::model($agentcommission, ['route' => ['commission.update', $agentcommission->id],'id'=>'agentcommission_form']) !!}
+
+                                @include('pages.sales_commission.commission._form')
+                                     
+                            {!! Form::close() !!} 
+
+                            
+
+                        </div>
                     </div>
                 </div>
-
-
-                <div class="hr-line-dashed"></div>
-
             </div>
-            <div class="modal-footer">
-                {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-update']) !!}
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>                                 
-            </div>
-            
-        </div>
-     </div>
- </div>
-
-{!! Form::close() !!} 
+        </div>     
 
 
+@endsection
+
+@section('styles')
+<link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+<link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+<script src="/js/plugins/toastr/toastr.min.js"></script>
+
+<script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#btn-generate').on('click', function(){
+                var _agentID = $('.employee_id').val();
+                var _startDate = $('.from_date').val();
+                var _endDate = $('.to_date').val();
+
+                if ( !_agentID ) {
+
+                    toastr.warning('Please select Agent Name','Warning')
+                    return false;
+                }
+
+                if ( !_startDate ) {
+
+                    toastr.warning('Please select Start Date','Warning')
+                     return false;
+                }
+
+                if ( !_endDate ) {
+
+                    toastr.warning('Please select End Date','Warning')
+                     return false;
+                }       
+
+                //$('#dTable-selected-item-table').DataTable().empty();
+
+                $.ajax({
+                    url:  '{{ url('agent-commission/generate') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _agentID, sdate: _startDate, edate: _endDate},  
+                    success:function(results){      
+                         
+                        $('#dTable-selected-item-table').DataTable({
+                            paging: false,
+                            searching: false,
+                            destroy: true,
+                            data: results,
+                            dom: '<"html5buttons"B>lTfgitp',
+                            buttons: [],
+                            columns: [
+                                    {data: 'so_number', name: 'so_number'},
+                                    {data: 'so_date', name: 'so_date'},
+                                    {data: 'so_status', name: 'so_status'},
+                                    {data: 'sub_agent', name: 'sub_agent'},
+                                    {data: 'total_sales', name: 'total_sales',
+                                        render: function(data, type, row){
+                                            return '<h4 class="text-right">'+parseFloat(row.total_sales).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +'<input type="hidden" name="total_amount[]" class="form-control input-sm text-right total_amount" id="total_amount" value='+row.total_sales+'></h4>'
+                                        }
+                                    },
+                                ],
+                            });               
+                        
+                            var _total_amount = 0;
+
+                            $( "#dTable-selected-item-table tbody > tr" ).each( function() {
+                                var $row = $( this );        
+                                var _subtotal = $row.find( ".total_amount" ).val();
+                            
+                                _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+
+                            });
+                            $('#total_sales_amount').val( _total_amount );
+
+                            _total_amount = _total_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+                            $('#total_sales').val(  _total_amount  );
+                            
+
+                    }
+                })            
+            });
+
+        });
+      
+        $(document).ready(function(){
+            $('#btn-close').on('click', function(){
+                document.location.href="/agent-commission"; 
+            });
+        });
+        
+        $(document).ready(function(){
+                var _agentID = $('.employee_id').val();
+                var _startDate = $('.from_date').val();
+                var _endDate = $('.to_date').val();
+
+            $.ajax({
+                    url:  '{{ url('agent-commission/generate') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _agentID, sdate: _startDate, edate: _endDate},  
+                    success:function(results){      
+                         
+                        $('#dTable-selected-item-table').DataTable({
+                            paging: false,
+                            searching: false,
+                            destroy: true,
+                            data: results,
+                            dom: '<"html5buttons"B>lTfgitp',
+                            buttons: [],
+                            columns: [
+                                    {data: 'so_number', name: 'so_number'},
+                                    {data: 'so_date', name: 'so_date'},
+                                    {data: 'so_status', name: 'so_status'},
+                                    {data: 'sub_agent', name: 'sub_agent'},
+                                    {data: 'total_sales', name: 'total_sales',
+                                        render: function(data, type, row){
+                                            return '<h4 class="text-right">'+parseFloat(row.total_sales).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +'<input type="hidden" name="total_amount[]" class="form-control input-sm text-right total_amount" id="total_amount" value='+row.total_sales+'></h4>'
+                                        }
+                                    },
+                                ],
+                            });               
+                        
+                            var _total_amount = 0;
+
+                            $( "#dTable-selected-item-table tbody > tr" ).each( function() {
+                                var $row = $( this );        
+                                var _subtotal = $row.find( ".total_amount" ).val();
+                            
+                                _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+
+                            });
+
+                            $('#total_sales_amount').val( _total_amount );
+
+                            _total_amount = _total_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+                            $('#total_sales').val(  _total_amount  ); 
+                            
+
+                    }
+                })
+        });
+        
+
+
+</script>
+
+@endsection

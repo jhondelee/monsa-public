@@ -54,8 +54,9 @@
 
                                             <th>ID</th>
                                             <th>Agent</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>Total Sales</th>
                                             <th>Created At</th>
                                             <th class="text-center">Action</th>
                                            
@@ -63,6 +64,34 @@
                                         </thead>
                                         <tbody>
 
+                                            @foreach($agentcommissions as $agentcommission)
+
+                                                <tr>
+
+                                                    <td>{{$agentcommission->id}}</td>
+                                                    <td>{{$agentcommission->sub_agent}}</td>
+                                                    <td>{{$agentcommission->from_date}}</td>
+                                                    <td>{{$agentcommission->to_date}}</td>
+                                                    <td>{{$agentcommission->total_sales}}</td>
+                                                    <td>{{$agentcommission->created_at}}</td>
+                                                    <td class="text-center">
+                                                        @if (!can('commission.edit'))
+                                                        <div class="btn-group">
+                                                            <a class="btn-info btn btn-xs edit-modal" 
+                                                            href="{{route ('commission.edit', $agentcommission->id) }}">
+                                                            <i class="fa fa-pencil"></i></a>
+                                                        </div>
+                                                        @endif
+                                                        @if (!can('commission.delete'))
+                                                        <div class="btn-group">
+                                                                   <a class="btn-danger btn btn-xs delete"onclick="confirmDelete('{{$agentcommission->id}}'); return false;"><i class="fa fa-trash"></i></a>
+                                                        </div>
+                                                        @endif
+                                                    </td>
+
+                                                </tr>
+
+                                            @endforeach
 
                                                                                
                                         </tbody>

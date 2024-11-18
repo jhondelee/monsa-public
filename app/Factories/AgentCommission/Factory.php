@@ -8,16 +8,34 @@ use DB;
 class Factory implements SetInterface
 {
 
+	public function index()
+	{
+		$results = DB::select("	SELECT a.id,
+				  CONCAT(emp.firstname ,' ',emp.lastname ) AS sub_agent,
+				  a.from_date,
+				  a.to_date,
+				  a.total_sales,
+				  a.created_at
+		FROM agent_commission a
+		INNER JOIN employees emp ON a.employee_id = emp.id
+		ORDER BY a.id desc");
+
+		return collect($results);
+	}
+
     public function getsalesCom($empId)
     {
 
      $results = DB::select("
-                SELECT so.so_number,
-			 	 so.status,
+                SELECT so.id,
+                 so.so_number,
+                 so.so_date,
+			 	 so.status AS so_status,
 				 CONCAT(sub.firstname ,' ',sub.lastname ) AS sub_agent,
+				 so.sub_employee_id,
 		 		 so.total_sales
 		FROM sales_order so
-		INNER  JOIN employees sub ON sub.id = so.sub_employee_id
+		LEFT  JOIN employees sub ON sub.id = so.sub_employee_id
 		WHERE so.employee_id = ? AND so.status = 'POSTED';",[$empId]);
      
         return collect($results);

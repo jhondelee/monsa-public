@@ -10,6 +10,8 @@ use App\User as Users;
 use App\Area;
 use App\CommissionRate;
 use App\AssignArea;
+use App\AgentCommission;
+use App\AgentCommissionItem;
 use DB;
 
 class AgentCommissionController extends Controller
@@ -27,9 +29,11 @@ class AgentCommissionController extends Controller
 
     public function index()
     {
+        $agentcommissions = $this->agentcommission->index();
+
         $employee = $this->user->getemplist()->pluck('emp_name','id');
 
-        return view('pages.sales_commission.commission.index',compact('employee'));
+        return view('pages.sales_commission.commission.index',compact('employee','agentcommissions'));
     }
 
     public function create()
@@ -47,10 +51,46 @@ class AgentCommissionController extends Controller
      {
         $this->validate($request,[
             'employee_id' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'from_date' => 'required',
+            'to_date' => 'required',
         ]);
 
+        $sale_items = $this->agentcommission->getsalesCom($request->employee_id)->whereBetween('so_date',[$request->from_date,$request->to_date]); 
+
+        $agentcommission = New AgentCommission;
+
+        $agentcommission->employee_id = $request->employee_id;
+
+        $agentcommission->from_date = $request->from_date;
+
+        $agentcommission->to_date = $request->to_date;
+
+        $agentcommission->total_sales = $request->total_sales_amount;
+
+
+        $agentcommission->created_by = Auth()->user()->id;
+
+        $agentcommission->save();
+
+
+        foreach ($sale_items as $key => $value) {
+
+            $agentcommissionitems = New AgentCommissionItem;
+
+            $agentcommissionitems->agent_commission_id = $agentcommission->id;
+
+            $agentcommissionitems->sales_order_id = $value->id;
+
+            $agentcommissionitems->so_date = $value->so_date;
+
+            $agentcommissionitems->so_status = $value->so_status;
+
+            $agentcommissionitems->sub_agent = $value->sub_employee_id;
+
+            $agentcommissionitems->total_amount = $value->total_sales;
+
+            $agentcommissionitems->save();
+        }
 
 
         return redirect()->route('commission.index')
@@ -62,11 +102,88 @@ class AgentCommissionController extends Controller
      public function getsalesCom(Request $request)
      {
         
-        $results = $this->agentcommission->getsalesCom($request->id);   
+        $results = $this->agentcommission->getsalesCom($request->id)->whereBetween('so_date',[$request->sdate,$request->edate]);   
 
         return response()->json($results); 
         
      }
 
+     public function edit($id)
+     {
+
+        $agentcommission = AgentCommission::find($id);
+
+        $employee = $this->user->getemplist()->pluck('emp_name','id');
+
+        $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
+
+
+        return view('pages.sales_commission.commission.edit',compact('employee','creator','agentcommission'));
+          
+     }
+
+
+     public function update(Request $request,$id)
+     {
+        $this->validate($request,[
+            'employee_id' => 'required',
+            'from_date' => 'required',
+            'to_date' => 'required',
+        ]);
+
+        $sale_items = $this->agentcommission->getsalesCom($request->employee_id)->whereBetween('so_date',[$request->from_date,$request->to_date]); 
+        
+        $comitems = AgentCommissionItem::where('agent_commission_id',$id)->get();
+
+            if(count($comitems) > 0)
+             {
+                foreach ($comitems as $key => $comitem) {
+
+                    $items = AgentCommissionItem::findOrfail($comitem->id);
+
+                    $items->delete();
+                }
+
+             }
+                
+
+
+        foreach ($sale_items as $key => $value) {
+
+            $agentcommissionitems = New AgentCommissionItem;
+
+            $agentcommissionitems->agent_commission_id = $id;
+
+            $agentcommissionitems->sales_order_id = $value->id;
+
+            $agentcommissionitems->so_date = $value->so_date;
+
+            $agentcommissionitems->so_status = $value->so_status;
+
+            $agentcommissionitems->sub_agent = $value->sub_employee_id;
+
+            $agentcommissionitems->total_amount = $value->total_sales;
+
+            $agentcommissionitems->save();
+        }
+
+        $agentcommission = AgentCommission::find($id);
+
+        $agentcommission->employee_id = $request->employee_id;
+
+        $agentcommission->from_date = $request->from_date;
+
+        $agentcommission->to_date = $request->to_date;
+
+        $agentcommission->total_sales = $request->total_sales_amount;
+
+        $agentcommission->save();
+
+
+        return redirect()->route('commission.index')
+
+            ->with('success','Agent Commission has been updated successfully.');
+
+     }
 
 }

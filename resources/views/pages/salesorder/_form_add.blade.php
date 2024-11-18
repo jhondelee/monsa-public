@@ -97,7 +97,7 @@
                     <th>#Stock/Unit</th>
                     <th class="text-center">Order Qty</th>
                     <th class="text-center">SRP</th>
-                    <th class="text-center">$ Discount</th>
+                    <th class="text-center">₱ Discount</th>
                     <th class="text-center">% Discount</th>
                     <th class="text-center">Set Price</th>
                     <th class="text-center">Amount</th>
@@ -120,7 +120,7 @@
                                 
                                 <div class="col-md-4 form-horizontal">
                                     <div class="form-group">
-                                        <label class="col-md-6 control-label">$ Discount</label>
+                                        <label class="col-md-6 control-label">₱ Discount</label>
                                         <div class="col-md-6">
                                             {!! Form::text('total_amount_discount',null, array('placeholder' => '0.00','class' => 'form-control text-right total_amount_discount','id'=>'total_amount_discount', 'readonly' => 'true')) !!}
                                         </div>

@@ -1,4 +1,4 @@
-    
+        
 @extends('layouts.app')
 
 @section('pageTitle','Sales Commission')
@@ -77,8 +77,8 @@
         $(document).ready(function(){
             $('#btn-generate').on('click', function(){
                 var _agentID = $('.employee_id').val();
-                var _startDate = $('.start_date').val();
-                var _endDate = $('.end_date').val();
+                var _startDate = $('.from_date').val();
+                var _endDate = $('.to_date').val();
 
                 if ( !_agentID ) {
 
@@ -96,25 +96,58 @@
 
                     toastr.warning('Please select End Date','Warning')
                      return false;
-                }
-              
+                }       
+
+                //$('#dTable-selected-item-table').DataTable().empty();
+
                 $.ajax({
                     url:  '{{ url('agent-commission/generate') }}',
                     type: 'POST',
                     dataType: 'json',
                     data: { _token: "{{ csrf_token() }}",
-                    id: _agentID},  
+                    id: _agentID, sdate: _startDate, edate: _endDate},  
                     success:function(results){      
-
-                        for( var i = 0 ; i <= results.length ; i++ ) {
-
-                            toastr.info(results[i].so_number +'Selected ','success' )
-
-                        }
+                         
+                        $('#dTable-selected-item-table').DataTable({
+                            paging: false,
+                            searching: false,
+                            destroy: true,
+                            data: results,
+                            dom: '<"html5buttons"B>lTfgitp',
+                            buttons: [],
+                            columns: [
+                                    {data: 'so_number', name: 'so_number'},
+                                    {data: 'so_date', name: 'so_date'},
+                                    {data: 'so_status', name: 'so_status'},
+                                    {data: 'sub_agent', name: 'sub_agent'},
+                                    {data: 'total_sales', name: 'total_sales',
+                                        render: function(data, type, row){
+                                            return '<h4 class="text-right">'+parseFloat(row.total_sales).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +'<input type="hidden" name="total_amount[]" class="form-control input-sm text-right total_amount" id="total_amount" value='+row.total_sales+'></h4>'
+                                        }
+                                    },
+                                ],
+                            });               
                         
+                            var _total_amount = 0;
+
+                            $( "#dTable-selected-item-table tbody > tr" ).each( function() {
+                                var $row = $( this );        
+                                var _subtotal = $row.find( ".total_amount" ).val();
+                            
+                                _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+
+                            });
+                            
+                             $('#total_sales_amount').val( _total_amount );
+
+                            _total_amount = _total_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+                            $('#total_sales').val(  _total_amount  ); 
+
                     }
-                })
+                })            
             });
+
         });
       
         $(document).ready(function(){
@@ -122,9 +155,28 @@
                 document.location.href="/agent-commission"; 
             });
         });
+        
+        
+        /* var _total_amount = 0;
+                        var _ctr = 0;
 
+                        for( var i = 0 ; i <= results.length ; i++ ) {
 
+                                $('#dTable-selected-item-table tbody').append("<tr>\
+                                    <td class='text-center'>"+results[i].so_number+"</td>\
+                                    <td class='text-center'>"+results[i].so_date+"</td>\
+                                    <td class='text-center'>"+results[i].status+"</td>\
+                                    <td class='text-center'>"+results[i].sub_agent+"</td>\
+                                    <td class='text-center'><input type='text' name='total_sales[]' class='form-control input-sm text-right total_sales' size='4'   id='total_sales' value='"+results[i].total_sales+"'></td></tr>");
+                                
+                                _ctr = _ctr + 1;
+                        }  
 
+                        if ( _ctr = 0 )
+                        {
+                            toastr.warning('No records will be generated on the selected date','Warning')
+                        }  
+        */
 
 </script>
 

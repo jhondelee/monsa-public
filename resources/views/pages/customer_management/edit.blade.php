@@ -166,7 +166,7 @@
                                             <th class="text-center">Item Description</th>
                                             <th>Units</th>
                                             <th>SRP</th>
-                                            <th>Discount $ </th>
+                                            <th>Discount ₱</th>
                                             <th>Discount %</th>
                                             <th>Active</th>
                                             <th>Set SRP</th>
