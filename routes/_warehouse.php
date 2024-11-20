@@ -90,7 +90,15 @@ Route::group(['prefix' => 'returns'], function() {
 
     Route::post('edit/{id}', 'ReturnsController@update')->name("returns.update"); 
 
-    Route::get('delete/{id}', 'ReturnsController@destroy')->name("returns.delete");    
+    Route::get('delete/{id}', 'ReturnsController@destroy')->name("returns.delete");  
+
+    Route::post('show-so', 'ReturnsController@getsalesorder')->name("returns.sonumber"); 
+
+    Route::post('return-items', 'ReturnsController@getreturnlist')->name("returns.returnlist");  
+
+    Route::get('post/{id}', 'ReturnsController@posting')->name("returns.post");   
+
+    Route::get('print/{id}', 'ReturnsController@print')->name("returns.print");    
 });
 
 

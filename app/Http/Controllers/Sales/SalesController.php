@@ -192,7 +192,7 @@ class SalesController extends Controller
 
        }    
 
-        return response()->json(['invenId' => $invenId, 'csPrice' => $csPrice]);;       
+        return response()->json(['invenId' => $invenId, 'csPrice' => $csPrice]);       
         
     }
 

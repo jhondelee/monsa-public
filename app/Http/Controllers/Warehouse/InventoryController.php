@@ -15,7 +15,7 @@ use App\Incoming;
 use App\Inventory;
 use App\InventoryMovement;
 use App\WarehouseLocation;
-    use Carbon\Carbon;
+use Carbon\Carbon;
 use Fpdf;
 use DB;
 
