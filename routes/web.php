@@ -62,5 +62,10 @@ Route::group(['middleware'=>'auth'],function(){
         Route::group(['namespace' => 'SalesCommission'], function(){
             require('_salescommission.php');
         });
+
+        Route::group(['namespace' => 'SalesMobileTools'], function(){
+            require('_mobiletools.php');
+        });
+
 });
  
