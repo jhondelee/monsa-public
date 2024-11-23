@@ -31,6 +31,7 @@
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet" />
+    <link href="css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
 
 

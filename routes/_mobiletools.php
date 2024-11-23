@@ -23,6 +23,7 @@ Route::group(['prefix' => 'event-photo'], function() {
 
     Route::get('delete/{id}', 'EventPhotoController@destroy')->name("event.delete"); 
 
+    Route::post('upload_image', 'EventPhotoController@upload_image')->name("event.upload_image");
 });
 
 
@@ -39,6 +40,8 @@ Route::group(['prefix' => 'brochure'], function() {
     Route::post('edit/{id}', 'BrochureController@update')->name("brochure.update"); 
 
     Route::get('delete/{id}', 'BrochureController@destroy')->name("brochure.delete"); 
+
+     Route::post('upload_file', 'BrochureController@upload_file')->name("brochure.upload_file");
 
 });
 
