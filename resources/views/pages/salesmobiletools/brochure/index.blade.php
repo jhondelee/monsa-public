@@ -45,19 +45,6 @@
 
                             <div class="ibox-content">
                                 
-                                <div class="lightBoxGallery">
-                                    <div id="blueimp-gallery" class="blueimp-gallery">
-                                        <div class="slides"></div>
-                                        <h3 class="title"></h3>
-                                        <a class="prev">‹</a>
-                                        <a class="next">›</a>
-                                        <a class="close">×</a>
-                                        <a class="play-pause"></a>
-                                        <ol class="indicator"></ol>
-                                    </div>
-                                </div>
-
-    
                                 <div class="table-responsive">
                                    
                                     <table class="table table-striped table-hover dataTables-area" data-toggle="dataTable" data-form="deleteForm" >
@@ -86,15 +73,17 @@
                                                     <td>{{$brochure->remarks}}</td>
                                                     <td>{{$brochure->created_at}}</td>
                                                     <td class="text-center">
-                                                        @if (!can('brochure.edit'))
                                                         <div class="btn-group">
-                                                             <a href="/item_image/{!! $brochure->docs!!}" class="btn-info btn btn-xs" title="{{$brochure->name}}" data-gallery="">
+                                                            <a href="{{route('brochure.download_file',$brochure->id)}}" class="btn-warning btn btn-xs btn-download" title="{{$brochure->name}}" data-id="{{$brochure->id}}">
+                                                            <i class="fa fa-download"></i></a>
+                                                        </div>
+                                                        <div class="btn-group">
+                                                            <a href="/uploaded_file/{{$brochure->docs}}" class="btn-info btn btn-xs" title="{{$brochure->name}}" data-gallery="">
                                                             <i class="fa fa-eye"></i></a>
                                                         </div>
-                                                        @endif
                                                         @if (!can('brochure.delete'))
                                                         <div class="btn-group">
-                                                                   <a class="btn-danger btn btn-xs delete"onclick="confirmDelete('{{$brochure->id}}'); return false;"><i class="fa fa-trash"></i></a>
+                                                            <a class="btn-danger btn btn-xs delete"onclick="confirmDelete('{{$brochure->id}}'); return false;"><i class="fa fa-trash"></i></a>
                                                         </div>
                                                         @endif
                                                     </td>
@@ -128,9 +117,6 @@
 @section('scripts')
 
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-    <script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
-
 
 <script type="text/javascript">
 
@@ -182,6 +168,8 @@
                 document.location.href="/brochure/delete/"+data;
             });
         }
+
+
 </script>
 
 @endsection

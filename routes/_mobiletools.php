@@ -43,6 +43,8 @@ Route::group(['prefix' => 'brochure'], function() {
 
      Route::post('upload_file', 'BrochureController@upload_file')->name("brochure.upload_file");
 
+    Route::get('download_file/{id}', 'BrochureController@getDownload')->name("brochure.download_file");
+
 });
 
 

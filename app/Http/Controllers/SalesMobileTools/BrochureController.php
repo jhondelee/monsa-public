@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\User as Users;
 use App\Brochure;
+use Response;
 use DB;
 
 
@@ -47,8 +48,9 @@ class BrochureController extends Controller
             $brochure->created_by = auth()->user()->id;
 
             $item_picture = time().'.'.$request->item_picture->getClientOriginalExtension();
-            $request->item_picture->move(public_path('item_image'), $item_picture );    
+            $request->item_picture->move(public_path('uploaded_file'), $item_picture );    
             $brochure->docs = $item_picture;
+
 
             $brochure->save();
 
@@ -66,12 +68,31 @@ class BrochureController extends Controller
 
     public function destroy($id)
     {
-        $events = Brochure::find($id);
+ 
+        $brochure = Brochure::find($id);
 
-        $events->delete();
+        $brochure->delete();
         
         return redirect()->route('brochure.index')
                              ->with('success','File uploaded successfully!');
+    }
+
+    public function getDownload($id)
+    {
+        $brochure = Brochure::find($id);
+
+        $file_name = $brochure->name;
+
+        $file_path = $brochure->docs;
+
+        //PDF file is stored under project/public/download/info.pdf
+        $file= public_path(). "/uploaded_file/$file_path";
+
+        $headers = array(
+                  'Content-Type: application/pdf',
+                );
+
+        return Response::download($file,$file_name, $headers);
     }
 
 }
