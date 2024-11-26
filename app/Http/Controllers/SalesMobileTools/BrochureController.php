@@ -74,7 +74,7 @@ class BrochureController extends Controller
         $brochure->delete();
         
         return redirect()->route('brochure.index')
-                             ->with('success','File uploaded successfully!');
+                             ->with('success','File delete successfully!');
     }
 
     public function getDownload($id)
