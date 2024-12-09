@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('pageTitle','Brochure')
+@section('pageTitle','Event Schedule')
 
 @section('content')
 
@@ -16,7 +16,7 @@
                     Extra pages
                 </li>
                 <li class="active">
-                    <strong>Calendar</strong>
+                    <strong>Calendar </strong>
                 </li>
             </ol>
         </div>
@@ -26,66 +26,32 @@
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Draggable Events</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#">Config option 1</a>
-                            </li>
-                            <li><a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
+                    <h5>Events for This Month</h5>
+
                 </div>
                 <div class="ibox-content">
                     <div id='external-events'>
-                        <p>Drag a event and drop into callendar.</p>
-                        <div class='external-event navy-bg'>Go to shop and buy some products.</div>
-                        <div class='external-event navy-bg'>Check the new CI from Corporation.</div>
-                        <div class='external-event navy-bg'>Send documents to John.</div>
-                        <div class='external-event navy-bg'>Phone to Sandra.</div>
-                        <div class='external-event navy-bg'>Chat with Michael.</div>
+                        <p>List of Events.</p>
+                            @foreach($events as $event)
+                             <div class='external-event navy-bg'>{{$event->title}}</div>
+                            @endforeach
+
                         <p class="m-t">
-                            <input type='checkbox' id='drop-remove' class="i-checks" checked /> <label for='drop-remove'>remove after drop</label>
+                            <!--@if (!can('calendar.create'))
+                                <a href="#" class="btn btn-warning btn-sm add-event">
+                                    <i class="fa fa-plus">&nbsp;</i>Create Event
+                                </a>
+                            @endif-->
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
-          
-                </div>
-            </div>
+
         </div>
         <div class="col-lg-9">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Striped Table </h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#">Config option 1</a>
-                            </li>
-                            <li><a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
+                    <h5>Calendar - Schedule of Events</h5>
                 </div>
                 <div class="ibox-content">
                     <div id="calendar"></div>
@@ -95,10 +61,15 @@
     </div>
 </div>
 
+@include('pages.salesmobiletools.calendar.create')
+
 @endsection
 
 
 @section('scripts')
+
+<link href="/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+<script src="/js/plugins/toastr/toastr.min.js"></script>
 
 <!-- Mainly scripts -->
 <script src="js/plugins/fullcalendar/moment.min.js"></script>
@@ -115,15 +86,20 @@
 <script>
 
     $(document).ready(function() {
+        $(function () {
+              $("#start_date").datepicker();
+        });
+    });
 
-            $('.i-checks').iCheck({
-                checkboxClass: 'icheckbox_square-green',
-                radioClass: 'iradio_square-green'
-            });
+    $(document).on('click', '.add-event', function() {
+        $('.modal-title').text('Event Schedule');
+        $('#eventModal').modal('show');
+    });
+
+    $(document).ready(function() {
 
         /* initialize the external events
          -----------------------------------------------------------------*/
-
 
         $('#external-events div.external-event').each(function() {
 
@@ -149,68 +125,65 @@
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
+        var _month = date.getMonth();
 
-        $('#calendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            editable: true,
-            droppable: true, // this allows things to be dropped onto the calendar
-            drop: function() {
-                // is the "remove after drop" checkbox checked?
-                if ($('#drop-remove').is(':checked')) {
-                    // if so, remove the element from the "Draggable Events" list
-                    $(this).remove();
-                }
-            },
-            events: [
-                {
-                    title: 'All Day Event',
-                    start: new Date(y, m, 1)
+        
+
+
+
+        $.ajax({
+            url:  '{{ url('calendar-schedule/events') }}',
+            type: 'POST',
+            dataType: 'json',
+            data: { _token: "{{ csrf_token() }}",
+            month: _month}, 
+            success:function(results){
+
+                        
+                $('#calendar').fullCalendar({
+                    header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
                 },
-                {
-                    title: 'Long Event',
-                    start: new Date(y, m, d-5),
-                    end: new Date(y, m, d-2)
+                selectable: true,
+                selectHelper: true,
+                select: function(start,end, allDays){
+                    $('#eventModal').modal('toggle');
+                        var start_date =moment(start).format('YYYY-MM-DD');
+                        var end_date =moment(end).format('YYYY-MM-DD');
+                 
+                        $('#start_date').val(start_date);
+                        $('#end_date').val(end_date);
                 },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d-3, 16, 0),
-                    allDay: false
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d+4, 16, 0),
-                    allDay: false
-                },
-                {
-                    title: 'Meeting',
-                    start: new Date(y, m, d, 10, 30),
-                    allDay: false
-                },
-                {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    allDay: false
-                },
-                {
-                    title: 'Birthday Party',
-                    start: new Date(y, m, d+1, 19, 0),
-                    end: new Date(y, m, d+1, 22, 30),
-                    allDay: false
-                },
-                {
-                    title: 'Click for Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
-                    url: 'http://google.com/'
-                }
-            ]
+                events : 
+                    [
+                        for (var i = results.length - 1; i >= 0; i--) {
+                            {
+                                title: results[i].title,
+                                start: new Date(results[i].start_date),
+                                end: new Date((results[i].end_date),
+                                allDay: false
+                            },
+               
+                        }
+
+                        {
+                            title: 'Birthday Party',
+                            start: new Date(y, m, d+1, 19, 0),
+                            end: new Date(y, m, d+1, 22, 30),
+                            allDay: false
+                        },
+                        {
+                            title: 'Click for Google',
+                            start: new Date(y, m, 28),
+                            end: new Date(y, m, 29),
+                            url: 'http://google.com/'
+                        },
+                    ]
+            });  
+
+            }
         });
 
 

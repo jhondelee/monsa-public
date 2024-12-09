@@ -35,9 +35,6 @@
                          {!! Form::textarea('remarks',null, array('class' => 'form-control', 'rows' => 2,'id'=>'notes')) !!}
                     </div>
 
-
-
-
                 </div>
  
             

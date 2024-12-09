@@ -114,6 +114,7 @@
 
 
 @section('scripts')
+<script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
 <script type="text/javascript">
         $(document).ready(function(){

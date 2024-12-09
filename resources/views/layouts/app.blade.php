@@ -32,9 +32,10 @@
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet" />
     <link href="css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
     <link href="css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
     <link href="css/plugins/fullcalendar/fullcalendar.print.css" rel='stylesheet' media='print'>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+
 
 
 
@@ -87,7 +88,7 @@
     <script src="/js/plugins/ladda/ladda.min.js"></script>
     <script src="/js/plugins/ladda/ladda.jquery.min.js"></script>
 
-    <!--<script src="/js/app.custom.js"></script>-->
+    <script src="/js/app.custom.js"></script>
     <script src="/js/inspinia.js"></script>
 
 

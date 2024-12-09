@@ -70,6 +70,7 @@
 @endsection
 
 @section('scripts')
+
 <script src="/js/plugins/toastr/toastr.min.js"></script>
 
 <script type="text/javascript">
