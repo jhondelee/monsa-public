@@ -158,15 +158,7 @@
                 },
                 events : 
                     [
-                        for (var i = results.length - 1; i >= 0; i--) {
-                            {
-                                title: results[i].title,
-                                start: new Date(results[i].start_date),
-                                end: new Date((results[i].end_date),
-                                allDay: false
-                            },
-               
-                        }
+
 
                         {
                             title: 'Birthday Party',
