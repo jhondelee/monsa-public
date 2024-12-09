@@ -32,8 +32,8 @@
                 <div class="ibox-content">
                     <div id='external-events'>
                         <p>List of Events.</p>
-                            @foreach($events as $event)
-                             <div class='external-event navy-bg'>{{$event->title}}</div>
+                            @foreach($scheds as $sched)
+                             <div class='external-event navy-bg'>{{$sched->title}}</div>
                             @endforeach
 
                         <p class="m-t">
@@ -60,6 +60,26 @@
         </div>
     </div>
 </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Booking title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" id="title">
+          <span id="titleError" class="text-danger"></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="saveBtn" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 @include('pages.salesmobiletools.calendar.create')
 
@@ -98,6 +118,14 @@
 
     $(document).ready(function() {
 
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+
         /* initialize the external events
          -----------------------------------------------------------------*/
 
@@ -120,6 +148,15 @@
 
 
         /* initialize the calendar
+                $.ajax({
+            url:  '{{ url('calendar-schedule/events') }}',
+            type: 'POST',
+            dataType: 'json',
+            data: { _token: "{{ csrf_token() }}",
+            month: _month}, 
+            success:function(results){
+
+            });
          -----------------------------------------------------------------*/
         var date = new Date();
         var d = date.getDate();
@@ -128,16 +165,7 @@
         var _month = date.getMonth();
 
         
-
-
-
-        $.ajax({
-            url:  '{{ url('calendar-schedule/events') }}',
-            type: 'POST',
-            dataType: 'json',
-            data: { _token: "{{ csrf_token() }}",
-            month: _month}, 
-            success:function(results){
+        var booking = @json($events);
 
                         
                 $('#calendar').fullCalendar({
@@ -146,6 +174,7 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
+                events: booking,
                 selectable: true,
                 selectHelper: true,
                 select: function(start,end, allDays){
@@ -156,28 +185,8 @@
                         $('#start_date').val(start_date);
                         $('#end_date').val(end_date);
                 },
-                events : 
-                    [
 
-
-                        {
-                            title: 'Birthday Party',
-                            start: new Date(y, m, d+1, 19, 0),
-                            end: new Date(y, m, d+1, 22, 30),
-                            allDay: false
-                        },
-                        {
-                            title: 'Click for Google',
-                            start: new Date(y, m, 28),
-                            end: new Date(y, m, 29),
-                            url: 'http://google.com/'
-                        },
-                    ]
             });  
-
-            }
-        });
-
 
     });
 

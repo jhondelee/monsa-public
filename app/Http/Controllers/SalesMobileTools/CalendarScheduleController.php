@@ -15,9 +15,33 @@ class CalendarScheduleController extends Controller
     public function index()
     {
         
-        $events = EventCalendar::where("start_date",">", Carbon::now()->subMonths(6))->get();
+        $scheds = EventCalendar::whereMonth("start_date",">=",Carbon::now()->month()->format('m'))
+                    ->orderBy('start_date')->get();
+            
 
-        return view('pages.salesmobiletools.calendar.index',compact('events'));
+        $events = array();
+
+            $bookings = EventCalendar::all();
+
+                foreach($bookings as $booking) {
+                    $color = null;
+                    if($booking->title == 'Test') {
+                        $color = '#924ACE';
+                    }
+                    if($booking->title == 'Test 1') {
+                        $color = '#68B01A';
+                    }
+
+                    $events[] = [
+                        'id'    => $booking->id,
+                        'title' => $booking->title,
+                        'start' => $booking->start_date,
+                        'end'   => $booking->end_date,
+                        'color' => $color
+                    ];
+                }
+
+        return view('pages.salesmobiletools.calendar.index',compact('events','bookings','scheds'));
     }
 
     public function store(Request $request)
