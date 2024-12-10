@@ -61,6 +61,8 @@ Route::group(['prefix' => 'calendar-schedule'], function() {
 
     Route::post('update', 'CalendarScheduleController@update')->name("calendar.update"); 
 
+    Route::post('title', 'CalendarScheduleController@update_title')->name("calendar.update_title");
+
     Route::get('delete/{id}', 'CalendarScheduleController@destroy')->name("calendar.delete"); 
 
     Route::post('events', 'CalendarScheduleController@events')->name("calendar.event"); 

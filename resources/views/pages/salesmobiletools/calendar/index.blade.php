@@ -37,15 +37,20 @@
                     <div id='external-events'>
                         <p>List of Events.</p>
                             @foreach($scheds as $sched)
-                             <div class='external-event navy-bg'><i class="fa fa-pencil">&nbsp;</i>{{$sched->title}}</div>
+                              <div class='external-event navy-bg'>
+                                <a href="#" class="navy-bg btn-block edit-title" data-id="{{$sched->id}}" data-title="{{$sched->title}}"><i class="fa fa-pencil">&nbsp;</i>{{$sched->title}}
+                                </a>
+                           </div>
                             @endforeach
 
                         <p class="m-t">
-                            <!--@if (!can('calendar.create'))
-                                <a href="#" class="btn btn-warning btn-sm add-event">
-                                    <i class="fa fa-plus">&nbsp;</i>Create Event
+                           <!-- @if (!can('calendar.create'))
+
+                                <a href="#" class="btn btn-primary">
+                                    <i class="fa fa-pencil">&nbsp;</i>Create Event
                                 </a>
-                            @endif-->
+                         
+                            @endif -->
                         </p>
                     </div>
                 </div>
@@ -86,7 +91,7 @@
   </div>
 
 @include('pages.salesmobiletools.calendar.create')
-
+@include('pages.salesmobiletools.calendar.edit')
 @endsection
 
 
@@ -226,7 +231,14 @@
                     return moment(event.start).utcOffset(false).isSame(moment(event.end).subtract(1, 'second').utcOffset(false), 'day');
                 },
 
-            });  
+            }); 
+
+        // Edit a post
+        $(document).on('click', '.edit-title', function() {
+            $('#id_edit').val($(this).data('id'));
+            $('#title_edit').val($(this).data('title'));
+            $('#EditeventModal').modal('show');
+        }); 
 
     });
 

@@ -84,6 +84,25 @@ class CalendarScheduleController extends Controller
     }
 
 
+    public function update_title(Request $request)
+    {
+        $booking = EventCalendar::find($request->id);
+
+        if(! $booking) {
+            return response()->json([
+                'error' => 'Unable to locate the event'
+            ], 404);
+        }
+        $booking->title = $request->title;
+
+        $booking->save();
+
+          return redirect()->route('calendar.index')
+
+            ->with('success','Event title been updated successfully.');
+    }
+
+
     public function destroy($id)
     {
         $booking = EventCalendar::find($id);
