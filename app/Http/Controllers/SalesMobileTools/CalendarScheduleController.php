@@ -67,13 +67,38 @@ class CalendarScheduleController extends Controller
             ->with('success','Event title been saved successfully.');
     }
 
-    public function events(Request $request)
+    public function update(Request $request)
     {
-        
-        $results = EventCalendar::where("start_date",">", Carbon::now()->subMonths(6))->get();  
+        $booking = EventCalendar::find($request->id);
 
-        return response()->json($results);       
-        
+        if(! $booking) {
+            return response()->json([
+                'error' => 'Unable to locate the event'
+            ], 404);
+        }
+        $booking->start_date = $request->start_date;
+        $booking->end_date = $request->end_date;
+        $booking->save();
+
+        return response()->json($booking);
     }
+
+
+    public function destroy($id)
+    {
+        $booking = EventCalendar::find($id);
+        if(! $booking) {
+            return response()->json([
+                'error' => 'Unable to locate the event'
+            ], 404);
+        }
+        $booking->delete();
+
+          return redirect()->route('calendar.index')
+
+            ->with('success','Event title been deleted successfully.');
+    }
+
+
 
 }

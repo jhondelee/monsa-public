@@ -21,6 +21,10 @@
             </ol>
         </div>
     </div>
+       
+        @include('layouts.alert')
+        @include('layouts.deletemodal') 
+
 <div class="wrapper wrapper-content">
     <div class="row animated fadeInDown">
         <div class="col-lg-3">
@@ -33,7 +37,7 @@
                     <div id='external-events'>
                         <p>List of Events.</p>
                             @foreach($scheds as $sched)
-                             <div class='external-event navy-bg'>{{$sched->title}}</div>
+                             <div class='external-event navy-bg'><i class="fa fa-pencil">&nbsp;</i>{{$sched->title}}</div>
                             @endforeach
 
                         <p class="m-t">
@@ -90,6 +94,7 @@
 
 <link href="/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
 <script src="/js/plugins/toastr/toastr.min.js"></script>
+ <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
 
 <!-- Mainly scripts -->
 <script src="js/plugins/fullcalendar/moment.min.js"></script>
@@ -185,10 +190,46 @@
                         $('#start_date').val(start_date);
                         $('#end_date').val(end_date);
                 },
+                editable: true,
+                eventDrop: function(event) {
+                    var id = event.id;
+                    var start_date = moment(event.start).format('YYYY-MM-DD');
+                    var end_date = moment(event.end).format('YYYY-MM-DD');
+
+                    $.ajax({
+                            url:  '{{ url('calendar-schedule/update') }}',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: { _token: "{{ csrf_token() }}",
+                            id: id, start_date:start_date, end_date: end_date}, 
+                            success:function(response)
+                            {
+                                toastr.info('Event has been updated','Success!')
+                            },
+                            error:function(error)
+                            {
+                                console.log(error)
+                            },
+                        });
+                },
+                 eventClick: function(event){
+                    var data = event.id;
+                    $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
+                    .on('click', '#delete-btn', function(){
+                        $(this).attr("disabled","disabled");
+                        document.location.href="/calendar-schedule/delete/"+data;
+                    });
+
+                },
+                selectAllow: function(event)
+                {
+                    return moment(event.start).utcOffset(false).isSame(moment(event.end).subtract(1, 'second').utcOffset(false), 'day');
+                },
 
             });  
 
     });
+
 
 </script>
 @endsection
