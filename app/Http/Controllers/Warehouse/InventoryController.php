@@ -40,6 +40,8 @@ class InventoryController extends Controller
     public function index()
     {
         $transferLists = $this->stocktransfer->getTransferList();
+
+        $returnLists = $this->inventory->getreturnindex();
        
         $inventories = $this->inventory->getindex();
 
@@ -51,7 +53,7 @@ class InventoryController extends Controller
 
         $created_by = $this->user->getemplist()->where('id',$id)->pluck('emp_name','id');
 
-        return view('pages.warehouse.inventory.index',compact('location','inventories','transferLists','inventoryItem','created_by'));
+        return view('pages.warehouse.inventory.index',compact('location','inventories','transferLists','inventoryItem','returnLists','created_by'));
                
     }
 

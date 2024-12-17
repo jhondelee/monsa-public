@@ -49,6 +49,13 @@
                                                     </a>
                                                 </li>
                                                 @endif
+                                                @if (!can('returns.index'))
+                                                <li>
+                                                    <a data-toggle="tab" href="#tab-3">
+                                                    <i class="fa fa-trash">&nbsp;</i>Returns
+                                                    </a>
+                                                </li>
+                                                @endif
 
                                             </ul>
                                             <div class="tab-content">
@@ -67,6 +74,17 @@
                                                         <div class="table-responsive" >
 
                                                             @include('pages.warehouse.inventory.transfer_list')
+                                                       
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if (!can('returns.index'))
+                                                <div id="tab-3" class="tab-pane">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive" >
+
+                                                            @include('pages.warehouse.inventory.return_list')
                                                        
                                                         </div>
                                                     </div>

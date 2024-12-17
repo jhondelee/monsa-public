@@ -15,4 +15,6 @@ interface SetInterface {
       public function getinventory();
 
      public function InventoryStatusUpdate($inventory_id);
+
+     public function getreturnindex();
 }

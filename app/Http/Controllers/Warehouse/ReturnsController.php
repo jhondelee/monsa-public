@@ -229,14 +229,40 @@ class ReturnsController extends Controller
             ->with('success','Return has been saved successfully.');
     }
 
-        public function posting($id)
+    public function posting($id)
     {
         
        $returns = Returns::findorfail($id);
 
-       $returns->status         =    1;
+       $returnItems = ReturnItems::where('returns_id',$returns->id)->get();
+
+       foreach ($returnItems as $key => $returnitem) {
+
+            $so = SalesOrder::where('so_number',$returns->so_number)->first();
+
+            $items = Item::findorfail($returnitem->item_id);
+
+            $item_unit_qty = $items->unit_quantity * $returnitem->return_quantity;
+
+            $inventory = New Inventory;
+            $inventory->item_id           = $returnitem->item_id;
+            $inventory->unit_quantity     = $returnitem->return_quantity;
+            $inventory->onhand_quantity   = $item_unit_qty;
+            $inventory->unit_cost         = $returnitem->unit_cost;
+            $inventory->location          = $so->location;
+            $inventory->received_date     = $returns->return_date;
+            $inventory->expiration_date   = NULL;
+            $inventory->status            = 'Out of Stock';
+            $inventory->consumable        = 2;
+            $inventory->created_by        = auth()->user()->id;
+            $inventory->save();
+
+       }
+
+        $returns->status         =    1;
 
        $returns->save();
+
 
         return redirect()->route('returns.index')
 
