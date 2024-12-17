@@ -61,6 +61,8 @@
                     <th>SO Date</th>
                     <th>SO Status</th>
                     <th>Junior Agent</th>
+                    <th class="text-center">Rate</th>
+                    <th class="text-center">Amount</th>
                     <th class="text-center">Total Sales</th>
 
                 </tr>   
@@ -92,13 +94,14 @@
   
                                         </div>
                                     </div>
-
+                                    <!--
                                     <div class="form-group">
                                     <label class="col-md-6 control-label">Rate %</label>
                                         <div class="col-md-6">
                                             {!! Form::text('rate',null, array('placeholder' => '0.00','class' => 'form-control text-right rate','id'=>'rate', 'readonly' => 'true' )) !!}
                                         </div>
                                     </div>
+                                    -->
                                     <div class="form-group">
                                     <label class="col-md-6 control-label">Total Commision</label>
                                         <div class="col-md-6">

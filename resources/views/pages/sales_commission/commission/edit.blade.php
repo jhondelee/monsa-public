@@ -120,6 +120,12 @@
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
                                     {data: 'sub_agent', name: 'sub_agent'},
+                                    {data: 'rate', name: 'rate'},
+                                    {data: 'amount_com', name: 'amount_com',
+                                        render: function(data, type, row){
+                                            return '<h5 class="text-right">'+parseFloat(row.amount_com).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +'<input type="hidden" name="amount_com[]" class="form-control input-sm text-right amount_com" id="amount_com" value='+row.amount_com+'></h5>'
+                                        }
+                                    },
                                     {data: 'total_sales', name: 'total_sales',
                                         render: function(data, type, row){
                                             return '<h4 class="text-right">'+parseFloat(row.total_sales).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +'<input type="hidden" name="total_amount[]" class="form-control input-sm text-right total_amount" id="total_amount" value='+row.total_sales+'></h4>'
@@ -181,6 +187,12 @@
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
                                     {data: 'sub_agent', name: 'sub_agent'},
+                                    {data: 'rate', name: 'rate'},
+                                   {data: 'amount_com', name: 'amount_com',
+                                        render: function(data, type, row){
+                                            return '<h5 class="text-right">'+parseFloat(row.amount_com).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +'<input type="hidden" name="amount_com[]" class="form-control input-sm text-right amount_com" id="amount_com" value='+row.amount_com+'></h5>'
+                                        }
+                                    },
                                     {data: 'total_sales', name: 'total_sales',
                                         render: function(data, type, row){
                                             return '<h4 class="text-right">'+parseFloat(row.total_sales).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +'<input type="hidden" name="total_amount[]" class="form-control input-sm text-right total_amount" id="total_amount" value='+row.total_sales+'></h4>'
@@ -190,12 +202,15 @@
                             });               
                         
                             var _total_amount = 0;
+                            var _total_com = 0;
 
                             $( "#dTable-selected-item-table tbody > tr" ).each( function() {
                                 var $row = $( this );        
                                 var _subtotal = $row.find( ".total_amount" ).val();
+                                var _subcom = $row.find( ".amount_com" ).val();
                             
                                 _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+                                _total_com += parseFloat( ('0' + _subcom).replace(/[^0-9-\.]/g, ''), 10 );
 
                             });
 
@@ -204,6 +219,8 @@
                             _total_amount = _total_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
                             $('#total_sales').val(  _total_amount  ); 
+
+                            $('#total_commission').val( _total_com );
                             
 
                     }

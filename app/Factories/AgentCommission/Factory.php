@@ -27,15 +27,20 @@ class Factory implements SetInterface
     {
 
      $results = DB::select("
-                SELECT so.id,
+   				 SELECT so.id,
                  so.so_number,
                  so.so_date,
-			 	 so.status AS so_status,
-				 CONCAT(sub.firstname ,' ',sub.lastname ) AS sub_agent,
-				 so.sub_employee_id,
-		 		 so.total_sales
+				 	  so.status AS so_status,
+					  CONCAT(sub.firstname ,' ',sub.lastname ) AS sub_agent,
+					  so.sub_employee_id,
+					  cs.name cs_name,
+					  cr.rate,
+					  format(cr.rate * so.total_sales,2) AS amount_com,
+			 		  so.total_sales
 		FROM sales_order so
 		LEFT  JOIN employees sub ON sub.id = so.sub_employee_id
+		INNER JOIN customers cs ON so.customer_id = cs.id
+		INNER JOIN commission_rate cr ON cr.id = cs.area_id
 		WHERE so.employee_id = ? AND so.status = 'POSTED';",[$empId]);
      
         return collect($results);
