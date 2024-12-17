@@ -135,19 +135,25 @@
                             });               
                         
                             var _total_amount = 0;
+                            var _total_com = 0;
 
                             $( "#dTable-selected-item-table tbody > tr" ).each( function() {
                                 var $row = $( this );        
                                 var _subtotal = $row.find( ".total_amount" ).val();
+                                var _subcom = $row.find( ".amount_com" ).val();
                             
                                 _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
+                                _total_com += parseFloat( ('0' + _subcom).replace(/[^0-9-\.]/g, ''), 10 );
 
                             });
+
                             $('#total_sales_amount').val( _total_amount );
 
                             _total_amount = _total_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
-                            $('#total_sales').val(  _total_amount  );
+                            $('#total_sales').val(  _total_amount  ); 
+
+                            $('#total_commission').val( _total_com );
                             
 
                     }
