@@ -40,9 +40,10 @@
             {!! Form::text('prepared_by',$creator, ['class'=>'form-control', 'readonly']) !!}
         </div>
 
-        <label class="col-sm-2 control-label">Sub Agent</label>
+        <label class="col-sm-2 control-label">Approved by <span class="text-danger">*</span></label>
         <div class="col-sm-3">
-            {!! Form::select ('sub_employee_id',$employee, null,['placeholder' => 'Select Sub Agent...','class'=>'chosen-select'])!!}
+            {!! Form::select ('approved_by',$employee, null,['placeholder' => 'Select Approver...','class'=>'chosen-select','required'=>true])!!}
+            
         </div>
 
 
@@ -55,11 +56,7 @@
              {!! Form::textarea('remarks',null, array('class' => 'form-control', 'rows' => 3)) !!}
         </div>
 
-        <label class="col-sm-2 control-label">Approved by <span class="text-danger">*</span></label>
-        <div class="col-sm-3">
-            {!! Form::select ('approved_by',$employee, null,['placeholder' => 'Select Approver...','class'=>'chosen-select','required'=>true])!!}
-            
-        </div>
+
 
 
 

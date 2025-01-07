@@ -96,7 +96,7 @@ class SalesController extends Controller
 
         $salesorder->employee_id        = $request->employee_id;
 
-        $salesorder->sub_employee_id    = $request->sub_employee_id;
+        $salesorder->sub_employee_id    = null;
 
         $salesorder->unit_cost_total    = $unitCostTotal;
 
@@ -254,7 +254,7 @@ class SalesController extends Controller
 
         $salesorder->employee_id        = $request->employee_id;
 
-        $salesorder->sub_employee_id    = $request->sub_employee_id;
+        $salesorder->sub_employee_id    = null;
 
         $salesorder->unit_cost_total    = $unitCostTotal;
 
