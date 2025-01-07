@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\AgentCommission' => $baseDir . '/app/AgentCommission.php',
     'App\\AgentCommissionItem' => $baseDir . '/app/AgentCommissionItem.php',
+    'App\\AgentTeam' => $baseDir . '/app/AgentTeam.php',
     'App\\Area' => $baseDir . '/app/Area.php',
     'App\\AssignArea' => $baseDir . '/app/AssignArea.php',
     'App\\Brochure' => $baseDir . '/app/Brochure.php',
@@ -82,6 +83,7 @@ return array(
     'App\\Http\\Controllers\\RouteManagement\\PermissionController' => $baseDir . '/app/Http/Controllers/RouteManagement/PermissionController.php',
     'App\\Http\\Controllers\\RouteManagement\\PermissionGroupController' => $baseDir . '/app/Http/Controllers/RouteManagement/PermissionGroupController.php',
     'App\\Http\\Controllers\\SalesCommission\\AgentCommissionController' => $baseDir . '/app/Http/Controllers/SalesCommission/AgentCommissionController.php',
+    'App\\Http\\Controllers\\SalesCommission\\AgentTeamController' => $baseDir . '/app/Http/Controllers/SalesCommission/AgentTeamController.php',
     'App\\Http\\Controllers\\SalesCommission\\AssignedAreaController' => $baseDir . '/app/Http/Controllers/SalesCommission/AssignedAreaController.php',
     'App\\Http\\Controllers\\SalesCommission\\RateController' => $baseDir . '/app/Http/Controllers/SalesCommission/RateController.php',
     'App\\Http\\Controllers\\SalesMobileTools\\BrochureController' => $baseDir . '/app/Http/Controllers/SalesMobileTools/BrochureController.php',

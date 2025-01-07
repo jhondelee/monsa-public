@@ -65,3 +65,22 @@ Route::group(['prefix' => 'agent-commission'], function() {
 });
 
 
+
+// Agent Team
+Route::group(['prefix' => 'agent-team'], function() {  
+
+    Route::get('/', 'AgentTeamController@index')->name("team.index");
+    
+    Route::get('add', 'AgentTeamController@create')->name("team.create");
+
+    Route::post('add', 'AgentTeamController@store')->name("team.store");
+
+    Route::get('edit/{id}', 'AgentTeamController@edit')->name("team.edit");    
+
+    Route::post('edit/{id}', 'AgentTeamController@update')->name("team.update"); 
+
+    Route::get('delete/{id}', 'AgentTeamController@destroy')->name("team.delete");    
+
+});
+
+

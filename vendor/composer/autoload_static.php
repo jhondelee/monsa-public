@@ -458,6 +458,7 @@ class ComposerStaticInitComposerPhar1505141966
     public static $classMap = array (
         'App\\AgentCommission' => __DIR__ . '/../..' . '/app/AgentCommission.php',
         'App\\AgentCommissionItem' => __DIR__ . '/../..' . '/app/AgentCommissionItem.php',
+        'App\\AgentTeam' => __DIR__ . '/../..' . '/app/AgentTeam.php',
         'App\\Area' => __DIR__ . '/../..' . '/app/Area.php',
         'App\\AssignArea' => __DIR__ . '/../..' . '/app/AssignArea.php',
         'App\\Brochure' => __DIR__ . '/../..' . '/app/Brochure.php',
@@ -532,6 +533,7 @@ class ComposerStaticInitComposerPhar1505141966
         'App\\Http\\Controllers\\RouteManagement\\PermissionController' => __DIR__ . '/../..' . '/app/Http/Controllers/RouteManagement/PermissionController.php',
         'App\\Http\\Controllers\\RouteManagement\\PermissionGroupController' => __DIR__ . '/../..' . '/app/Http/Controllers/RouteManagement/PermissionGroupController.php',
         'App\\Http\\Controllers\\SalesCommission\\AgentCommissionController' => __DIR__ . '/../..' . '/app/Http/Controllers/SalesCommission/AgentCommissionController.php',
+        'App\\Http\\Controllers\\SalesCommission\\AgentTeamController' => __DIR__ . '/../..' . '/app/Http/Controllers/SalesCommission/AgentTeamController.php',
         'App\\Http\\Controllers\\SalesCommission\\AssignedAreaController' => __DIR__ . '/../..' . '/app/Http/Controllers/SalesCommission/AssignedAreaController.php',
         'App\\Http\\Controllers\\SalesCommission\\RateController' => __DIR__ . '/../..' . '/app/Http/Controllers/SalesCommission/RateController.php',
         'App\\Http\\Controllers\\SalesMobileTools\\BrochureController' => __DIR__ . '/../..' . '/app/Http/Controllers/SalesMobileTools/BrochureController.php',
