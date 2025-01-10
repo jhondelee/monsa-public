@@ -138,7 +138,7 @@
                     data: { _token: "{{ csrf_token() }}",
                     id: _agentID, sdate: _startDate, edate: _endDate},  
                     success:function(results){      
-                         toastr.warning(_agentID +'Please select End Date','Warning')
+
                         $('#dTable-selected-item-table').DataTable({
                             paging: false,
                             searching: false,
