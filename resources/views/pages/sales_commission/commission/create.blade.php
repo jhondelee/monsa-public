@@ -76,7 +76,9 @@
 <script type="text/javascript">
 
         $(document).ready(function(){
+
             $('#btn-generate').on('click', function(){
+
                 var _agentID = $('.employee_id').val();
                 var _startDate = $('.from_date').val();
                 var _endDate = $('.to_date').val();
@@ -107,8 +109,9 @@
                     dataType: 'json',
                     data: { _token: "{{ csrf_token() }}",
                     id: _agentID, sdate: _startDate, edate: _endDate},  
-                    success:function(results){      
-                         
+                    success:function(results){   
+
+
                         $('#dTable-selected-item-table').DataTable({
                             paging: false,
                             searching: false,
@@ -120,7 +123,6 @@
                                     {data: 'so_number', name: 'so_number'},
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
-                                    {data: 'sub_agent', name: 'sub_agent'},
                                     {data: 'rate', name: 'rate'},
                                     {data: 'amount_com', name: 'amount_com',
                                         render: function(data, type, row){
@@ -156,8 +158,14 @@
 
                             $('#total_commission').val( _total_com );
 
+                    
+    
+
                     }
-                })            
+
+                }) 
+                     
+              
             });
 
         });
@@ -168,27 +176,35 @@
             });
         });
         
+        $(document).ready(function(){
+            var _MainAgent = $('.employee_id').val();
+            var _commission = $('#total_commission').val();
+
+            $.ajax({
+                    url:  '{{ url('agent-commission/agentEarned') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _MainAgent},  
+                    success:function(results){  
+
+                    for( var i = 0 ; i <= results.length ; i++ ) {
+                        
+                        var _rates =  results[i].rates * _commission / 100;
+                         _rates = _rates.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+                        $('#div-agents').append("<div class='form-group'>\
+                        <label class='col-sm-1 control-label'>Agent: </label><div class='col-md-3'>\
+                        <input type='text' name='agent[]' value="+ results[i].sub_agent +" class='form-control text-center' readonly>\</div>\
+                        <label class='col-sm-2 control-label'>Earned: </label><div class='col-md-2'>\
+                        <input type='text' name='earned[]' value="+ _rates +" class='form-control text-right'readonly></div></div>")
+                    }
+
+                }
+
+            })
         
-        /* var _total_amount = 0;
-                        var _ctr = 0;
-
-                        for( var i = 0 ; i <= results.length ; i++ ) {
-
-                                $('#dTable-selected-item-table tbody').append("<tr>\
-                                    <td class='text-center'>"+results[i].so_number+"</td>\
-                                    <td class='text-center'>"+results[i].so_date+"</td>\
-                                    <td class='text-center'>"+results[i].status+"</td>\
-                                    <td class='text-center'>"+results[i].sub_agent+"</td>\
-                                    <td class='text-center'><input type='text' name='total_sales[]' class='form-control input-sm text-right total_sales' size='4'   id='total_sales' value='"+results[i].total_sales+"'></td></tr>");
-                                
-                                _ctr = _ctr + 1;
-                        }  
-
-                        if ( _ctr = 0 )
-                        {
-                            toastr.warning('No records will be generated on the selected date','Warning')
-                        }  
-        */
+        });
 
 </script>
 

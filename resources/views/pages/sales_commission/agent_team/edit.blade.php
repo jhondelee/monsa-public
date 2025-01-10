@@ -1,84 +1,168 @@
+        
+@extends('layouts.app')
 
-{!! Form::open(array('route' => array('assign_area.update'),'class'=>'form-horizontal','role'=>'form')) !!} 
+@section('pageTitle','Sales Commission')
 
- <div id="editModal" class="modal fade" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h3 class="modal-title"></h3>
-            </div>
-            <div class="modal-body">
-           
-                {!! Form::token(); !!}
-                {!! csrf_field() ; !!} 
-                {!! Form::hidden('id',null, ['class'=>'form-control','id'=>'id_edit']) !!}
-                <div class="editform"> 
-                    <div class="form-group">
-                    <label class="col-sm-4 control-label">Main Agent <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        {!! Form::select ('employee_id',$employee, null,['placeholder' => 'Select Agent...','class'=>'chosen-select','required'=>true])!!}
-                    </div>
+@section('content')
 
-                    <label class="col-sm-4 control-label">Percentage Rate </label>
-                    <div class="col-sm-7">
-                        {!! Form::text('main_rate',null, ['class'=>'form-control', 'required'=> true]) !!}
-                    </div>
-                </div>    
+    <div class="row wrapper border-bottom white-bg page-heading">
 
-                <div class="hr-line-dashed"></div>
-                
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Sub Agent 1 <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        {!! Form::select ('team_one',$employee, null,['placeholder' => 'Select Agent...','class'=>'chosen-select','required'=>true])!!}
-                    </div>
+        <div class="col-lg-10">
 
-                    <label class="col-sm-4 control-label">Percentage Rate </label>
-                    <div class="col-sm-7">
-                        {!! Form::text('rate_one',null, ['class'=>'form-control', 'required'=> true]) !!}
-                    </div>
-                </div>
+            <h2>Agent Team</h2>
 
-                <div class="hr-line-dashed"></div>
-                
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Sub Agent 2 <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        {!! Form::select ('team_two',$employee, null,['placeholder' => 'Select Agent...','class'=>'chosen-select','required'=>true])!!}
-                    </div>
+                <ol class="breadcrumb">
+                    <li>
 
-                    <label class="col-sm-4 control-label">Percentage Rate </label>
-                    <div class="col-sm-7">
-                        {!! Form::text('rate_two',null, ['class'=>'form-control', 'required'=> true]) !!}
-                    </div>
-                </div>
+                        Home
 
-                <div class="hr-line-dashed"></div>
-                
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Sub Agent 3 <span class="text-danger">*</span></label>
-                    <div class="col-sm-7">
-                        {!! Form::select ('team_three',$employee, null,['placeholder' => 'Select Agent...','class'=>'chosen-select','required'=>true])!!}
-                    </div>
+                    </li>
 
-                    <label class="col-sm-4 control-label">Percentage Rate </label>
-                    <div class="col-sm-7">
-                        {!! Form::text('rate_three',null, ['class'=>'form-control', 'required'=> true]) !!}
-                    </div>
-                </div>
-                </div>
+                    <li class="active">
 
-            </div>
-            <div class="modal-footer">
-                {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-update']) !!}
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>                                 
-            </div>
-            
+                        <strong>Agent Team</strong>
+
+                    </li>
+                                      
+                </ol>
+
         </div>
-     </div>
- </div>
 
-{!! Form::close() !!} 
+    </div>
+
+       @include('layouts.alert')
+       @include('layouts.deletemodal')
+
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        
+        <div class="row">
+            
+            <div class="col-lg-12">
+                
+                <div class="ibox float-e-margins">
+                    
+                    <div class="ibox-title">
+                                     
+                        <h4>Agent Team</h4> 
+                            
+                    </div>
+                        
+                    <div class="ibox-content">
+                            
+                        <div class="form-horizontal m-t-md">
+                            {!! Form::model($agents, ['route' => ['team.update', $agents->employee_id],'id'=>'agentteam_form']) !!}
+
+                                @include('pages.sales_commission.agent_team._form')
+                                     
+                            {!! Form::close() !!} 
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div> 
+
+    </div>  
+        
+@endsection
+
+@section('styles')
+<link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+<link href="/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+
+<script src="/js/plugins/toastr/toastr.min.js"></script>
+
+<script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#btn-add_sub').on('click', function(){
+                var _agentID = $('.employee_id').val();
+                var _mainRate = $('.share_percentage').val();
+                var _subAgent = $('.sub_agent').val();
+                var _subAgentName = $('.sub_agent :selected').text();
+                var _subRate = $('.sub_rate').val();
+
+                if ( !_agentID ) {
+
+                    toastr.warning('Please select Agent Name','Warning')
+                    return false;
+                }
+
+                if ( !_mainRate ) {
+
+                    toastr.warning('Please input Main Agent Rate','Warning')
+                     return false;
+                }
+
+                if ( !_subAgent ) {
+
+                    toastr.warning('Please select Sub Agent Name','Warning')
+                     return false;
+                }       
+
+                if ( !_subRate ) {
+
+                    toastr.warning('Please input Sub Agent Rate','Warning')
+                     return false;
+                }  
 
 
+                       $('#dTable-sub-table tbody').append("<tr><td><input type='hidden' name='main_id[]' class='form-control input-sm text-center main_id' required=true size='2'  value="+ _agentID +" readonly><input type='text' name='sub_id[]' class='form-control input-sm text-center sub_id' readonly=true size='4'  value="+ _subAgent +"   id ='sub_id'></td>\
+                            <td>"+ _subAgentName+"</td>\
+                            <td>\
+                            <input type='text' name='sub_rate[]' class='form-control input-sm text-center sub_rate' readonly=true size='4'  value="+ _subRate +"   id ='sub_rate'>\
+                            </td>\
+                           <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
+                        </tr>");             
+         
+            });
+
+        });
+      
+        $(document).ready(function(){
+            $('#btn-close').on('click', function(){
+                document.location.href="/agent-team"; 
+            });
+        });
+        
+        $('#dTable-sub-table ').on('click', '#delete_line', function(){
+            $(this).closest('tr').remove();
+        });
+        
+         $(document).ready(function(){
+            var _id = $('.employee_id').val();
+
+            $.ajax({
+                url:  '{{ url('agent-team/subagents') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: { _token: "{{ csrf_token() }}",
+                id: _id,}, 
+                success:function(results){
+
+                  for( var i = 0 ; i <= results.length ; i++ ) {
+                            
+                            $('#dTable-sub-table tbody').append("<tr><td><input type='hidden' name='main_id[]' class='form-control input-sm text-center main_id' required=true size='2'  value="+ results[i].employee_id +" readonly><input type='text' name='sub_id[]' class='form-control input-sm text-center sub_id' readonly=true size='4'  value="+ results[i].team_id +"   id ='sub_id'></td>\
+                            <td>"+ results[i].sub_agent+"</td>\
+                            <td>\
+                            <input type='text' name='sub_rate[]' class='form-control input-sm text-center sub_rate' readonly=true size='4'  value="+ results[i].share_percentage +"   id ='sub_rate'>\
+                            </td>\
+                           <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
+                        </tr>");
+                    }
+                }         
+            })
+         });
+             
+
+
+</script>
+
+@endsection

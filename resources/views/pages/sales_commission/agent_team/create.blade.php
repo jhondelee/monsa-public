@@ -84,8 +84,8 @@
 
         $(document).ready(function(){
             $('#btn-add_sub').on('click', function(){
-                var _agentID = $('.main_agent').val();
-                var _mainRate = $('.main_rate').val();
+                var _agentID = $('.employee_id').val();
+                var _mainRate = $('.share_percentage').val();
                 var _subAgent = $('.sub_agent').val();
                 var _subAgentName = $('.sub_agent :selected').text();
                 var _subRate = $('.sub_rate').val();

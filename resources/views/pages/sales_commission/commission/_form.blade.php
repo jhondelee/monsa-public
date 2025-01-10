@@ -60,7 +60,6 @@
                     <th class="text-center">SO Number</th>
                     <th>SO Date</th>
                     <th>SO Status</th>
-                    <th>Junior Agent</th>
                     <th class="text-center">Rate</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">Total Sales</th>
@@ -78,6 +77,8 @@
         <hr>
     </div>
     <br>
+
+ 
 
     <!-- start row -->
                             <div class="row">
@@ -105,21 +106,33 @@
                                     <div class="form-group">
                                     <label class="col-md-6 control-label">Total Commision</label>
                                         <div class="col-md-6">
-                                            {!! Form::text('total_commission',null, array('placeholder' => '0.00','class' => 'form-control text-right total_commission','id'=>'total_commission', 'readonly' => 'true' )) !!}
+                                            {!! Form::text('total_commission',$total_com, array('placeholder' => '0.00','class' => 'form-control text-right total_commission','id'=>'total_commission', 'readonly' => 'true' )) !!}
                                         </div>
                                     </div>
-                                </div> 
+                                </div>   
+                                   
+                             </div>  
 
-                                <div class="col-md-2 form-horizontal">
-                                </div>       
-                                                                
-                            </div> 
+   <div class="hr-line-dashed"></div>
+
+        <div class="col-md-12 form-horizontal" id="div-agents">
+
+
+
+    
+
+        </div> 
+
+    </div> 
+
+    
     <!-- end row -->    
-                               
-    <div class="hr-line-dashed"></div>
-    <div class="row">
-        <div class="col-md-12 form-horizontal">
+  
  
+    <div class="row">
+
+        <div class="col-md-12 form-horizontal">
+        <div class="hr-line-dashed"></div>
             <div class="ibox-tools pull-right">
                  
             <button type="button" class="btn btn-danger btn-close" id="btn-close">Close</button>

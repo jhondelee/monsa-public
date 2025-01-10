@@ -62,6 +62,8 @@ Route::group(['prefix' => 'agent-commission'], function() {
 
     Route::post('generate', 'AgentCommissionController@getsalesCom')->name("commission.generate"); 
 
+    Route::post('agentEarned', 'AgentCommissionController@agentEarned')->name("commission.agentearned"); 
+
 });
 
 
@@ -79,7 +81,9 @@ Route::group(['prefix' => 'agent-team'], function() {
 
     Route::post('edit/{id}', 'AgentTeamController@update')->name("team.update"); 
 
-    Route::get('delete/{id}', 'AgentTeamController@destroy')->name("team.delete");    
+    Route::get('delete/{id}', 'AgentTeamController@destroy')->name("team.delete");  
+
+    Route::post('subagents', 'AgentTeamController@showSubAgents')->name("team.subagents");   
 
 });
 

@@ -80,8 +80,7 @@
                                                         @if (!can('team.edit'))
                                                         <div class="btn-group">
                                                             <a class="btn-info btn btn-xs edit-modal" 
-                                                            data-id="{{$agent->id}}"
-                                                            data-name="{{$agent->main_agent}}">
+                                                            href="{{route ('team.edit', $agent->id) }}">
                                                             <i class="fa fa-pencil"></i></a>
                                                         </div>
                                                         @endif
@@ -150,32 +149,10 @@
          $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
             .on('click', '#delete-btn', function(){
                 $(this).attr("disabled","disabled");
-                document.location.href="/assign-area/delete/"+data;
+                document.location.href="/agent-team/delete/"+data;
             });
         }
 
-        $(document).on('click', '.add-modal', function() {
-            $('.modal-title').text('Add Assign Area');
-            $('#myModal').modal('show');
-        });
-
-        // Edit a post
-        $(document).on('click', '.edit-modal', function() {
-            $('.modal-title').text('Edit Assign Area');
-            $('#id_edit').val($(this).data('id'));
-            $('#emp_id_edit').val($(this).data('name')).trigger("chosen:updated");
-            $('#rates_edit').val($(this).data('rate')).trigger("chosen:updated");
-            $('#area_edit').val($(this).data('area')).trigger("chosen:updated");
-
-            $('#editModal').modal('show');
- 
-        });
-
-            /* if ($(this).data('status')==1)
-                $('#alive_status').attr("checked","checked"); 
-            else
-            $('#alive_status').attr("checked",false);
-            */
 </script>
 
 @endsection

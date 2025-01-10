@@ -38,9 +38,9 @@ class AgentTeamController extends Controller
      */
     public function create()
     {
-        $employee = $this->user->getemplist()->pluck('emp_name','id');
+        $employee_id = $this->user->getemplist()->pluck('emp_name','id');
 
-        return view('pages.sales_commission.agent_team.create',compact('employee'));
+        return view('pages.sales_commission.agent_team.create',compact('employee_id'));
     }
 
     /**
@@ -53,11 +53,11 @@ class AgentTeamController extends Controller
     {
         $agent_rate = New AgentTeam;
 
-        $agent_rate->employee_id = $request->main_agent;
+        $agent_rate->employee_id = $request->employee_id;
 
-        $agent_rate->team_id = $request->main_agent;
+        $agent_rate->team_id = $request->employee_id;
 
-        $agent_rate->share_percentage = $request->main_rate;
+        $agent_rate->share_percentage = $request->share_percentage;
 
         $agent_rate->save();
 
@@ -68,7 +68,7 @@ class AgentTeamController extends Controller
 
             $agent_rate = New AgentTeam;
 
-            $agent_rate->employee_id = $request->main_agent;
+            $agent_rate->employee_id = $request->employee_id;
 
             $agent_rate->team_id = $subagents[$i];
 
@@ -90,10 +90,14 @@ class AgentTeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function showSubAgents(Request $request)
+    {   
+        
+        $results = $this->agentteam->sub_agents($request->id);
+        
+        return response()->json($results);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -103,7 +107,14 @@ class AgentTeamController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $agents = AgentTeam::where('employee_id',$id)->first();
+
+        $agentteams = AgentTeam::where('employee_id',$id)->get();
+
+        $employee_id = $this->user->getemplist()->pluck('emp_name','id');
+
+        return view('pages.sales_commission.agent_team.edit',compact('agentteams','employee_id','agents'));
     }
 
     /**
@@ -115,8 +126,48 @@ class AgentTeamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+        
+
+        $agentlist = AgentTeam::where('employee_id',$id)->get();
+
+        foreach ($agentlist as $key => $value) {
+            $agent = AgentTeam::find($value->id);
+            $agent->delete();
+
+        }
+
+        $agent_rate = New AgentTeam;
+
+        $agent_rate->employee_id = $request->employee_id;
+
+        $agent_rate->team_id = $request->employee_id;
+
+        $agent_rate->share_percentage = $request->share_percentage;
+
+        $agent_rate->save();
+
+        $subagents = $request->get('sub_id');
+        $subrates = $request->get('sub_rate');
+
+        for ( $i=0 ; $i < count($subagents) ; $i++ ){
+
+            $agent_rate = New AgentTeam;
+
+            $agent_rate->employee_id = $request->employee_id;
+
+            $agent_rate->team_id = $subagents[$i];
+
+            $agent_rate->share_percentage = $subrates[$i];
+
+            $agent_rate->save();
+
+        }
+
+
+        return redirect()->route('team.index')
+
+            ->with('success','Agent team has been updated successfully.');
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -126,6 +177,17 @@ class AgentTeamController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $agentlist = AgentTeam::where('employee_id',$id)->get();
+
+        foreach ($agentlist as $key => $value) {
+            $agent = AgentTeam::find($value->id);
+            $agent->delete();
+
+        }
+
+        return redirect()->route('team.index')
+
+            ->with('success','Agent team has been deleted successfully.');
+        
     }
 }

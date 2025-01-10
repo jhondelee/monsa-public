@@ -50,7 +50,8 @@
                             {!! Form::model($agentcommission, ['route' => ['commission.update', $agentcommission->id],'id'=>'agentcommission_form']) !!}
 
                                 @include('pages.sales_commission.commission._form')
-                                     
+                                
+                                <input type="hidden" name="emp_id" id="emp_id" value="{{$agentcommission->employee_id}}">     
                             {!! Form::close() !!} 
 
                             
@@ -73,13 +74,45 @@
 <script src="/js/plugins/toastr/toastr.min.js"></script>
 
 <script type="text/javascript">
+        $(document).ready(function(){
+
+            var _MainAgent = $('#emp_id').val();
+            var _commission = $('#total_commission').val();
+
+            $.ajax({
+                    url:  '{{ url('agent-commission/agentEarned') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _MainAgent},  
+                    success:function(results){  
+
+                    for( var i = 0 ; i <= results.length ; i++ ) {
+         
+                        var _rates =  results[i].rates * _commission / 100;
+                         _rates = _rates.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+                        $('#div-agents').append("<div class='form-group'>\
+                        <label class='col-sm-1 control-label'>Agent: </label><div class='col-md-3'>\
+                        <input type='text' name='agent[]' value="+ results[i].sub_agent +" class='form-control text-center' readonly></div>\
+                        <label class='col-sm-2 control-label'>Earned: </label><div class='col-md-2'>\
+                        <input type='text' name='earned[]' value="+ _rates +" class='form-control text-right'readonly></div></div>")
+                    }
+
+                }
+
+            })
+        
+        });
 
         $(document).ready(function(){
+
             $('#btn-generate').on('click', function(){
                 var _agentID = $('.employee_id').val();
                 var _startDate = $('.from_date').val();
                 var _endDate = $('.to_date').val();
 
+   
                 if ( !_agentID ) {
 
                     toastr.warning('Please select Agent Name','Warning')
@@ -98,8 +131,6 @@
                      return false;
                 }       
 
-                //$('#dTable-selected-item-table').DataTable().empty();
-
                 $.ajax({
                     url:  '{{ url('agent-commission/generate') }}',
                     type: 'POST',
@@ -107,7 +138,7 @@
                     data: { _token: "{{ csrf_token() }}",
                     id: _agentID, sdate: _startDate, edate: _endDate},  
                     success:function(results){      
-                         
+                         toastr.warning(_agentID +'Please select End Date','Warning')
                         $('#dTable-selected-item-table').DataTable({
                             paging: false,
                             searching: false,
@@ -119,7 +150,6 @@
                                     {data: 'so_number', name: 'so_number'},
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
-                                    {data: 'sub_agent', name: 'sub_agent'},
                                     {data: 'rate', name: 'rate'},
                                     {data: 'amount_com', name: 'amount_com',
                                         render: function(data, type, row){
@@ -154,7 +184,6 @@
                             $('#total_sales').val(  _total_amount  ); 
 
                             $('#total_commission').val( _total_com );
-                            
 
                     }
                 })            
@@ -172,6 +201,7 @@
                 var _agentID = $('.employee_id').val();
                 var _startDate = $('.from_date').val();
                 var _endDate = $('.to_date').val();
+
 
             $.ajax({
                     url:  '{{ url('agent-commission/generate') }}',
@@ -192,7 +222,6 @@
                                     {data: 'so_number', name: 'so_number'},
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
-                                    {data: 'sub_agent', name: 'sub_agent'},
                                     {data: 'rate', name: 'rate'},
                                    {data: 'amount_com', name: 'amount_com',
                                         render: function(data, type, row){
@@ -230,9 +259,12 @@
                             
 
                     }
-                })
+                });
+
+
         });
-        
+    
+
 
 
 </script>

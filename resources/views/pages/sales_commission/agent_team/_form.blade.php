@@ -7,7 +7,7 @@
             
         <div class="col-sm-3">
                         
-            {!! Form::select ('main_agent',$employee, null,['placeholder' => 'Select Agent...','class'=>'chosen-select main_agent','required'=>true])!!}
+            {!! Form::select ('employee_id',$employee_id, null,['placeholder' => 'Select Agent...','class'=>'chosen-select employee_id','required'=>true])!!}
             
         </div>
 
@@ -15,7 +15,7 @@
         
         <div class="col-sm-2">
             
-            {!! Form::text('main_rate',null, ['class'=>'form-control main_rate', 'required'=> true]) !!}
+            {!! Form::text('share_percentage',null, ['class'=>'form-control share_percentage', 'required'=> true]) !!}
                     
         </div>
                 
@@ -29,7 +29,7 @@
             
         <div class="col-sm-3">
                         
-            {!! Form::select ('sub_agent',$employee, null,['placeholder' => 'Select Agent One...','class'=>'chosen-select sub_agent','required'=>true])!!}
+            {!! Form::select ('sub_agent',$employee_id, null,['placeholder' => 'Select Sub Agent...','class'=>'chosen-select sub_agent'])!!}
             
         </div>
 
@@ -37,7 +37,7 @@
         
         <div class="col-sm-2">
             
-            {!! Form::text('sub_rate',null, ['class'=>'form-control sub_rate', 'required'=> true]) !!}
+            {!! Form::text('sub_rate',null, ['class'=>'form-control sub_rate']) !!}
                     
         </div>
                 
@@ -80,12 +80,13 @@
         <div class="col-md-12 form-horizontal">
 
             <div class="ibox-tools pull-right">
-                                
+
                 <button type="button" class="btn btn-danger btn-close" id="btn-close">Close</button>
 
-                &nbsp;
-                                                                                   
-                {!! Form::submit(' Save Changes ', ['class' => 'btn btn-primary']) !!}   
+                 &nbsp;
+                
+                {!! Form::submit(' Save Changes ', ['class' => 'btn btn-primary']) !!}                 
+                 
 
             </div>
 

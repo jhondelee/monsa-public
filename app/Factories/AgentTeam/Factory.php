@@ -21,6 +21,31 @@ class Factory implements SetInterface
 		return collect($results);
 	}
 
+
+	public function sub_agents($mainID)
+	{
+		$results = DB::select("
+				SELECT a.employee_id, a.team_id ,
+		CONCAT(e.firstname ,' ',e.lastname ) AS sub_agent,
+		a.share_percentage FROM agent_team a 
+		INNER JOIN employees e ON a.team_id = e.id 
+		WHERE a.employee_id = ?
+		AND a.employee_id <> a.team_id",[$mainID]);
+
+		return collect($results);
+	}
+
+	public function agentsEarned($empID)
+	{
+		$results = DB::select("
+				SELECT a.employee_id, a.team_id ,
+		CONCAT(e.firstname ,' ',e.lastname ) AS sub_agent,
+		a.share_percentage as rates FROM agent_team a 
+		INNER JOIN employees e ON a.team_id = e.id 
+		WHERE a.employee_id = ? ",[$empID]);
+
+		return collect($results);
+	}
 }
 
 

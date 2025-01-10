@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Factories\AgentCommission\Factory as AgentCommissionFactory;
+use App\Factories\AgentTeam\Factory as AgentTeamFactory;
 use App\User as Users;
 use App\Area;
 use App\CommissionRate;
@@ -18,11 +19,13 @@ class AgentCommissionController extends Controller
 {
      public function __construct(
             Users $user,
-            AgentCommissionFactory $agent_commission
+            AgentCommissionFactory $agent_commission,
+            AgentTeamFactory $agent_team
         )
     {
         $this->user = $user;
         $this->agentcommission = $agent_commission;
+        $this->agentteam = $agent_team;
         $this->middleware('auth');  
     }
 
@@ -43,8 +46,9 @@ class AgentCommissionController extends Controller
 
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
+        $total_com = 0;
 
-        return view('pages.sales_commission.commission.create',compact('employee','creator'));
+        return view('pages.sales_commission.commission.create',compact('employee','creator','total_com'));
     }
 
      public function store(Request $request)
@@ -108,6 +112,17 @@ class AgentCommissionController extends Controller
         
      }
 
+    public function agentEarned(Request $request)
+     {
+        
+        $results = $this->agentteam->agentsEarned($request->id);
+
+        return response()->json($results); 
+        
+     }
+
+
+
      public function edit($id)
      {
 
@@ -118,9 +133,21 @@ class AgentCommissionController extends Controller
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
 
-        return view('pages.sales_commission.commission.edit',compact('employee','creator','agentcommission'));
+        $earned = $this->agentcommission->getsalesCom($agentcommission->employee_id)->whereBetween('so_date',[$agentcommission->from_date,
+            $agentcommission->to_date]);
+
+
+        $total_com = 0;
+        foreach ($earned as $key => $value) {
+             $total_com =  $total_com + $value->amount_com;
+        }
+
+
+
+        return view('pages.sales_commission.commission.edit',compact('employee','creator','agentcommission','total_com'));
           
      }
+
 
 
      public function update(Request $request,$id)
