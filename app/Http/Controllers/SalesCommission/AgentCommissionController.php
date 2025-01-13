@@ -213,4 +213,33 @@ class AgentCommissionController extends Controller
 
      }
 
+
+     public function destroy($id)
+     {  
+
+        $AgentComs = AgentCommission::find($id);
+
+        $AgentComs->delete();
+
+        
+        $comitems = AgentCommissionItem::where('agent_commission_id',$id)->get();
+
+            if(count($comitems) > 0)
+             {
+                foreach ($comitems as $key => $comitem) {
+
+                    $items = AgentCommissionItem::findOrfail($comitem->id);
+
+                    $items->delete();
+                }
+
+             }
+            
+
+        return redirect()->route('commission.index')
+
+            ->with('success','Agent Commission has been deleted successfully.');
+
+     }
+
 }
