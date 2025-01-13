@@ -86,7 +86,7 @@
                     data: { _token: "{{ csrf_token() }}",
                     id: _MainAgent},  
                     success:function(results){  
-                    toastr.warning('Yes it works','Warning')
+
                     for( var i = 0 ; i <= results.length ; i++ ) {
          
                         var _rates =  results[i].rates * _commission / 100;

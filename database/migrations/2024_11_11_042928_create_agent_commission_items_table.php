@@ -24,7 +24,7 @@ class CreateAgentCommissionItemsTable extends Migration
 
 
             $table->foreign('agent_commission_id')
-                  ->references('id')->on('agent_commission');
+                  ->references('id')->on('agent_commission')->onDelete('cascade');;
                   
         });
     }
