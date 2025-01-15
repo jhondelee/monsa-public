@@ -15,6 +15,9 @@ use App\Incoming;
 use App\Inventory;
 use App\InventoryMovement;
 use App\WarehouseLocation;
+use App\Supplier;
+use App\SupplierItems; 
+use App\ItemReturntoSupplier;
 use Carbon\Carbon;
 use Fpdf;
 use DB;
@@ -49,11 +52,13 @@ class InventoryController extends Controller
 
         $location = WarehouseLocation::pluck('name','id');
 
-        $id = auth()->user()->id;
+        $suppliers = Supplier::pluck('name','id');
 
-        $created_by = $this->user->getemplist()->where('id',$id)->pluck('emp_name','id');
+        $user_id = auth()->user()->id;
 
-        return view('pages.warehouse.inventory.index',compact('location','inventories','transferLists','inventoryItem','returnLists','created_by'));
+        $created_by = $this->user->getemplist()->where('id',$user_id)->pluck('emp_name','id');
+
+        return view('pages.warehouse.inventory.index',compact('location','inventories','transferLists','inventoryItem','returnLists','created_by','user_id','suppliers'));
                
     }
 
@@ -346,5 +351,113 @@ class InventoryController extends Controller
 
     }
 
+
+    public function return_to_supplier(Request $request)
+    {
+        
+        $itemReturn = New ItemReturntoSupplier;
+
+        $itemReturn->item_id =          $request->item_rtn_id;
+
+        $itemReturn->supplier_id =      $request->supplier_id;
+
+        $itemReturn->inventory_id =      $request->inven_id;
+
+        $itemReturn->return_unit_qty =  $request->unti_qty;
+
+        $itemReturn->return_date =      $request->return_date;
+
+        $itemReturn->location =         $request->location;
+
+        $itemReturn->return_by =        $request->return_by;
+
+        $itemReturn->save();
+    
+
+        $items =Item::findorfail($request->item_rtn_id);
+
+        $itemUnitQty = $request->unti_qty * $items->unit_quantity;
+
+
+        $inventories = Inventory::findorfail($request->inven_id);
+
+        $inventories->unit_quantity =  $inventories->unit_quantity - $request->unti_qty;
+
+        $inventories->onhand_quantity = $inventories->onhand_quantity - $itemUnitQty;
+
+        $inventories->save();
+
+
+        return redirect()->route('inventory.index')
+
+            ->with('success','Item returned to the supplier has been saved!.');
+
+    }
+
+
+    public function item_return_to_supplier(Request $request)
+    {
+        $SupplierItems = SupplierItems::where('item_id',$request->id)->first();
+
+        $results = Supplier::findorfail($SupplierItems->supplier_id);
+
+        return response()->json($results);
+    }
+
+    public function return_to_inventory(Request $request)
+    {
+        $this->validate($request, [
+            'unti_qty_i'      => 'required',
+            'return_date' => 'required',
+            'inv_loc'      => 'required',
+            'return_by'   => 'required'
+        ]);
+
+
+        $items = $this->items->getiteminfo($request->item_id)->first();
+
+        $item_unit_qty = $items->unit_quantity * $request->unti_qty_i;
+
+
+        $inventory = New Inventory;
+
+        $inventory->item_id           = $request->item_id;
+
+        $inventory->unit_quantity     = $request->unti_qty_i;
+
+        $inventory->onhand_quantity   = $item_unit_qty;
+
+        $inventory->unit_cost         = $items->unit_cost;
+
+        $inventory->location          = $request->inv_loc;
+
+        $inventory->received_date     = $request->return_date;
+
+        $inventory->status            = 'In Stock';
+
+        $inventory->consumable         = 0;
+
+        $inventory->created_by        = $request->return_by;
+
+        $inventory->save();
+
+
+        $inventories = Inventory::findorfail($request->inven_item_id);
+      
+        $untiQTY = $inventories->unit_quantity - $request->unti_qty_i;
+
+        $onHndQTY = $inventories->onhand_quantity -  $item_unit_qty;
+
+        $inventories->unit_quantity =  $untiQTY;
+
+        $inventories->onhand_quantity = $onHndQTY;
+
+        $inventories->save();
+   
+
+        return redirect()->route('inventory.index')
+
+            ->with('success','Item has been returned to the inventory successfully!.');
+    }
 
 }

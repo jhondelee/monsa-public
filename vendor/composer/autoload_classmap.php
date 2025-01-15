@@ -26,6 +26,8 @@ return array(
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Factories\\AgentCommission\\Factory' => $baseDir . '/app/Factories/AgentCommission/Factory.php',
     'App\\Factories\\AgentCommission\\SetInterface' => $baseDir . '/app/Factories/AgentCommission/SetInterface.php',
+    'App\\Factories\\AgentTeam\\Factory' => $baseDir . '/app/Factories/AgentTeam/Factory.php',
+    'App\\Factories\\AgentTeam\\SetInterface' => $baseDir . '/app/Factories/AgentTeam/SetInterface.php',
     'App\\Factories\\AssignArea\\Factory' => $baseDir . '/app/Factories/AssignArea/Factory.php',
     'App\\Factories\\AssignArea\\SetInterface' => $baseDir . '/app/Factories/AssignArea/SetInterface.php',
     'App\\Factories\\Auth\\Factory' => $baseDir . '/app/Factories/Auth/Factory.php',

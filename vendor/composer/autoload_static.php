@@ -476,6 +476,8 @@ class ComposerStaticInitComposerPhar1505141966
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Factories\\AgentCommission\\Factory' => __DIR__ . '/../..' . '/app/Factories/AgentCommission/Factory.php',
         'App\\Factories\\AgentCommission\\SetInterface' => __DIR__ . '/../..' . '/app/Factories/AgentCommission/SetInterface.php',
+        'App\\Factories\\AgentTeam\\Factory' => __DIR__ . '/../..' . '/app/Factories/AgentTeam/Factory.php',
+        'App\\Factories\\AgentTeam\\SetInterface' => __DIR__ . '/../..' . '/app/Factories/AgentTeam/SetInterface.php',
         'App\\Factories\\AssignArea\\Factory' => __DIR__ . '/../..' . '/app/Factories/AssignArea/Factory.php',
         'App\\Factories\\AssignArea\\SetInterface' => __DIR__ . '/../..' . '/app/Factories/AssignArea/SetInterface.php',
         'App\\Factories\\Auth\\Factory' => __DIR__ . '/../..' . '/app/Factories/Auth/Factory.php',

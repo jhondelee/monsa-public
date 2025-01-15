@@ -18,6 +18,7 @@ use App\SalesOrder;
 use App\Returns;
 use App\ReturnItems;
 use App\WarehouseLocation;
+use App\ItemReturntoSupplier;
 use App\Customer;
 
 class ReturnsController extends Controller
@@ -42,7 +43,9 @@ class ReturnsController extends Controller
 
         $returns =  $this->returns->getindex();
 
-        return view('pages.warehouse.return.index',compact('returns'));
+        $returntosuppliers = $this->returns->getreturntosupplier();
+
+        return view('pages.warehouse.return.index',compact('returns','returntosuppliers'));
                
     }
 

@@ -11,4 +11,6 @@ interface SetInterface {
      public function getsoitems($SoNum);
 
      public function getreturnitems($id);
+
+     public function getreturntosupplier();
 }

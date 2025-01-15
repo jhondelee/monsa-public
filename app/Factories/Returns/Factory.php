@@ -94,5 +94,28 @@ class Factory implements SetInterface
 
     }
 
+    public function getreturntosupplier()
+    {
+
+        $results = DB::select("
+                SELECT s.id,
+                     s.item_id,
+                     i.name AS item_name,
+                     i.description,
+                     u.code AS units,
+                     CONCAT('(',s.return_unit_qty,') ',u.code) AS unit_qty,
+                     r.name AS supplier_name,
+                    s.return_date,
+                    s.return_by
+            FROM return_to_supplier s
+            INNER JOIN items i ON s.item_id = i.id
+            INNER JOIN unit_of_measure u ON u.id = i.unit_id
+            INNER JOIN suppliers r ON r.id = s.supplier_id
+            ORDER BY s.id Desc");
+     
+        return collect($results);
+
+    }
+
      
 }

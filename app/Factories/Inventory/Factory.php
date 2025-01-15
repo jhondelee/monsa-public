@@ -29,7 +29,8 @@ class Factory implements SetInterface
         ON u.id = e.unit_id
         INNER JOIN warehouse_location w
         ON w.id = i.location
-        WHERE  e.deleted_at is NULL AND i.consumable = 0;");
+        WHERE  e.deleted_at is NULL AND i.consumable = 0
+        AND i.unit_quantity > 0;");
 
         return collect($results);
     } 
@@ -46,8 +47,10 @@ class Factory implements SetInterface
             e.srp,
             i.onhand_quantity,
             w.name as location,
+            w.id as loc_id,
             e.picture,
-            i.`status`
+            i.`status`,
+            i.unit_quantity
         FROM inventory i
         INNER JOIN items e
         ON i.item_id = e.id AND e.activated = 1
@@ -55,7 +58,8 @@ class Factory implements SetInterface
         ON u.id = e.unit_id
         INNER JOIN warehouse_location w
         ON w.id = i.location
-        WHERE  e.deleted_at is NULL AND i.consumable = 2;");
+        WHERE  e.deleted_at is NULL AND i.consumable = 2
+        AND i.unit_quantity > 0;");
 
         return collect($results);
     } 

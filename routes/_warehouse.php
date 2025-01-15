@@ -52,6 +52,13 @@ Route::group(['prefix' => 'inventory'], function() {
     Route::get('print', 'InventoryController@print')->name("inventory.print"); 
 
     Route::get('print-inventory', 'InventoryController@print_inventory')->name("inventory.print-inventory"); 
+
+    Route::post('return-to-supplier', 'InventoryController@return_to_supplier')->name("inventory.return_to_supplier"); 
+
+    Route::post('get-item-to-supplier', 'InventoryController@item_return_to_supplier')->name("inventory.item_return_to_supplier");
+
+    Route::post('return-to-inventory', 'InventoryController@return_to_inventory')->name("inventory.return_to_inventory"); 
+
 });
 
 

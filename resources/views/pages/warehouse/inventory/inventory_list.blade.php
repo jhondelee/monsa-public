@@ -2,6 +2,7 @@
     @if (!can('inventory.create'))
         <a href="#" class="btn btn-warning btn-sm add-inventory-item">
         <i class="fa fa-plus">&nbsp;</i>Inventory</a>
+
     @endif   
      <a href="{{route('inventory.print')}}" class="btn btn-info btn-sm print-inventory-item">
         <i class="fa fa-print">&nbsp;</i>Print Warehouse</a>
