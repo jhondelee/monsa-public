@@ -44,11 +44,11 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <h1 class="no-margins">{{$current_orders}}</h1>
+                                <h1 class="no-margins">{{number_format($current_sales)}}</h1>
                                 <div class="font-bold text-navy">0% <i class="fa fa-level-up"></i> <small>Rapid pace</small></div>
                             </div>
                             <div class="col-md-6">
-                                <h1 class="no-margins">{{$current_orders}}</h1>
+                                <h1 class="no-margins">{{number_format($current_orders)}}</h1>
                                 <div class="font-bold text-navy">0% <i class="fa fa-level-up"></i> <small>Slow pace</small></div>
                             </div>
                         </div>
