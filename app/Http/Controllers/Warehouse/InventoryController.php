@@ -58,6 +58,17 @@ class InventoryController extends Controller
 
         $created_by = $this->user->getemplist()->where('id',$user_id)->pluck('emp_name','id');
 
+        //update inventory status
+        $invStocks = Inventory::all();
+
+        foreach ($invStocks as $key => $stock) {
+            
+           $UpdateStatus = $this->inventory->getItemStockLevel($stock->item_id, $stock->unit_quantity);
+
+           $this->inventory->InventoryStatusUpdate($stock->id, $UpdateStatus);
+        }
+
+
         return view('pages.warehouse.inventory.index',compact('location','inventories','transferLists','inventoryItem','returnLists','created_by','user_id','suppliers'));
                
     }
@@ -459,5 +470,8 @@ class InventoryController extends Controller
 
             ->with('success','Item has been returned to the inventory successfully!.');
     }
+
+
+
 
 }

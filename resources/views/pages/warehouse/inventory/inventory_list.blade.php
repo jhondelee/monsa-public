@@ -42,7 +42,14 @@
                     <td>{{$inventory->onhand_quantity}}</td>
                     <td>{{$inventory->srp}}</td>
                     <td>{{$inventory->location}}</td>
-                    <td><label class="label label-warning" >{{$inventory->status}}</label></td>
+                    <td>@if ($inventory->status =="In Stock")
+                            <label class="label label-success" >
+                        @elseif ($inventory->status =="Reorder")
+                            <label class="label label-warning" >
+                        @elseif ($inventory->status =="Critical")
+                            <label class="label label-danger" >
+                        @endif
+                            {{$inventory->status}}</label></td>
                     <td class="text-center">
                             <div class="btn-group">
                                 <a href="{{route('inventory.show',$inventory->item_id)}}" class="btn-primary btn btn-xs"><i class="fa fa-eye"></i></a>

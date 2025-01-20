@@ -3,6 +3,8 @@
 namespace App\Factories\Inventory;
 
 use App\Factories\Inventory\SetInterface;
+use App\Inventory;
+use App\Item;
 use DB;
 
 class Factory implements SetInterface
@@ -195,9 +197,59 @@ class Factory implements SetInterface
     }
 
 
-     public function InventoryStatusUpdate($inventory_id)
-     {
-        
+    public function getItemStockLevel($id, $unitQty)
+    {
+        $items = Item::find($id);
+
+        $safelvl = $items->safety_stock_level;
+
+        $critlvl = $items->criticl_stock_level;
+
+        $status ='';
+
+        If ( $unitQty >= $safelvl )
+        {
+
+            $status = "In Stock";
+
+        }
+
+        If ( $unitQty < $safelvl && $unitQty > $critlvl )
+        {
+
+            $status = "Reorder";
+
+        }
+
+
+        If ( $unitQty <= $critlvl &&  $unitQty > 0 )
+        {
+
+            $status = "Critical";
+
+        }
+
+        If ( $unitQty = 0 ){
+
+            $status = "Out of Stock";
+
+        }
+       
+
+
+        return $status;
+
+    }
+  
+
+    public function InventoryStatusUpdate($inventory_id, $status)
+    {
+        $inventory = Inventory::find($inventory_id);
+
+        $inventory->status =  $status;
+
+        $inventory->save();
+
      }
   
 }
