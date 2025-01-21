@@ -199,19 +199,19 @@
 
         <div class="col-lg-12">
         <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h5>Critical Stock</h5>
+        <div class="ibox-title" >
+            <div id="inven-title"></div>
             <div class="ibox-tools">
-          <div class="form-group">
-            <div>
-                <label> <input type="radio" checked="" value="In Stock" id="optionsRadios1" name="optionsRadios"> In Stock </label>
-                &nbsp;&nbsp;
-                <label> <input type="radio" checked="" value="Reorder" id="optionsRadios2" name="optionsRadios"> Reorder</label>
-                 &nbsp;&nbsp;
-                <label> <input type="radio" checked="" value="Critical" id="optionsRadios3" name="optionsRadios"> Critical</label>
-        
-            </div>
-        </div>                           
+                  <div class="form-group">
+                    <div>
+                        <label> <input type="radio" checked="" value="In Stock" id="optionsRadios1" name="optionsRadios"> In Stock </label>
+                        &nbsp;&nbsp;
+                        <label> <input type="radio" checked="" value="Reorder" id="optionsRadios2" name="optionsRadios"> Reorder</label>
+                         &nbsp;&nbsp;
+                        <label> <input type="radio" checked="" value="Critical" id="optionsRadios3" name="optionsRadios"> Critical</label>
+                
+                    </div>
+                </div>                           
             </div>
         </div>
         
@@ -344,7 +344,7 @@
     <script>
         
     $(document).ready(function(){
-       
+        $('#inven-title').append("<h5>Critical Items</h5>");
             $.ajax({
                 url:  '{{ url('/getinventorystatus') }}',
                 type: 'POST',
@@ -392,7 +392,8 @@
 
      $("input[name='optionsRadios']").click(function () {
           var _rdVaule = $("input[name='optionsRadios']:checked").val();
-          
+          $('#inven-title').empty();
+           $('#inven-title').append("<h5>"+ _rdVaule +" Items</h5>");
 
             $.ajax({
                 url:  '{{ url('/getinventorystatus') }}',
