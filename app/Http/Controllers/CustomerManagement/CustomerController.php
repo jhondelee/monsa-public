@@ -170,6 +170,7 @@ class CustomerController extends Controller
         ]);
 
 
+
         $customers =   Customer::findorfail($id);
 
         $customers->name                        = $request->name;
@@ -205,9 +206,8 @@ class CustomerController extends Controller
 
             $getPercentDisc = $request->get('perD');
 
-            $activated = $request->get('disc_active');
-
             $getSetSRP = $request->get('setSRP');
+
 
 
                 $customerSRPs = CustomerPrice::where('customer_id',$id)->get();
@@ -225,12 +225,6 @@ class CustomerController extends Controller
 
 
         for ($i=0; $i < count($getItemId); $i++) { 
-
-            if ( isset( $activated[$i]) &&  isset( $getSetSRP[$i] ) ){
-                $activeDisc = 1;
-            }else{
-                $activeDisc = 0;
-            }
             
             $customerPrices = New CustomerPrice;
 
@@ -246,12 +240,25 @@ class CustomerController extends Controller
 
             $customerPrices->percentage_discount    = $getPercentDisc[$i];              
 
-            $customerPrices->activated_discount     = $activeDisc;
-
             $customerPrices->set_srp                = $getSetSRP[$i];
 
             $customerPrices->save();
         }
+
+        $activated = $request->get('disc_active');
+
+        if (isset ($activated))
+        {
+            foreach ($activated as $key => $value) {
+                     
+                $activeprice = CustomerPrice::where('customer_id',$id)->where('item_id',$value)->first();
+
+                $activeprice->activated_discount = 1;
+
+                $activeprice->save();
+            }
+        }
+
 
         return redirect()->route('customer.index')
 
@@ -266,7 +273,6 @@ class CustomerController extends Controller
         $customers =   Customer::findorfail($id);
 
         $customers->delete();
-
 
             $customerSRPs = CustomerPrice::where('customer_id',$id)->get();
 

@@ -60,8 +60,6 @@ class CalendarScheduleController extends Controller
 
         $event->save();
 
-
-
         return redirect()->route('calendar.index')
 
             ->with('success','Event title been saved successfully.');

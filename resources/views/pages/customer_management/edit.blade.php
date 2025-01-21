@@ -350,20 +350,20 @@
             data: { _token: "{{ csrf_token() }}",
             id: _id}, 
             success:function(results){
-   
+                
                 for( var i = 0 ; i <= results.length ; i++ ) {
-                   
+                   //append to table
                     $('#dTable-price-item-table tbody').append("<tr><td>"+results[i].item_id+"<input type='hidden' name='item_id[]' id='item_id' value="+results[i].item_id+"></td><td>"+results[i].item_descript+"</td><td>"+results[i].item_units+"</td><td>"+results[i].item_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+results[i].item_srp+"><input type='hidden' name='item_cost[]' value="+results[i].item_cost+"></td>\
                         <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD' value="+results[i].amountD+"> </td>\
                         <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD' value="+results[i].perD+"></td>\
-                        <td class='text-center chkbx'><input type='checkbox' name='disc_active[]' id='disc_active' value="+results[i].disc_active+"></td>\
+                        <td class='text-center chkbx'><input type='checkbox' name='disc_active[]' id='disc_active' value="+results[i].item_id+"></td>\
                         <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' value="+results[i].setSRP+" readonly></td>\
                         <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
                     </td></tr>");
                     
                     if(results[i].disc_active == 1){
                         
-                         $(".chkbx input[value='1']").attr('checked','checked');
+                         $(".chkbx input[value='"+results[i].item_id+"']").attr('checked','checked');
 
                     }
                 } 
