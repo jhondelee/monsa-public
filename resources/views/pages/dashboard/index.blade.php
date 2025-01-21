@@ -200,94 +200,37 @@
         <div class="col-lg-12">
         <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Critical Stock </h5>
+            <h5>Critical Stock</h5>
             <div class="ibox-tools">
-                <a class="collapse-link">
-                    <i class="fa fa-chevron-up"></i>
-                </a>
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-wrench"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#">Config option 1</a>
-                    </li>
-                    <li><a href="#">Config option 2</a>
-                    </li>
-                </ul>
-                <a class="close-link">
-                    <i class="fa fa-times"></i>
-                </a>
+          <div class="form-group">
+            <div>
+                <label> <input type="radio" checked="" value="In Stock" id="optionsRadios1" name="optionsRadios"> In Stock </label>
+                &nbsp;&nbsp;
+                <label> <input type="radio" checked="" value="Reorder" id="optionsRadios2" name="optionsRadios"> Reorder</label>
+                 &nbsp;&nbsp;
+                <label> <input type="radio" checked="" value="Critical" id="optionsRadios3" name="optionsRadios"> Critical</label>
+        
+            </div>
+        </div>                           
             </div>
         </div>
+        
         <div class="ibox-content">
     
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-striped data-table-inventory" id="data-table-inventory">
                     <thead>
-                    <tr>
 
-                        <th>#</th>
-                        <th>Product List </th>
-                        <th>Status </th>
-                        <th>Quantity </th>
-                        <th>Units </th>
-                        <th>Category</th>
-                        <th>Action</th>
-                    </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>C001 <small>Example item 001</small></td>
-                        <td><span class="label label-warning pull-left">Critical</span></td>
-                        <td>2</td>
-                        <td>Box(es)</td>
-                        <td>Paper</td>
-                        <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>C201 <small>Example item 201</small></td>
-                        <td><span class="label label-warning pull-left">Critical</span></td>
-                        <td>10</td>
-                        <td>Ream</td>
-                        <td>Paper</td>
-                        <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>C421 <small>Example item 421</small></td>
-                        <td><span class="label label-info pull-left">Reorder</span></td>
-                        <td>5</td>
-                        <td>Bdl</td>
-                        <td>Container</td>
-                        <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>C366 <small>Example item 366</small></td>
-                        <td><span class="label label-warning pull-left">Critical</span></td>
-                        <td>7</td>
-                        <td>Sack</td>
-                        <td>Plastic</td>
-                        <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>C203 <small>Example item 203</small></td>
-                        <td><span class="label label-info    pull-left">Reorder</span></td>
-                        <td>11</td>
-                        <td>Case</td>
-                        <td>Cans</td>
-                        <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                    </tr>
-                                       
+                               
                     </tbody>
                 </table>
             </div>
 
      
         </div>
+
         </div>
 
         <!-- Inactive Customer-->
@@ -397,8 +340,107 @@
 
     <!-- ChartJS-->
     <script src="/js/plugins/chartJs/Chart.min.js"></script>
-
+    <script src="/js/plugins/toastr/toastr.min.js"></script>
     <script>
+        
+    $(document).ready(function(){
+       
+            $.ajax({
+                url:  '{{ url('/getinventorystatus') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: { _token: "{{ csrf_token() }}",
+                id: 'Critical'}, 
+                success:function(results){
+                     
+                $('#data-table-inventory').DataTable({
+                                        destroy: true,
+                                        pageLength: 100,
+                                        responsive: true,
+                                        data: results,
+                                        autoWidth: true,
+                                        dom: '<"html5buttons"B>lTfgitp',
+                                        buttons: [],
+                                        fixedColumns: true,
+                                        columns: [
+                                            {data: 'id', title: 'Id'},  
+                                            {data: 'name', title: 'Name'},    
+                                            {data: 'description', title: 'Description'},
+                                            {data: 'units', title: 'Units'},
+                                            {data: 'status', title: 'Status',
+                                                render: function(data, type, row){
+                                                    if(row.status=='In Stock'){
+                                                        return '<label class="label label-success" >In Stock</label>  '
+                                                    } 
+                                                    if(row.status=='Reorder'){
+                                                        return '<label class="label label-warning" >Reorder</label>  '
+                                                    }  
+                                                    if(row.status=='Critical'){
+                                                        return '<label class="label label-danger" >Critical</label>  ';
+                                                    }    
+                                                }
+                                            },
+                        
+                                 
+                                        ],
+                                    })
+
+                }
+            });
+
+    });
+
+     $("input[name='optionsRadios']").click(function () {
+          var _rdVaule = $("input[name='optionsRadios']:checked").val();
+          
+
+            $.ajax({
+                url:  '{{ url('/getinventorystatus') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: { _token: "{{ csrf_token() }}",
+                id: _rdVaule}, 
+                success:function(results){
+                     
+                $('#data-table-inventory').DataTable({
+                                        destroy: true,
+                                        pageLength: 100,
+                                        responsive: true,
+                                        data: results,
+                                        autoWidth: true,
+                                        dom: '<"html5buttons"B>lTfgitp',
+                                        buttons: [],
+                                        fixedColumns: true,
+                                        columns: [
+                                             {data: 'id', title: 'Id'},  
+                                            {data: 'name', title: 'Name'},    
+                                            {data: 'description', title: 'Description'},
+                                            {data: 'units', title: 'Units'},
+                                            {data: 'status', title: 'Status',
+                                                render: function(data, type, row){
+                                                    if(row.status=='In Stock'){
+                                                        return '<label class="label label-success" >In Stock</label>  '
+                                                    } 
+                                                    if(row.status=='Reorder'){
+                                                        return '<label class="label label-warning" >Reorder</label>  '
+                                                    }  
+                                                    if(row.status=='Critical'){
+                                                        return '<label class="label label-danger" >Critical</label>  ';
+                                                    }    
+                                                }
+                                            },
+                        
+                                 
+                                        ],
+                                    })
+
+                }
+            });
+
+       
+     });
+
+ 
         $(document).ready(function() {
 
 

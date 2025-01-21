@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Factories\Dashboard\Factory as DashboardFactory;
+use App\Factories\Inventory\Factory as InventoryFactory;
 use App\Factories\User\Factory as UserFactory;
 use App\Role;
 use Carbon\Carbon;
@@ -19,11 +20,13 @@ class HomeController extends Controller
      */
     public function __construct(
                 DashboardFactory $dashboard,
+                InventoryFactory $inventory,
                 UserFactory $user
 
      ){ 
-        $this->user               = $user;
-        $this->dashboard          = $dashboard;
+        $this->user          = $user;
+        $this->inventory    = $inventory;
+        $this->dashboard    = $dashboard;
         $this->middleware('auth');
     }
     /**
@@ -31,13 +34,19 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getinventorystatus(Request $request)
+    {
+        $results =  $this->inventory->showstatus($request->id);
+
+        return response()->json($results);
+    }
+
     public function index()
     {
       
         $user = auth()->user()->id;
         $role = role::where('level',$user)->first();
-
-        
 
     //----SALES Previous Month---//
             $sales = $this->dashboard->sales_of_previous_month()->first();

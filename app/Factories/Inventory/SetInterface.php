@@ -20,5 +20,7 @@ interface SetInterface {
 
      public function getreturnindex();
 
+      public function showstatus($status);
+
 
 }

@@ -27,6 +27,8 @@ Route::group(['middleware'=>'auth'],function(){
         
         Route::post('refresh','HomeController@index')->name("main.refresh"); 
 
+        Route::post('getinventorystatus','HomeController@getinventorystatus')->name("main.getinventorystatus");
+
         Route::group(['namespace' => 'UserManagement'], function() {        
             require('_user.php');
         });  
