@@ -240,7 +240,7 @@
         <div class="col-lg-12">
         <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Inactive Customers <small>(In 2 Weeks, Follow up)-(In 1 Month, Losing)-(More than a Month, Lost)</small></h5>
+            <h5>Inactive Customers <small>(In 2 Weeks, Follow up)-(In 1 Month, No Transactions)-(More than a Month, Lost)</small></h5>
         </div>
         <div class="ibox-content">
 
@@ -249,51 +249,29 @@
                     <thead>
                     <tr>
 
-                        <th>#</th>
                         <th>Customer Name </th>
+                        <th>SO Date </th>
+                        <th>No Transactions</th>
                         <th>Status </th>
-                        <th>Orders </th>
-                        <th>Last Transaction </th>
                     </tr>
                     </thead>
                     <tbody>
+                    @foreach($getcustomerlist as $getcustomer)
                     <tr>
-                        <td>1</td>
-                        <td>CS02 <small>ABC Store</small></td>
-                        <td><span class="label label-info pull-left">No Transaction</span></td>
-                        <td>2,00</td>
-                        <td>2 weeks Ago</td>
+                        <td>{{$getcustomer->cs_name}}</td>
+                        <td>{{$getcustomer->so_date}}</td>
+                        <td>{{$getcustomer->Last_trans}}</td>
+                        <td>@IF($getcustomer->trans_stat == 'No Transaction')
+                            <span class="label label-success pull-left">{{$getcustomer->trans_stat}}</span>
+                            @ELSEIF ($getcustomer->trans_stat == 'Follow Up')
+                            <span class="label label-info pull-left">{{$getcustomer->trans_stat}}</span>
+                            @ELSE
+                            <span class="label label-warning pull-left">{{$getcustomer->trans_stat}}</span>
+                            @ENDIF
+                        </td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>CS04 <small>Lerma Store</small></td>
-                        <td><span class="label label-info pull-left">No Transaction</span></td>
-                        <td>0,1000</td>
-                        <td>2 weeks Ago</td>
-                    </tr>
-
-                    <tr>
-                        <td>4</td>
-                        <td>CS35 <small>Market 3</small></td>
-                        <td><span class="label label-success pull-left">Follow Up</span></td>
-                        <td>700</td>
-                        <td>3 weeks Ago</td>
-                    </tr>   
-                    <tr>
-                        <td>5</td>
-                        <td>CS10 <small>Pamela Trading</small></td>
-                        <td><span class="label label-success pull-left">Follow Up</span></td>
-                        <td>200</td>
-                        <td>3 weeks Ago</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>CS20 <small>Eat&Drink Restobar</small></td>
-                        <td><span class="label label-primary pull-left">Lost</span></td>
-                        <td>5,563</td>
-                        <td>More than a month</td>
-                    </tr>
-                                       
+                    @endforeach
+                                
                     </tbody>
                 </table>
             </div>

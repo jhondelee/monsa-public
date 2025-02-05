@@ -16,5 +16,7 @@ interface SetInterface {
 
       public function order_of_current_month();
 
+      public function getinactivecs();
+
 
 }

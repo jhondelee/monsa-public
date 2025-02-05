@@ -64,6 +64,25 @@ class Factory implements SetInterface
 
         return collect($results);
     } 
+
+    public function getinactivecs()
+    {
+        $results = DB::select("
+    SELECT
+        c.name AS cs_name,
+        MAX(s.so_date) AS so_date,
+        CONCAT(DATEDIFF(CURRENT_DATE(),s.so_date),' Days') AS Last_trans,
+      CASE 
+        WHEN (DATEDIFF(CURRENT_DATE(),s.so_date)  > 14) && (DATEDIFF(CURRENT_DATE(),s.so_date) <= 21) THEN 'No Transaction'
+        WHEN (DATEDIFF(CURRENT_DATE(),s.so_date)  > 21) && (DATEDIFF(CURRENT_DATE(),s.so_date) <= 30) THEN 'Follow Up'
+        WHEN (DATEDIFF(CURRENT_DATE(),s.so_date)  > 30) THEN 'Lost Customer'
+      END AS trans_stat
+    FROM sales_order s INNER JOIN customers c ON s.customer_id = c.id
+    WHERE (DATEDIFF(CURRENT_DATE(),s.so_date)  < 60) GROUP BY c.name,s.so_date ORDER BY  MAX(s.so_date);");
+
+        return collect($results);
+    }
 }
+
 
 

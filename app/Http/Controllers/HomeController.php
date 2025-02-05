@@ -139,7 +139,7 @@ class HomeController extends Controller
         }
 
            
-
+        $getcustomerlist = $this->dashboard->getinactivecs();
 
         return view('pages.dashboard.index',compact(
                     'sales_monthyear',
@@ -149,7 +149,8 @@ class HomeController extends Controller
                     'order_total',
                     'order_percent',
                     'current_orders',
-                    'current_sales'
+                    'current_sales',
+                    'getcustomerlist'
             ));
                
     }
