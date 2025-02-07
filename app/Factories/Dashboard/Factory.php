@@ -68,19 +68,42 @@ class Factory implements SetInterface
     public function getinactivecs()
     {
         $results = DB::select("
-    SELECT
-        c.name AS cs_name,
-        MAX(s.so_date) AS so_date,
-        CONCAT(DATEDIFF(CURRENT_DATE(),s.so_date),' Days') AS Last_trans,
-      CASE 
-        WHEN (DATEDIFF(CURRENT_DATE(),s.so_date)  > 14) && (DATEDIFF(CURRENT_DATE(),s.so_date) <= 21) THEN 'No Transaction'
-        WHEN (DATEDIFF(CURRENT_DATE(),s.so_date)  > 21) && (DATEDIFF(CURRENT_DATE(),s.so_date) <= 30) THEN 'Follow Up'
-        WHEN (DATEDIFF(CURRENT_DATE(),s.so_date)  > 30) THEN 'Lost Customer'
-      END AS trans_stat
-    FROM sales_order s INNER JOIN customers c ON s.customer_id = c.id
-    WHERE (DATEDIFF(CURRENT_DATE(),s.so_date)  < 60) GROUP BY c.name,s.so_date ORDER BY  MAX(s.so_date);");
+    SELECT  s.id, c.name AS cs_name, t.so_date,
+          CONCAT(DATEDIFF(CURRENT_DATE(),t.so_date),' Days') AS Last_trans,
+          CASE 
+            WHEN (DATEDIFF(CURRENT_DATE(),t.so_date)  > 14) && (DATEDIFF(CURRENT_DATE(),t.so_date) <= 21) THEN 'No Transaction'
+            WHEN (DATEDIFF(CURRENT_DATE(),t.so_date)  > 21) && (DATEDIFF(CURRENT_DATE(),t.so_date) <= 30) THEN 'Follow Up'
+            WHEN (DATEDIFF(CURRENT_DATE(),t.so_date)  > 30) THEN 'Lost Customer'
+        END AS trans_stat
+        FROM   (
+                SELECT DISTINCT  customer_id, MAX(so_date) AS so_date ,max(id) AS id
+                FROM sales_order 
+                GROUP BY customer_id
+            ) t
+    left JOIN sales_order s ON s.id = t.id
+    INNER JOIN customers c ON s.customer_id = c.id
+    WHERE (DATEDIFF(CURRENT_DATE(),t.so_date)  < 60) AND (DATEDIFF(CURRENT_DATE(),t.so_date)  > 14)
+    ORDER BY t.so_date;");
 
         return collect($results);
+    }
+
+    public function gettopsalesteam()
+    {
+        $results = DB::select("
+        SELECT CONCAT(e.firstname,' ' ,e.lastname ) AS emp_name , SUM(o.total_sales) AS sales , s.sales AS last_sales  
+        FROM sales_order o
+        INNER JOIN employees e ON e.id = o.employee_id 
+        LEFT JOIN (
+                        SELECT employee_id, SUM(total_sales) AS sales
+                        FROM sales_order 
+                        WHERE WEEK(so_date) =  (WEEK(CURRENT_DATE())-1) 
+                        GROUP BY employee_id
+                        ) s ON s.employee_id = o.employee_id
+        WHERE WEEK(so_date) =  WEEK(CURRENT_DATE()) 
+        GROUP BY CONCAT(e.firstname,' ' ,e.lastname ) ,s.sales ORDER BY SUM(o.total_sales) DESC LIMIT 3");
+
+        return collect($results); 
     }
 }
 

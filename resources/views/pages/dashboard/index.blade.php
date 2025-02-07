@@ -62,7 +62,7 @@
                     <div class="ibox-title">
                         <h5>Daily Sales</h5>
                         <div class="ibox-tools">
-                            <span class="label label-primary">Updated 07.2024</span>
+                            <span class="label label-primary">Updated  {{$datetoday}}</span>
                         </div>
                     </div>
                     <div class="ibox-content no-padding">
@@ -136,60 +136,28 @@
             <div class="col-lg-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <span class="label label-warning pull-right">As of July 5</span>
-                        <h5>TOP 3 Sales Agent This Week</h5>
+                        <span class="label label-warning pull-right">As of {{$datetoday}}</span>
+                        <h5>TOP 3 Sales Team This Week</h5>
                     </div>
+                    @foreach($gettopsales as $gettopsale)
                     <div class="ibox-content">
                         <div class="row">
                             <div class="col-xs-4">
-                                <small class="stats-label">Employee Name</small>
-                                <h4>Junior Nava</h4>
+                                <small class="stats-label">Team Leader</small>
+                                <h4>{{$gettopsale->emp_name}}</h4>
                             </div>
 
                             <div class="col-xs-4">
-                                <small class="stats-label">Orders</small>
-                                <h4>11,256</h4>
+                                <small class="stats-label">Sales</small>
+                                <h4>{{number_format($gettopsale->sales)}}</h4>
                             </div>
                             <div class="col-xs-4">
                                 <small class="stats-label">Last week</small>
-                                <h4>23,566</h4>
+                                <h4>{{number_format($gettopsale->last_sales)}}</h4>
                             </div>
                         </div>
                     </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <small class="stats-label">Employee Name</small>
-                                <h4>Alden Limosnero</h4>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <small class="stats-label">Orders</small>
-                                <h4>10,560</h4>
-                            </div>
-                            <div class="col-xs-4">
-                                <small class="stats-label">Last week</small>
-                                <h4>21.331</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <small class="stats-label">Employee Name</small>
-                                <h4>Richard Martinez</h4>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <small class="stats-label">Orders</small>
-                                <h4>10,350</h4>
-                            </div>
-                            <div class="col-xs-4">
-                                <small class="stats-label">Last week</small>
-                                <h4>26,230</h4>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
 
@@ -423,12 +391,13 @@
         $(document).ready(function() {
 
 
-            var d1 = [[1262304000000, 6], [1264982400000, 3057], [1267401600000, 20434], [1270080000000, 31982], [1272672000000, 26602], [1275350400000, 27826], [1277942400000, 24302], [1280620800000, 24237], [1283299200000, 21004], [1285891200000, 12144], [1288569600000, 10577], [1291161600000, 10295]];
+            var d1 = [[1262304000000,12144], [1264982400000, 3057], [1267401600000, 20434], [1270080000000, 31982], [1272672000000, 26602], [1275350400000, 27826], [1277942400000, 24302], [1280620800000, 24237], [1283299200000, 21004], [1285891200000, 12144], [1288569600000, 10577], [1291161600000, 10295]];
+
             var d2 = [[1262304000000, 5], [1264982400000, 200], [1267401600000, 1605], [1270080000000, 6129], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 30062], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]];
 
             var data1 = [
-                { label: "Data 1", data: d1, color: '#17a084'},
-                { label: "Data 2", data: d2, color: '#127e68' }
+                { label: "Data 1", data: d1, color: '#749189'},
+                { label: "Data 2", data: d2, color: '#465752' }
             ];
             $.plot($("#flot-chart1"), data1, {
                 xaxis: {

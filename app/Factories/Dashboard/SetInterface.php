@@ -18,5 +18,7 @@ interface SetInterface {
 
       public function getinactivecs();
 
+      public function gettopsalesteam();
+
 
 }

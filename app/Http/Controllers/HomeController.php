@@ -141,6 +141,10 @@ class HomeController extends Controller
            
         $getcustomerlist = $this->dashboard->getinactivecs();
 
+        $gettopsales = $this->dashboard->gettopsalesteam();
+
+        $datetoday = Carbon::createFromFormat('Y-m-d H:i:s', now())->format('M - d') ;
+
         return view('pages.dashboard.index',compact(
                     'sales_monthyear',
                     'sales_total',
@@ -150,7 +154,9 @@ class HomeController extends Controller
                     'order_percent',
                     'current_orders',
                     'current_sales',
-                    'getcustomerlist'
+                    'getcustomerlist',
+                    'datetoday',
+                    'gettopsales'
             ));
                
     }
