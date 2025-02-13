@@ -104,7 +104,7 @@
                 success:function(results){
 
                     toastr.success(sup_name + ' Supplier','Selected!')
-
+//
                     $('#dTable-ItemList-table').DataTable({
                         destroy: true,
                         pageLength: 100,
@@ -125,9 +125,14 @@
                             {data: 'status', title: 'Status',
                                 render: function(data, type, row){
                                     if(row.status=='In Stock'){
-                                        return '<label class="label label-warning" >In Stock</label>  '
+                                        return '<label class="label label-success" >In Stock</label>  '
                                     }else{
-                                        return '<label class="label label-danger" >Out of Stock</label>';
+                                        if(row.status=='Reorder'){
+                                            return '<label class="label label-warning" >Reorder</label>'
+                                        }else{
+                                            return '<label class="label label-danger" >Critical</label>';
+                                        }
+                                        
                                     }   
                                 }
                             },
