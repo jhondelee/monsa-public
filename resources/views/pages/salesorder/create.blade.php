@@ -119,7 +119,7 @@
                                 destroy: true,
                                 pageLength: 100,
                                 responsive: true,
-                                fixedColumns: true,
+                                fixedColumns: false,
                                 autoWidth: true,
                                 data: results,
                                 dom: '<"html5buttons"B>lTfgitp',
