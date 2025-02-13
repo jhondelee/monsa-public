@@ -12,7 +12,7 @@
                      
                         <div class="table-responsive">
                             <div class="scroll_content" style="width:100%; height:350px; margin: 0;padding: 0;overflow-y: scroll">
-                            <table class="table table-bordered dataTables-add-items" id="dTable-ItemList-table">
+                            <table class="table table-bordered dataTables-add-items" id="dTable-ItemList-table"  style="width:100%">
                                 <thead> 
                                   
                                 </thead>
