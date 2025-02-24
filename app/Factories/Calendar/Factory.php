@@ -12,7 +12,7 @@ class Factory implements SetInterface
     {
 
      $results = DB::select("
-        SELECT title  FROM event_calendar
+        SELECT *  FROM event_calendar
         WHERE MONTH(start_date) = MONTH(CURRENT_DATE)");
 
         return collect($results);
