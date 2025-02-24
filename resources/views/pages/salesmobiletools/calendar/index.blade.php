@@ -191,7 +191,7 @@
                     $('#eventModal').modal('toggle');
                         var start_date =moment(start).format('YYYY-MM-DD');
                         var end_date =moment(end).format('YYYY-MM-DD');
-                 
+      
                         $('#start_date').val(start_date);
                         $('#end_date').val(end_date);
                 },

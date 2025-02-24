@@ -20,5 +20,7 @@ interface SetInterface {
 
       public function gettopsalesteam();
 
+      public function getMonthSales();
+
 
 }

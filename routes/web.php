@@ -29,6 +29,8 @@ Route::group(['middleware'=>'auth'],function(){
 
         Route::post('getinventorystatus','HomeController@getinventorystatus')->name("main.getinventorystatus");
 
+        Route::post('getsalesmonthly','HomeController@getsalesmonthly')->name("main.getsalesmonthly");
+
         Route::group(['namespace' => 'UserManagement'], function() {        
             require('_user.php');
         });  

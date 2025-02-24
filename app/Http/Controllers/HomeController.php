@@ -42,6 +42,16 @@ class HomeController extends Controller
         return response()->json($results);
     }
 
+    public function getsalesmonthly(Request $request)
+    {
+    
+        $results =  $this->dashboard->getMonthSales();
+
+        return response()->json($results);
+    }
+
+
+
     public function index()
     {
       
@@ -145,6 +155,10 @@ class HomeController extends Controller
 
         $datetoday = Carbon::createFromFormat('Y-m-d H:i:s', now())->format('M - d') ;
 
+        $monthtoday = Carbon::createFromFormat('Y-m-d H:i:s', now())->format('M- Y') ;
+
+        $monthsales = $this->dashboard->getMonthSales();
+
         return view('pages.dashboard.index',compact(
                     'sales_monthyear',
                     'sales_total',
@@ -156,7 +170,9 @@ class HomeController extends Controller
                     'current_sales',
                     'getcustomerlist',
                     'datetoday',
-                    'gettopsales'
+                    'monthtoday',
+                    'gettopsales',
+                    'monthsales'
             ));
                
     }

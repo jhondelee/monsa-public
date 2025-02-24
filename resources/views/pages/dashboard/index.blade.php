@@ -37,7 +37,7 @@
             <div class="col-lg-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <span class="label label-primary pull-right">Today</span>
+                        <span class="label label-primary pull-right">{{$monthtoday}}</span>
                         <h5>Sales & Orders</h5>
                     </div>
                     <div class="ibox-content">
@@ -389,15 +389,36 @@
 
  
         $(document).ready(function() {
+            let  _salesVal = [];
+           
+                $.ajax({
+                    url:  '{{ url('/getsalesmonthly') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}"}, 
+                    success:function(results){
+
+                        for( var i = 0 ; i <= 12 ; i++ ){
+
+                            _salesVal[i] = results[i].Total_Sales ;
+                            
+                        }         
+                        
+                     }
+                         
+                });
 
 
-            var d1 = [[1262304000000,12144], [1264982400000, 3057], [1267401600000, 20434], [1270080000000, 31982], [1272672000000, 26602], [1275350400000, 27826], [1277942400000, 24302], [1280620800000, 24237], [1283299200000, 21004], [1285891200000, 12144], [1288569600000, 10577], [1291161600000, 10295]];
 
-            var d2 = [[1262304000000, 5], [1264982400000, 200], [1267401600000, 1605], [1270080000000, 6129], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 30062], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]];
+
+            var d1 = [[1262304000000, 65165 ], [1264982400000, 21000], [1267401600000, 2], [1270080000000, 2], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 2], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]
+            ];
+
+            var d2 = [[1262304000000, 5], [1264982400000, 2], [1267401600000, 2], [1270080000000, 2], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 2], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]];
 
             var data1 = [
-                { label: "Data 1", data: d1, color: '#749189'},
-                { label: "Data 2", data: d2, color: '#465752' }
+                { label: "Data 1", data: _salesVal, color: '#749189'},
+                { label: "Data 2", data: d2, color: '#749169' }
             ];
             $.plot($("#flot-chart1"), data1, {
                 xaxis: {
@@ -430,23 +451,23 @@
             });
 
             var lineData = {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Septr","Oct","Nov","Dec"],
                 datasets: [
                     {
-                        label: "Example dataset",
+                        label: "Revenue",
                         backgroundColor: "rgba(26,179,148,0.5)",
                         borderColor: "rgba(26,179,148,0.7)",
                         pointBackgroundColor: "rgba(26,179,148,1)",
                         pointBorderColor: "#fff",
-                        data: [48, 48, 60, 39, 56, 37, 30]
+                        data: [55, 48, 60, 39, 56, 37, 30,0]
                     },
                     {
-                        label: "Example dataset",
+                        label: "Margin",
                         backgroundColor: "rgba(220,220,220,0.5)",
                         borderColor: "rgba(220,220,220,1)",
                         pointBackgroundColor: "rgba(220,220,220,1)",
                         pointBorderColor: "#fff",
-                        data: [65, 59, 40, 51, 36, 25, 40]
+                        data: [65, 59, 40, 51, 36, 25, 40,0]
                     }
                 ]
             };

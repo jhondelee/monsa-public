@@ -5,18 +5,25 @@ namespace App\Http\Controllers\SalesMobileTools;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Factories\Calendar\Factory as CalendarFactory;
 use App\EventCalendar;
 use Carbon\Carbon;
 
 class CalendarScheduleController extends Controller
 {
+    public function __construct(
+            CalendarFactory $calendar
+        )
+    {
+        $this->calendar = $calendar;
+    }
 
 
     public function index()
     {
-        
-        $scheds = EventCalendar::whereMonth("start_date",">=",Carbon::now()->month()->format('m'))
-                    ->orderBy('start_date')->get();
+        $scheds =  $this->calendar->getindex();
+       /* $scheds = EventCalendar::whereMonth("start_date",">=",Carbon::now()->month()->format('m'))
+                    ->orderBy('start_date')->get();*/
             
 
         $events = array();
@@ -53,6 +60,8 @@ class CalendarScheduleController extends Controller
         $event->user_id = Auth()->user()->id;
 
         $event->title = $request->title;
+
+        dd($request->start_date);
 
         $event->start_date = $request->start_date;
 

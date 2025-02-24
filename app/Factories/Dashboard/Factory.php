@@ -105,6 +105,25 @@ class Factory implements SetInterface
 
         return collect($results); 
     }
+
+        public function getMonthSales()
+    {
+        $results = DB::select("
+            SELECT MONTHNAME(o.so_date) AS Months, 
+            YEAR(o.so_date),
+            s.Total_Sales
+            FROM sales_order o
+            INNER JOIN (
+                            SELECT MONTHNAME(so_date) AS Months, SUM(total_sales) AS Total_Sales 
+                            FROM sales_order
+                            WHERE STATUS ='POSTED' AND YEAR(so_date) = YEAR(CURRENT_DATE)
+                            GROUP BY MONTHNAME(so_date)
+                            ) s  ON s.Months = MONTHNAME(o.so_date)
+            GROUP BY YEAR(o.so_date), MONTHNAME(o.so_date), s.Total_Sales  ORDER BY MONTHNAME(o.so_date) DESC
+        ");
+
+        return collect($results); 
+    }
 }
 
 
