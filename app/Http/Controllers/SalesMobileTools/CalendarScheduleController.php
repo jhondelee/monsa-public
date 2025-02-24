@@ -61,8 +61,6 @@ class CalendarScheduleController extends Controller
 
         $event->title = $request->title;
 
-        dd($request->start_date);
-
         $event->start_date = $request->start_date;
 
         $event->end_date = $request->end_date;
