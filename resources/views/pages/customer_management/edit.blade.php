@@ -11,7 +11,7 @@
 
                 <div class="col-lg-10">
 
-                    <h2>Condemnations</h2>
+                    <h2>Customer Mgnt.</h2>
 
                    <ol class="breadcrumb">
                         <li>
@@ -240,6 +240,36 @@
 
     });
 
+    //add all items
+  $(document).on('click','#add-all-item', function(){
+
+        var _id = $('#customer_id').val();
+      
+        $.ajax({
+            url:  '{{ url('all-items/price') }}',
+            type: 'POST',
+            dataType: 'json',
+            data: { _token: "{{ csrf_token() }}",
+            id: _id}, 
+            success:function(results){
+                
+                for( var i = 0 ; i <= results.length ; i++ ) {
+                   
+                    $('#dTable-price-item-table tbody').append("<tr><td>"+item_id+"<input type='hidden' name='item_id[]' id='item_id' value="+item_id+"></td><td>"+item_descript+"</td><td>"+item_units+"</td><td>"+item_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+item_srp+"><input type='hidden' name='item_cost[]' value="+item_cost+"></td>\
+                        <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
+                        <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\
+                        <td class='text-center'><input type='checkbox' name='disc_active[]' id='disc_active' value='0'/></td>\
+                        <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
+                        <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
+                    </td></tr>");
+                    }
+                }                
+        });
+
+        toastr.success('Items has been added!')
+
+    });
+
 
     //add item on list
     $(document).on('click','.add-item-button', function(){
@@ -254,7 +284,7 @@
         $('#dTable-price-item-table tbody').append("<tr><td>"+item_id+"<input type='hidden' name='item_id[]' id='item_id' value="+item_id+"></td><td>"+item_descript+"</td><td>"+item_units+"</td><td>"+item_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+item_srp+"><input type='hidden' name='item_cost[]' value="+item_cost+"></td>\
             <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
             <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\
-            <td class='text-center'><input type='checkbox' name='disc_active[]' id='disc_active' value='0'/></td>\
+            <td class='text-center'><input type='checkbox' name='disc_active[]' id='disc_active' value='"+item_id+"'/></td>\
             <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
             <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
         </td></tr>");
@@ -268,6 +298,8 @@
         $('.modal-title').text('Add Item');
         $('#myModal').modal('show'); 
     });
+
+
 
 
     

@@ -261,14 +261,13 @@ class CustomerController extends Controller
 
         $activated = $request->get('disc_active');
 
-        if (is_array($activated)){
 
             if (isset($activated))
             {
                 foreach ($activated as $key => $value) {
                          
                     $activeID= CustomerPrice::where('customer_id',$id)->where('item_id',$value)->first();
-                    
+                   
                     $activeprice = CustomerPrice::find($activeID->id);
 
                     $activeprice->activated_discount = 1;
@@ -276,7 +275,7 @@ class CustomerController extends Controller
                     $activeprice->save();
                 }
             }
-        }
+
 
         return redirect()->route('customer.index')
 
