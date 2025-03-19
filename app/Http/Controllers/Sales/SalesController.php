@@ -776,9 +776,9 @@ class SalesController extends Controller
             $pdf::Ln(3);
 
 
-        //$salesorder_items = $this->salesorders->getForSOitems($id);
+        $salesorder_items = $this->salesorders->getForSOitems($id);
 
-        $salesorder_items =  item::orderBy('code', 'DESC')->take(300)->get()->random(150);
+        //$salesorder_items =  item::orderBy('code', 'DESC')->take(300)->get()->random(150);
 
         $order_number=0;
 
