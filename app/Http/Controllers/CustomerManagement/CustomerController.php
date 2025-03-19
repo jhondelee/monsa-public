@@ -67,6 +67,14 @@ class CustomerController extends Controller
     }
 
 
+    public function getAddAllItems(Request $request)
+    {
+        $results = $items = $this->items->getitemList();
+
+            return response()->json($results);
+    }
+
+
     public function store(Request $request)
     {
 
@@ -223,42 +231,52 @@ class CustomerController extends Controller
 
                 }
 
+        if (is_array($getItemId)){
 
-        for ($i=0; $i < count($getItemId); $i++) { 
-            
-            $customerPrices = New CustomerPrice;
 
-            $customerPrices->customer_id            = $customers->id;
+            for ($i=0; $i < count($getItemId); $i++) { 
+                
+                $customerPrices = New CustomerPrice;
 
-            $customerPrices->item_id                = $getItemId[$i];
+                $customerPrices->customer_id            = $customers->id;
 
-            $customerPrices->unit_cost              = $getItemCost[$i];
+                $customerPrices->item_id                = $getItemId[$i];
 
-            $customerPrices->srp                    = $getItemSrp[$i];
+                $customerPrices->unit_cost              = $getItemCost[$i];
 
-            $customerPrices->srp_discounted         = $getAmountDisc[$i];
+                $customerPrices->srp                    = $getItemSrp[$i];
 
-            $customerPrices->percentage_discount    = $getPercentDisc[$i];              
+                $customerPrices->srp_discounted         = $getAmountDisc[$i];
 
-            $customerPrices->set_srp                = $getSetSRP[$i];
+                $customerPrices->percentage_discount    = $getPercentDisc[$i];              
 
-            $customerPrices->save();
+                $customerPrices->set_srp                = $getSetSRP[$i];
+
+                $customerPrices->save();
+            }
+
         }
+
+            
 
         $activated = $request->get('disc_active');
 
-        if (isset ($activated))
-        {
-            foreach ($activated as $key => $value) {
-                     
-                $activeprice = CustomerPrice::where('customer_id',$id)->where('item_id',$value)->first();
+        if (is_array($activated)){
 
-                $activeprice->activated_discount = 1;
+            if (isset($activated))
+            {
+                foreach ($activated as $key => $value) {
+                         
+                    $activeID= CustomerPrice::where('customer_id',$id)->where('item_id',$value)->first();
+                    
+                    $activeprice = CustomerPrice::find($activeID->id);
 
-                $activeprice->save();
+                    $activeprice->activated_discount = 1;
+
+                    $activeprice->save();
+                }
             }
         }
-
 
         return redirect()->route('customer.index')
 
