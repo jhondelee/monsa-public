@@ -738,4 +738,206 @@ class SalesController extends Controller
 
     }
 
+    
+
+    public function printDraft_test($id)
+    {
+
+        $salesorders = SalesOrder::find($id);     
+
+        
+
+        $pdf = new Fpdf('P');
+
+            $pdf->col = 0;
+            $pdf::AcceptPageBreak(false);
+            //My Loop Controls
+            $column = 0; //Control which column to add data
+            $columnLenght = 0; //monitor if we need to change the column
+            $maxLinesPerColumn = 85;
+            $wrapCharacters = 75; //do not exceed this char qty per line
+            $collectedDescription = ""; //stack Description here
+
+        //$pdf::AddPage('P','A4');
+ 
+            //$pdf::AddPage(['L', 'Letter']);
+
+            $pdf::SetFont('Arial', 'B');
+            $pdf::SetFontSize(15);
+
+            // $mid_x = 10; // the middle of the "PDF screen", fixed by now.        
+            //$pdf::Text($mid_x - ($pdf::GetStringWidth('TITLE') / 2), 10, 'Sales Order');
+
+            $pdf::AddPage(['L', 'A4']);
+            $pdf::SetFontSize(10);
+        
+            $pdf::SetXY($pdf::getX(), $pdf::getY());
+            $pdf::cell(10,1,"Sales Order",0,"","L");
+            $pdf::Ln(3);
+
+
+        //$salesorder_items = $this->salesorders->getForSOitems($id);
+
+        $salesorder_items =  item::orderBy('code', 'DESC')->take(300)->get()->random(150);
+
+        $order_number=0;
+
+        foreach ($salesorder_items as $key => $g) {
+  
+        $chunks = explode("\n", wordwrap(strip_tags($g->description), $wrapCharacters));
+        $actionCollect = 1;
+        $collectedDescription = "";
+
+       $order_number = $order_number+1;
+
+        for ($i = 0; $i < count($chunks); $i++) {
+                if ($columnLenght > $maxLinesPerColumn && $column == 2) {
+                    $column = 0;
+                    $columnLenght = 1;
+
+                    $pdf::AddPage(['L', 'A4']);
+                    $pdf::Footer("d");
+                    $pdf->col = $column;
+                    $x = 10 + $column * 95;
+                    $pdf::SetLeftMargin($x);
+                    $pdf::SetX($x);
+                    $pdf::SetY(8);
+                    $actionCollect = 0;
+                } else if ($columnLenght > $maxLinesPerColumn && $column < 2) {
+                    $columnLenght = 1;
+                    $column++;
+                    $pdf->col = $column;
+                    $x = 10 + $column * 95;
+                    $pdf::SetLeftMargin($x);
+                    $pdf::SetX($x);
+                    $pdf::SetY(8);
+                    $actionCollect = 0;
+                } else {
+                    $columnLenght ++;
+                    $actionCollect = 1;
+                }
+
+                if ($i == 0) {
+                    $columnLenght ++;
+                    $pdf::SetFont('Arial', 'B');
+                    $term = html_entity_decode($order_number);
+                    //$pdf::MultiCell(90, 3, $term, 'R'); 
+                    $pdf::Ln(1);
+                }
+
+                $collectedDescription.=strip_tags($chunks[$i]);
+
+                if (count($chunks) - 1 && $i == 0) {
+
+                    $pdf::SetFont('Arial');
+                    $pdf::MultiCell(90, 3, $collectedDescription, 'R');
+                    $actionCollect = 0;
+                    $collectedDescription = "";
+                } else {
+                    $pdf::SetFont('Arial');
+                    $pdf::MultiCell(90, 3, strip_tags($chunks[$i]), 'R');
+                    $actionCollect = 0;
+                    $collectedDescription = "";
+                }
+            }
+        }
+        $pdf::Ln(2);
+        $pdf::SetFont('Arial','I',6);
+        $pdf::cell(20,6,"--Nothing Follows--",0,"","C");
+
+        $pdf::Ln(1);
+        $pdf::Output();
+        exit;
+       
+    }
+
+
+    public function getCreatePDF($flascard_id) {
+    $flashcard = Flashcard::where('user_id', auth()->id())->findOrFail($flascard_id);
+
+    $glossary = Glossary::with('flashcarditem')
+            ->whereHas('flashcarditem', function ($query) use ($flascard_id) {
+                $query->where('flashcard_id', '=', $flascard_id);
+            })
+            ->get();
+
+    $pdf = app('FPDF');
+    $pdf->col = 0;
+    $pdf->AcceptPageBreak(false);
+    //My Loop Controls
+    $column = 0; //Control which column to add data
+    $columnLenght = 0; //monitor if we need to change the column
+    $maxLinesPerColumn = 51;
+    $wrapCharacters = 75; //do not exceed this char qty per line
+    $collectedDescription = ""; //stack Description here
+
+    $pdf->AddPage(['L', 'Letter']);
+    $pdf->SetFont('Arial', 'B');
+    $pdf->SetFontSize(18);
+    $mid_x = 135; // the middle of the "PDF screen", fixed by now.        
+    $pdf->Text($mid_x - ($pdf->GetStringWidth('TITLE') / 2), 102, 'TITLE');
+    $pdf->AddPage(['L', 'Letter']);
+    $pdf->SetFontSize(7);
+
+    foreach ($glossary as $key => $g) {
+        $chunks = explode("\n", wordwrap(strip_tags($g->description), $wrapCharacters));
+        $actionCollect = 1;
+        $collectedDescription = "";
+
+
+        for ($i = 0; $i < count($chunks); $i++) {
+            if ($columnLenght > $maxLinesPerColumn && $column == 2) {
+                $column = 0;
+                $columnLenght = 1;
+
+                $pdf->AddPage(['L', 'Letter']);
+                $pdf->Footer("d");
+                $pdf->col = $column;
+                $x = 10 + $column * 95;
+                $pdf->SetLeftMargin($x);
+                $pdf->SetX($x);
+                $pdf->SetY(8);
+                $actionCollect = 0;
+            } else if ($columnLenght > $maxLinesPerColumn && $column < 2) {
+                $columnLenght = 1;
+                $column++;
+                $pdf->col = $column;
+                $x = 10 + $column * 95;
+                $pdf->SetLeftMargin($x);
+                $pdf->SetX($x);
+                $pdf->SetY(8);
+                $actionCollect = 0;
+            } else {
+                $columnLenght ++;
+                $actionCollect = 1;
+            }
+
+            if ($i == 0) {
+                $columnLenght ++;
+                $pdf->SetFont('Arial', 'B');
+                $term = html_entity_decode($g->term);
+                $pdf->MultiCell(90, 3, $term, 'R');
+                $pdf->Ln(0);
+            }
+
+            $collectedDescription.=strip_tags($chunks[$i]);
+
+            if (count($chunks) - 1 && $i == 0) {
+
+                $pdf->SetFont('Arial');
+                $pdf->MultiCell(90, 3, $collectedDescription, 'R');
+                $actionCollect = 0;
+                $collectedDescription = "";
+            } else {
+                $pdf->SetFont('Arial');
+                $pdf->MultiCell(90, 3, strip_tags($chunks[$i]), 'R');
+                $actionCollect = 0;
+                $collectedDescription = "";
+            }
+        }
+
+        $pdf->Ln(1);
+    }
+}
+
 }   

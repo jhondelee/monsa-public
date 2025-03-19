@@ -21,7 +21,8 @@ Route::group(['prefix' => 'sales'], function() {
 
     Route::get('delete/{id}', 'SalesController@destroy')->name("salesorder.delete");    
 
-    Route::get('printDraft/{id}', 'SalesController@printDraft')->name("salesorder.printDraft"); 
+    //Route::get('printDraft/{id}', 'SalesController@printDraft')->name("salesorder.printDraft"); 
+    Route::get('printDraft/{id}', 'SalesController@printDraft_test')->name("salesorder.printDraft"); 
 
     Route::get('print/{id}', 'SalesController@printSO')->name("salesorder.print"); 
 
