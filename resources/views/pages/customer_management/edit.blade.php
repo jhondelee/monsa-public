@@ -239,70 +239,152 @@
             });
 
     });
-
-    //add all items
-  $(document).on('click','#add-all-item', function(){
-
-        var _id = $('#customer_id').val();
-      
-        $.ajax({
-            url:  '{{ url('all-items/price') }}',
-            type: 'POST',
-            dataType: 'json',
-            data: { _token: "{{ csrf_token() }}",
-            id: _id}, 
-            success:function(results){
-                
-                for( var i = 0 ; i <= results.length ; i++ ) {
-                   
-                    $('#dTable-price-item-table tbody').append("<tr><td>"+item_id+"<input type='hidden' name='item_id[]' id='item_id' value="+item_id+"></td><td>"+item_descript+"</td><td>"+item_units+"</td><td>"+item_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+item_srp+"><input type='hidden' name='item_cost[]' value="+item_cost+"></td>\
-                        <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
-                        <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\
-                        <td class='text-center'><input type='checkbox' name='disc_active[]' id='disc_active' value='0'/></td>\
-                        <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
-                        <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
-                    </td></tr>");
-                    }
-                }                
+  
+  $(function() {
+        
+        $('#ChkAll').click(function() {
+            if ($(this).prop('checked')) {
+                $('.tblChk').prop('checked', true);
+            } else {
+                $('.tblChk  ').prop('checked', false);
+            }
         });
-
-        toastr.success('Items has been added!')
-
+        
     });
 
 
-    //add item on list
-    $(document).on('click','.add-item-button', function(){
-
-        var item_id = $(this).data('item_id');
-        var item_name = $(this).data('item_name');
-        var item_descript = $(this).data('item_descript');
-        var item_units = $(this).data('item_untis');
-        var item_cost = $(this).data('item_cost');
-        var item_srp = $(this).data('item_srp');
-
-        $('#dTable-price-item-table tbody').append("<tr><td>"+item_id+"<input type='hidden' name='item_id[]' id='item_id' value="+item_id+"></td><td>"+item_descript+"</td><td>"+item_units+"</td><td>"+item_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+item_srp+"><input type='hidden' name='item_cost[]' value="+item_cost+"></td>\
-            <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
-            <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\
-            <td class='text-center'><input type='checkbox' name='disc_active[]' id='disc_active' value='"+item_id+"'/></td>\
-            <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
-            <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
-        </td></tr>");
-
-        toastr.success(item_descript,'Added!')
-
-    });
-
+  
     //show modal
     $(document).on('click', '.btn-add-item', function() {
+
+        var valueSelected = 0;
+        //
+        $.ajax({
+        url:  '{{ url('customer/all-items') }}',
+        type: 'POST',
+        dataType: 'json',
+        data: { _token: "{{ csrf_token() }}",
+        value: valueSelected},  
+        success:function(results){                
+        //
+           $('#dTable-ItemList-table').DataTable({
+                                destroy: true,
+                                pageLength: 100,
+                                responsive: true, 
+                                data: results,
+                                dom: '<"html5buttons"B>lTfgitp',
+                                buttons: [],
+                                fixedColumns: true,
+                                columns: [
+                                     {data: null,
+                                        render: function(data, type, row){
+                                                return '<input type="checkbox" value="' + row.id + '" class="largerCheckbox tblChk" id="tblChk"/></td>';
+                                        }
+                                    },
+                                    {data: 'id',name: 'id'}, 
+                                    {data: 'description', name: 'description'},
+                                    {data: 'unit_code', name: 'unit_code'},
+                                    {data: 'srp', name: 'srp'},  
+                                
+                              
+                                ],
+                            })
+
+                        }
+             });
+            
         $('.modal-title').text('Add Item');
         $('#myModal').modal('show'); 
     });
 
+     $('.item_name').on('change', function (e) {
+        var itemSelected = this.value;
+        toastr.success(itemSelected,'Selected!')
+        //
+        $.ajax({
+        url:  '{{ url('customer/selected-items') }}',
+        type: 'POST',
+        dataType: 'json',
+        data: { _token: "{{ csrf_token() }}",
+        value: itemSelected},  
+        success:function(results){                
+        //
+           $('#dTable-ItemList-table').DataTable({
+                                destroy: true,
+                                pageLength: 100,
+                                responsive: true, 
+                                data: results,
+                                dom: '<"html5buttons"B>lTfgitp',
+                                buttons: [],
+                                fixedColumns: true,
+                                columns: [
+                                    {data: null,
+                                        render: function(data, type, row){
+                                                return '<input type="checkbox" value="' + row.id + '" class="largerCheckbox tblChk" id="tblChk"/></td>';
+                                        }
+                                    },
+                                    {data: 'id',name: 'id'}, 
+                                    {data: 'description', name: 'description'},
+                                    {data: 'unit_code', name: 'unit_code'},
+                                    {data: 'srp', name: 'srp'},  
+                              
+                                ],
+                            })
 
+                        }
+             });
 
-
+     });
     
+    $(document).on('click', '#add-selected', function() {
+        var _ctr = 0;
+        var _unit_cost = 0;
+
+        $( ".dTable-ItemList-table tbody > tr" ).each( function() {
+
+                var $row = $( this );   
+                    
+                    if($row.find('#tblChk').is(':checked')){                      
+
+                        _ctr = _ctr + 1;
+
+                        var _id = $row.find( 'td:eq(1)').text();
+
+                        var _description = $row.find( 'td:eq(2)').text();
+                        var _unit_code = $row.find( 'td:eq(3)').text();
+                        var _srp = $row.find( 'td:eq(4)').text(); 
+
+                        $.ajax({
+                            url:  '{{ url('customer/cost-items') }}',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: { _token: "{{ csrf_token() }}",
+                            value: _id},  
+                            success:function(results){
+                                
+                            _unit_cost = results.unit_cost ;
+
+                            $('#dTable-price-item-table tbody').append("<tr><td>"+_id+"<input type='hidden' name='item_id[]' id='item_id' value="+_id+"></td><td>"+_description+"</td><td>"+_unit_code+"</td><td>"+_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+_srp+"><input type='hidden' name='item_cost[]' value="+_unit_cost+"></td>\
+                                <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
+                                <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\
+                                <td class='text-center'><input type='checkbox' name='disc_active[]' id='disc_active' value='"+_id+"'/></td>\
+                                <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
+                                <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
+                            </td></tr>");
+
+
+                                }
+                            });    
+                    }
+
+            });
+        if (_ctr > 0)
+        {
+            toastr.info('Item has been added','Success!')
+           }
+
+    });
+
      // remove item 
     $('#dTable-price-item-table').on('click', '#delete_line', function(){
         $(this).closest('tr').remove();
@@ -360,9 +442,7 @@
                     
                 }
 
-                
-
-            
+                            
         } else {
 
             $(this).closest( 'tr').find( '#setSRP' ).val('0.00');
@@ -398,9 +478,7 @@
                          $(".chkbx input[value='"+results[i].item_id+"']").attr('checked','checked');
 
                     }
-                } 
-                
-               
+                }                                
             }                
         });
     });

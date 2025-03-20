@@ -8,25 +8,32 @@
 
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        {!! Form::select ('item_name',$item_name,null,['placeholder' => 'Select Item Name...','class'=>'chosen-select item_name','required'=>true,'id'=>'item_name'])!!}
+                    </div>
+                </div>
                 <div class="form-horizontal m-t-md">
-                     
+            
                         <div class="table-responsive">
+
                             <div class="scroll_content" style="width:100%; height:350px; margin: 0;padding: 0;overflow-y: scroll">
                             <table class="table table-bordered dTable-ItemList-table" id="dTable-ItemList-table">
                                 <thead> 
                                         <tr>
+                                            <th><input type="checkbox" class="largerCheckbox" id="ChkAll" /></th>
                                             <th class="text-center">ID</th>
                                             <th>Description</th>
                                             <th>Units</th>
                                             <th>SRP</th>
-                                            <th class="text-center">Remove</th>
+                                            <!--<th class="text-center">Remove</th>-->
                                         </tr>
 
                                 </thead>
                                 
                                     <tbody >
 
-                                        @foreach($items as $item)
+                                        <!--@foreach($items as $item)
 
                                             <tr>
                                                 <td>{{$item->id}}</td>
@@ -41,11 +48,13 @@
                                                     data-item_untis="{{$item->unit_code}}"
                                                     data-item_srp="{{$item->srp}}"
                                                     data-item_cost="{{$item->unit_cost}}"><i class="fa fa-plus"></i>
+                                                    </a>
                                                 </td>
+                                                 <td class='text-center'><input type='checkbox' name='chk_add[]' id='chk_add' value='{{$item->id}}'/></td>
 
                                             </tr>
 
-                                        @endforeach
+                                        @endforeach-->
                                            
                                     </tbody>
                                 
@@ -62,8 +71,9 @@
 
                             <div class="ibox-tools pull-right">
                                 
-                                <button type="button" class="btn btn-danger btn-close" data-dismiss="modal" >Close</button>       
-
+                                <button type="button" class="btn btn-primary btn-add" id="add-selected">Add</button> 
+                                <button type="button" class="btn btn-danger btn-close" data-dismiss="modal" >Close</button>
+                                    
                             </div>
 
                         </div>

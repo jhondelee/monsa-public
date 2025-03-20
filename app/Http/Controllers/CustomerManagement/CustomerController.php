@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Factories\Customer\Factory as CustomerFactory;
 use App\Factories\Item\Factory as ItemFactory;
 use App\User as Users;
+use App\Item;
 use App\Customer;
 use App\CustomerPrice;
 use App\Area;
@@ -32,6 +33,7 @@ class CustomerController extends Controller
         
         $customers = $this->customer->getindex();
 
+  
         return view('pages.customer_management.index',compact('customers'));
     }
 
@@ -40,13 +42,15 @@ class CustomerController extends Controller
     {
         $items = $this->items->getitemList();
 
+        $item_name = Item::pluck('name','name');
+
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
         $approver = $this->user->getemplist()->pluck('emp_name','id');
         
         $areas =  Area::pluck('name','id');
 
-        return view('pages.customer_management.create',compact('areas','creator','items'));
+        return view('pages.customer_management.create',compact('areas','creator','items','item_name'));
     }
 
 
@@ -69,7 +73,21 @@ class CustomerController extends Controller
 
     public function getAddAllItems(Request $request)
     {
-        $results = $items = $this->items->getitemList();
+        $results =  $this->items->getitemList();
+
+            return response()->json($results);
+    }
+
+    public function getSelectedItems(Request $request)
+    {
+            $results =  $this->items->getitemname($request->value);
+
+            return response()->json($results);
+    }
+
+    public function getItemCost(Request $request)
+    {
+            $results =  $this->items->getiteminfo($request->value)->first();
 
             return response()->json($results);
     }
@@ -159,13 +177,15 @@ class CustomerController extends Controller
 
         $items = $this->items->getitemList();
 
+        $item_name = Item::pluck('name','name');
+
         $creator = $this->user->getCreatedbyAttribute($customers->created_by);
 
         $approver = $this->user->getemplist()->pluck('emp_name','id');
         
         $areas =  Area::pluck('name','id');
 
-        return view('pages.customer_management.edit',compact('areas','creator','items','customers'));
+        return view('pages.customer_management.edit',compact('areas','creator','items','customers','item_name'));
     }
 
     public function update(Request $request,$id)
