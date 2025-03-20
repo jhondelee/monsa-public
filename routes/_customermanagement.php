@@ -23,7 +23,14 @@ Route::group(['prefix' => 'customer'], function() {
 
     Route::post('area', 'CustomerController@getAdditionalAreaValue')->name("customer.area");
     
-    Route::post('price', 'CustomerController@getCustomerItemSrp')->name("customer.price");    
+    Route::post('price', 'CustomerController@getCustomerItemSrp')->name("customer.price");  
+
+    Route::post('all-items', 'CustomerController@getAddAllItems')->name("customer.all_items");  
+
+    Route::post('selected-items', 'CustomerController@getSelectedItems')->name("customer.selected_items");  
+
+    Route::post('cost-items', 'CustomerController@getItemCost')->name("customer.cost_items"); 
+      
 });
 
 
