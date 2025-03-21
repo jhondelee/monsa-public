@@ -364,6 +364,10 @@
                                 
                             _unit_cost = results.unit_cost ;
 
+                            if (!_unit_cost){
+                                _unit_cost = 0.00;
+                            }
+
                             $('#dTable-price-item-table tbody').append("<tr><td>"+_id+"<input type='hidden' name='item_id[]' id='item_id' value="+_id+"></td><td>"+_description+"</td><td>"+_unit_code+"</td><td>"+_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+_srp+"><input type='hidden' name='item_cost[]' value="+_unit_cost+"></td>\
                                 <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
                                 <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\

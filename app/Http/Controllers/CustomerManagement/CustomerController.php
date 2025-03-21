@@ -102,7 +102,6 @@ class CustomerController extends Controller
             'address'       => 'required'
         ]);
 
-
         $customers = New Customer;
 
         $customers->name                        = $request->name;
