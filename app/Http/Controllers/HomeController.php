@@ -54,7 +54,7 @@ class HomeController extends Controller
 
     public function index()
     {
-      
+         
         $user = auth()->user()->id;
         $role = role::where('level',$user)->first();
 

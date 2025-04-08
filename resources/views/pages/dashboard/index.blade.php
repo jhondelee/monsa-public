@@ -390,7 +390,10 @@
  
         $(document).ready(function() {
             let  _salesVal = [];
-           
+            var _val;
+            var d1;
+            var d2;
+
                 $.ajax({
                     url:  '{{ url('/getsalesmonthly') }}',
                     type: 'POST',
@@ -398,32 +401,27 @@
                     data: { _token: "{{ csrf_token() }}"}, 
                     success:function(results){
 
-                        for( var i = 0 ; i <= 12 ; i++ ){
+             
+                        alert(results[0].Total_Sales);
 
-                            _salesVal[i] = results[i].Total_Sales ;
-                            
-                        }         
+                        var d1 = [[1262304000000,  results[0].Total_Sales ], [1264982400000,  results[1].Total_Sales], [1267401600000,  results[2].Total_Sales], [1270080000000,  results[3].Total_Sales], [1272672000000,  results[4].Total_Sales], [1275350400000,  results[5].Total_Sales], [1277942400000,  results[6].Total_Sales], [1280620800000,  results[7].Total_Sales], [1283299200000,  results[8].Total_Sales], [1285891200000,  results[9].Total_Sales], [1288569600000,  results[10].Total_Sales], [1291161600000,  results[11].Total_Sales]
+                        ];
+                  
+                        var d2 =  [[1262304000000,  results[0].Total_Sales ], [1264982400000,  results[1].Total_Sales], [1267401600000,  results[2].Total_Sales], [1270080000000,  results[3].Total_Sales], [1272672000000,  results[4].Total_Sales], [1275350400000,  results[5].Total_Sales], [1277942400000,  results[6].Total_Sales], [1280620800000,  results[7].Total_Sales], [1283299200000,  results[8].Total_Sales], [1285891200000,  results[9].Total_Sales], [1288569600000,  results[10].Total_Sales], [1291161600000,  results[11].Total_Sales]
+                        ]; 
                         
                      }
-                         
-                });
 
-
-
-
-            var d1 = [[1262304000000, 65165 ], [1264982400000, 21000], [1267401600000, 2], [1270080000000, 2], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 2], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]
-            ];
-
-            var d2 = [[1262304000000, 5], [1264982400000, 2], [1267401600000, 2], [1270080000000, 2], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 2], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]];
 
             var data1 = [
-                { label: "Data 1", data: _salesVal, color: '#749189'},
+                { label: "Data 1", data: d1, color: '#749189'},
                 { label: "Data 2", data: d2, color: '#749169' }
             ];
             $.plot($("#flot-chart1"), data1, {
                 xaxis: {
                     tickDecimals: 0
                 },
+                
                 series: {
                     lines: {
                         show: true,
@@ -480,6 +478,8 @@
             var ctx = document.getElementById("lineChart").getContext("2d");
             new Chart(ctx, {type: 'line', data: lineData, options:lineOptions});
 
+                         
+                });            
 
         });
     </script>

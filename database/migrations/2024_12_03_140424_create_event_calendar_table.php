@@ -16,7 +16,7 @@ class CreateEventCalendarTable extends Migration
         Schema::create('event_calendar', function (Blueprint $table) {
             $table->Increments('id');
             $table->tinyInteger('user_id')->required();
-            $table->string('title',65)->nullable();
+            $table->string('title',125)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();

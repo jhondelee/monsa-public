@@ -53,7 +53,7 @@ class CalendarScheduleController extends Controller
 
     public function store(Request $request)
     {   
-        $this->validate($request, ['title' => 'required',]);
+        $this->validate($request, ['title' => 'required|max:125',]);
 
         $event = New EventCalendar;
 

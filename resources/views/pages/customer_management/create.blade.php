@@ -168,7 +168,7 @@
                                             <th>SRP</th>
                                             <th>Discount $ </th>
                                             <th>Discount %</th>
-                                            <th>Active</th>
+                                            <th>Active &nbsp; <input type="checkbox" class="largerCheckbox" id="ChkAllSetSRP" /></th>
                                             <th>Set SRP</th>
                                             <th class="text-center">Remove</th>
 
@@ -252,6 +252,85 @@
         
     });
 
+    $(function() {
+
+        $('#ChkAllSetSRP').click(function() {
+
+            if ($(this).prop('checked')) {
+
+                 $('.chk_active').prop('checked', true);
+
+                   $( "#dTable-price-item-table tbody > tr" ).each( function() {
+
+                        var $row = $( this );  
+
+                        if ($row.find('.chk_active').is(':checked')) {
+
+                            var _srp =  $row.closest('tr').find('#item_srp').val();
+
+                            var _srpD = $row.closest('tr').find('#amountD').val();
+
+                            var _perD = $row.closest('tr').find('#perD').val();
+                        
+                         
+                            if ( _perD == 0  && _srpD == 0 ){
+                            
+                                $row.closest('tr').find('#setSRP').val('0.00');
+                              
+                            }
+
+                            if ( _srpD != 0 && _perD == 0 ){
+                                  
+                                var _amoundD=0.00;  
+
+                                    if (isNaN( _srpD )){
+                                        _srpD = 0.00;
+                                    }else{
+                                        _amoundD = ( _srp - _srpD );
+                                    }
+                                                                                                
+
+                                  $row.closest('tr').find('#setSRP').val( _amoundD.toFixed(2) );
+                                                                
+                            }
+
+                            if ( _perD != 0 && _srpD == 0 ){
+                        
+                                var _perAmount = 0.00;
+                                var _SetSRP = 0.00;
+
+                                    if (isNaN(_perD)){
+                                        _SetSRP = 0.00;
+                                    }else{
+
+                                        _perAmount = ( _srp * _perD ) / 100;
+
+                                        _SetSRP = ( _srp - _perAmount);
+
+                                    }
+                                      
+                                $row.closest('tr').find('#setSRP').val( _SetSRP.toFixed(2) );
+                                
+                            }
+                        }
+
+                   });
+
+            } else {
+
+                $('.chk_active').prop('checked', false);
+
+                $( "#dTable-price-item-table tbody > tr" ).each( function() {
+                    var $row = $( this ); 
+                    $row.closest('tr').find('#setSRP').val( '0.00');
+                
+                });
+
+                    
+            }
+                            
+        });
+     });
   
     //show modal
     $(document).on('click', '.btn-add-item', function() {
@@ -373,7 +452,7 @@
                             $('#dTable-price-item-table tbody').append("<tr><td>"+_id+"<input type='hidden' name='item_id[]' id='item_id' value="+_id+"></td><td>"+_description+"</td><td>"+_unit_code+"</td><td>"+_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+_srp+"><input type='hidden' name='item_cost[]' value="+_unit_cost+"></td>\
                                 <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
                                 <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\
-                                <td class='text-center'><input type='checkbox' name='disc_active[]' id='disc_active' value='"+_id+"'/></td>\
+                                <td class='text-center'><input type='checkbox' name='disc_active[]' class='chk_active' value='"+_id+"'/></td>\
                                 <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
                                 <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
                             </td></tr>");
