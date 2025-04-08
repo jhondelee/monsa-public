@@ -34,7 +34,7 @@ class Factory implements SetInterface
                          i.description AS item_descript,
                          u.code AS item_units,
                          ifnull(c.unit_cost,0) AS item_cost,
-                         ifnull(c.srp,0) AS item_srp,
+                         ifnull(i.srp,0) AS item_srp,
                          ifnull(c.srp_discounted,0) AS amountD,
                          ifnull(c.percentage_discount,0) AS perD,
                          c.activated_discount AS disc_active,

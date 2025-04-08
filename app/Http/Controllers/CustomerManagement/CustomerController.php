@@ -236,7 +236,6 @@ class CustomerController extends Controller
             $getSetSRP = $request->get('setSRP');
 
 
-
                 $customerSRPs = CustomerPrice::where('customer_id',$id)->get();
 
                 if(count($customerSRPs) > 0)
@@ -260,7 +259,7 @@ class CustomerController extends Controller
                 $customerPrices->customer_id            = $customers->id;
 
                 $customerPrices->item_id                = $getItemId[$i];
-
+              
                 $customerPrices->unit_cost              = $getItemCost[$i];
 
                 $customerPrices->srp                    = $getItemSrp[$i];
