@@ -150,8 +150,11 @@
                             <div class="hr-line-dashed"></div>
 
                             <div class="form-group">
-                                <div class="col-sm-4">
+                                <div class="col-sm-8">
                                     <a class='btn btn-info btn-sm btn-add-item' id="btn-add-item"><i class='fa fa-plus'></i> Item</a>
+                                </div>
+                                <div class="ibox-tools pull-right">
+                                     {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!} 
                                 </div>
                             </div>
                                                         

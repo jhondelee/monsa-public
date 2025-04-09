@@ -228,7 +228,7 @@ class CustomerController extends Controller
             $getItemSrp = $request->get('item_srp');
 
             $getItemCost = $request->get('item_cost');
-            
+      
             $getAmountDisc = $request->get('amountD');
 
             $getPercentDisc = $request->get('perD');
@@ -259,7 +259,7 @@ class CustomerController extends Controller
                 $customerPrices->customer_id            = $customers->id;
 
                 $customerPrices->item_id                = $getItemId[$i];
-              
+
                 $customerPrices->unit_cost              = $getItemCost[$i];
 
                 $customerPrices->srp                    = $getItemSrp[$i];
