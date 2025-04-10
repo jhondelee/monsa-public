@@ -249,7 +249,7 @@
             if ($(this).prop('checked')) {
                 $('.tblChk').prop('checked', true);
             } else {
-                $('.tblChk  ').prop('checked', false);
+                $('.tblChk').prop('checked', false);
             }
         });
         
@@ -382,6 +382,8 @@
 
      $('.item_name').on('change', function (e) {
         var itemSelected = this.value;
+        $('#ChkAll').prop('checked', false);
+
         toastr.success(itemSelected,'Selected!')
         //
         $.ajax({

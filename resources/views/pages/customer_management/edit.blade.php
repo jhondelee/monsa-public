@@ -382,6 +382,7 @@
      $('.item_name').on('change', function (e) {
         var itemSelected = this.value;
         toastr.success(itemSelected,'Selected!')
+        $('#ChkAll').prop('checked', false);
         //
         $.ajax({
         url:  '{{ url('customer/selected-items') }}',
