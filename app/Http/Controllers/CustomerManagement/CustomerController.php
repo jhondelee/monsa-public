@@ -93,6 +93,35 @@ class CustomerController extends Controller
     }
 
 
+    public function doSave(Request $request)
+    {
+
+            $customerPrices = New CustomerPrice;
+
+            $customerPrices->customer_id            = $request->_csx_id;
+
+            $customerPrices->item_id                = $request->item_id;
+
+            $customerPrices->unit_cost              = $request->item_cost;
+
+            $customerPrices->srp                    = $request->srp;
+
+            $customerPrices->srp_discounted         = $request->srpD;
+
+            $customerPrices->percentage_discount    = $request->perD;              
+
+            $customerPrices->activated_discount     = $request->chk_active;
+
+            $customerPrices->set_srp                = $request->setsrp;
+
+            $customerPrices->save();
+
+            $results = $customerPrices->id;
+
+        return response()->json($results);
+    }
+
+
     public function store(Request $request)
     {
 
@@ -134,7 +163,7 @@ class CustomerController extends Controller
         $activated = $request->get('disc_active');
         $getSetSRP = $request->get('setSRP');
 
-        for ($i=0; $i < count($getItemId); $i++) { 
+        for ($i=0; $i < count($getItemId) -1 ; $i++) { 
 
             if (isset($activated[$i])){
                 $activeDisc = 1;
@@ -228,13 +257,13 @@ class CustomerController extends Controller
             $getItemSrp = $request->get('item_srp');
 
             $getItemCost = $request->get('item_cost');
-      
+
             $getAmountDisc = $request->get('amountD');
 
             $getPercentDisc = $request->get('perD');
 
             $getSetSRP = $request->get('setSRP');
-
+  
 
                 $customerSRPs = CustomerPrice::where('customer_id',$id)->get();
 
@@ -249,11 +278,10 @@ class CustomerController extends Controller
 
                 }
 
-        if (is_array($getItemId)){
 
 
-            for ($i=0; $i < count($getItemId); $i++) { 
-                
+            for ($i=0; $i < count($getItemId) - 1 ; $i++) { 
+
                 $customerPrices = New CustomerPrice;
 
                 $customerPrices->customer_id            = $customers->id;
@@ -271,9 +299,10 @@ class CustomerController extends Controller
                 $customerPrices->set_srp                = $getSetSRP[$i];
 
                 $customerPrices->save();
+
             }
 
-        }
+       
 
             
 

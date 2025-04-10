@@ -30,6 +30,8 @@ Route::group(['prefix' => 'customer'], function() {
     Route::post('selected-items', 'CustomerController@getSelectedItems')->name("customer.selected_items");  
 
     Route::post('cost-items', 'CustomerController@getItemCost')->name("customer.cost_items"); 
+
+    Route::post('doSave', 'CustomerController@doSave')->name("customer.doSave"); 
       
 });
 

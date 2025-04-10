@@ -57,8 +57,7 @@
 
                             {!! csrf_field() ; !!}
 
-                        
-
+                            
                              <div class="form-group">
                                 <input type="hidden" name="customer_id" id="customer_id" value="{{$customers->id}}">
                                 <label class="col-sm-2 control-label">Name <span class="text-danger">*</span></label>
@@ -490,10 +489,12 @@
 
             var _perD = parseFloat($(this).closest( 'tr' ).find( '#perD' ).val());
 
+            var _results ;
 
                 if ( !_perD == false && !_srpD == false ){
 
                     $(this).closest( 'tr').find( '#setSRP' ).val('0');
+                     _results = 0;
 
                 }
 
@@ -509,6 +510,7 @@
 
 
                     $(this).closest( 'tr').find( '#setSRP' ).val( _amoundD.toFixed(2));
+                    _results = _amoundD.toFixed(2);
                     
                 }
 
@@ -528,10 +530,29 @@
                         }
 
                     $(this).closest( 'tr').find( '#setSRP' ).val( _SetSRP.toFixed(2))   ;
-                    
+                    _results = _SetSRP.toFixed(2);
                 }
 
-                            
+                var _csx_id = $('#customer_id').val();
+                var _item_id = $(this).closest( 'tr' ).find( '#item_id' ).val();
+                var _item_cost = $(this).closest( 'tr' ).find( '#item_cost' ).val();
+                var _chk_active = $(this).closest('tr').find('#chk_active').val();
+                
+                toastr.info( _results +' - ' + 'doSave is Working','Success!')
+
+               /* $.ajax({
+                    url:  '{{ url('customer/doSave') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _csx_id, item_id: _item_id, item_cost: _item_cost,srp: _srp, srpD: _srpD, perD:_perD , setsrp: _results, chk_active:_chk_active}, 
+                    success:function(results){
+
+                        toastr.info('doSave is Working','Success!')
+
+                    }   
+                });  */ 
+
         } else {
 
             $(this).closest( 'tr').find( '#setSRP' ).val('0.00');
@@ -554,7 +575,7 @@
                 
                 for( var i = 0 ; i <= results.length ; i++ ) {
                    //append to table
-                    $('#dTable-price-item-table tbody').append("<tr><td>"+results[i].item_id+"<input type='hidden' name='item_id[]' id='item_id' value="+results[i].item_id+"></td><td>"+results[i].item_descript+"</td><td>"+results[i].item_units+"</td><td>"+results[i].item_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+results[i].item_srp+"><input type='hidden' name='item_cost[]' value="+results[i].item_cost+"></td>\
+                    $('#dTable-price-item-table tbody').append("<tr><td>"+results[i].item_id+"<input type='hidden' name='item_id[]' id='item_id' value="+results[i].item_id+"></td><td>"+results[i].item_descript+"</td><td>"+results[i].item_units+"</td><td>"+results[i].item_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+results[i].item_srp+"><input type='hidden' name='item_cost[]' id='item_cost' value="+results[i].item_cost+"></td>\
                         <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD' value="+results[i].amountD+"> </td>\
                         <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD' value="+results[i].perD+"></td>\
                         <td class='text-center chkbx'><input type='checkbox' name='disc_active[]' class='chk_active' id='chk_active' value="+results[i].item_id+"></td>\

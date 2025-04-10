@@ -16,4 +16,8 @@ RewriteRule ^(.*)$ /public/$1
 
 RewriteRule ^(/)?$ public/index.php [L] 
 
+AllowOverride 
+
+php_value max_input_vars 2500
+
 </IfModule>
