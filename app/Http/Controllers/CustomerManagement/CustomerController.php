@@ -263,7 +263,7 @@ class CustomerController extends Controller
         $customers->save();
 
 
-            $getItemIds = $request->get('item_id');
+            $getItemId = $request->get('item_id');
 
             $getItemSrp = $request->get('item_srp');
 
@@ -291,9 +291,9 @@ class CustomerController extends Controller
                 }
 
 
-        if (isset($getItemIds)){
+        if (isset($getItemId)){
 
-           for ($i=0; $i < count($getItemIds); $i++) { 
+           for ($i=0; $i < count($getItemId); $i++) { 
 
                 if (isset($activated[$i])){
                     $activeDisc = 1;
@@ -305,7 +305,7 @@ class CustomerController extends Controller
 
                 $customerPrices->customer_id            = $customers->id;
 
-                $customerPrices->item_id                = $getItemId;
+                $customerPrices->item_id                = $getItemId[$i];
 
                 if (isset($getItemCost[$i])){
                     $customerPrices->unit_cost              = $getItemCost[$i];
