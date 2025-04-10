@@ -308,17 +308,40 @@ class CustomerController extends Controller
 
                 $customerPrices->item_id                = $getItemId;
 
-                $customerPrices->unit_cost              = $getItemCost[$i];
-
-                $customerPrices->srp                    = $getItemSrp[$i];
-
-                $customerPrices->srp_discounted         = $getAmountDisc[$i];
-
-                $customerPrices->percentage_discount    = $getPercentDisc[$i];              
+                if (isset($getItemCost[$i])){
+                    $customerPrices->unit_cost              = $getItemCost[$i];
+                }else{
+                    $customerPrices->unit_cost              = 0;
+                }
+                
+                if (isset($getItemSrp[$i])){
+                    $customerPrices->srp                    = $getItemSrp[$i];
+                }else{
+                    $customerPrices->srp                    =0;
+                }
+             
+                if (isset($getAmountDisc[$i])){
+                    $customerPrices->srp_discounted         = $getAmountDisc[$i]; 
+                }else{
+                    $customerPrices->srp_discounted         = 0;
+                }
+             
+                
+                if (isset($getPercentDisc[$i])){
+                    $customerPrices->percentage_discount    = $getPercentDisc[$i];               
+                }else{
+                    $customerPrices->percentage_discount    = 0;
+                }
+                
 
                 $customerPrices->activated_discount     = $activeDisc;
 
-                $customerPrices->set_srp                = $getSetSRP[$i];
+                if (isset($getPercentDisc[$i])){
+                    $customerPrices->set_srp                = $getPercentDisc[$i];              
+                }else{
+                    $customerPrices->set_srp    = 0;
+                }
+
 
                 $customerPrices->save();
 
