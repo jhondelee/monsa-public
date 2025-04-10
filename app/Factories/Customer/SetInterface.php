@@ -8,4 +8,6 @@ interface SetInterface {
 
      public function getCustomerItemSrp($customerID);
 
+     public function getItemFromCustomer($customerID,$itemID);
+
 }

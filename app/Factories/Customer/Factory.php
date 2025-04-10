@@ -47,6 +47,14 @@ class Factory implements SetInterface
         return collect($results);
     } 
   
-  
+    public function getItemFromCustomer($customerID,$itemID)
+    {
+         $results = DB::select("
+                SELECT * 
+                FROM customer_prices 
+                WHERE customer_id = ? AND item_id = ?;",[$customerID,$itemID]);
+
+        return collect($results);
+    }
 
 }
