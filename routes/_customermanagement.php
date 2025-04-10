@@ -31,7 +31,11 @@ Route::group(['prefix' => 'customer'], function() {
 
     Route::post('cost-items', 'CustomerController@getItemCost')->name("customer.cost_items"); 
 
-    Route::post('doSave', 'CustomerController@doSave')->name("customer.doSave"); 
+    Route::post('doUpdate', 'CustomerController@doUpdate')->name("customer.doUpdate"); 
+
+    Route::post('doDelete', 'CustomerController@doDelete')->name("customer.doDelete"); 
+
+    Route::post('doDeactive', 'CustomerController@doDeactive')->name("customer.doDeactive"); 
       
 });
 

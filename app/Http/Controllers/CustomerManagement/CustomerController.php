@@ -51,7 +51,7 @@ class CustomerController extends Controller
         
         $areas =  Area::pluck('name','id');
 
-        return view('pages.customer_management.create',compact('areas','creator','items','item_name'));
+        return view('pages.customer_management.create_cs',compact('areas','creator','items','item_name'));
     }
 
 
@@ -88,40 +88,94 @@ class CustomerController extends Controller
 
     public function getItemCost(Request $request)
     {
-            $results =  $this->items->getiteminfo($request->value)->first();
+            $UnitCost =  $this->items->getiteminfo($request->id)->first();
 
-            return response()->json($results);
+               $customerPrices = New CustomerPrice;
+
+                $customerPrices->customer_id            = $request->cs_id;
+
+                $customerPrices->item_id                = $request->id;
+
+                $customerPrices->unit_cost              = $UnitCost->unit_cost;
+
+                $customerPrices->save();
+
+                $cspriceID = $customerPrices->id;
+              
+            return response()->json(['UnitCost' => $UnitCost, 'cspriceID' => $cspriceID]);
+
     }
 
-
-    public function doSave(Request $request)
+     public function doDelete(Request $request)
     {
 
-            $customerPrices = New CustomerPrice;
+            $customerPrices = CustomerPrice::findOrfail($request->id);
 
-            $customerPrices->customer_id            = $request->_csx_id;
+            $item_name = Item::findOrfail($customerPrices->item_id);
 
-            $customerPrices->item_id                = $request->item_id;
+            $customerPrices->delete();
 
-            $customerPrices->unit_cost              = $request->item_cost;
-
-            $customerPrices->srp                    = $request->srp;
-
-            $customerPrices->srp_discounted         = $request->srpD;
-
-            $customerPrices->percentage_discount    = $request->perD;              
-
-            $customerPrices->activated_discount     = $request->chk_active;
-
-            $customerPrices->set_srp                = $request->setsrp;
-
-            $customerPrices->save();
-
-            $results = $customerPrices->id;
+            $results = $item_name->description;
 
         return response()->json($results);
     }
 
+    public function doUpdate(Request $request)
+    {
+
+                if (isset($request->chk_active)){
+                    $activeDisc = 1;
+                }else{
+                    $activeDisc = 0;
+                }
+
+
+                $customerPrices = CustomerPrice::findOrfail($request->id);
+
+                $customerPrices->customer_id            = $request->cxid;
+
+                $customerPrices->item_id                = $request->item_id;
+
+                $customerPrices->unit_cost              = $request->item_cost;
+
+                $customerPrices->srp                    = $request->srp;
+
+                $customerPrices->srp_discounted         = $request->srpD;
+
+                $customerPrices->percentage_discount    = $request->perD;              
+
+                $customerPrices->activated_discount     = $activeDisc;
+
+                $customerPrices->set_srp                = $request->set_srp;
+
+                $customerPrices->save();
+
+                if(isset($request->set_srp)){
+                    $results =$request->set_srp;
+                }else{
+                    $results =0.00;
+                }
+
+        return response()->json($results);
+    }
+
+     public function doDeactive(Request $request)
+    {
+
+            $customerPrices = CustomerPrice::findOrfail($request->id);             
+
+            $customerPrices->activated_discount     = 0;
+
+            $customerPrices->set_srp                = 0.00;
+
+            $customerPrices->save();
+
+
+                $results =0.00;
+           
+
+        return response()->json($results);
+    }
 
     public function store(Request $request)
     {
@@ -156,6 +210,8 @@ class CustomerController extends Controller
           
         $customers->save();
 
+        $id= $customers->id;
+        /*
         $getItemIds = $request->get('item_id');
         $getItemSrp = $request->get('item_srp');
         $getItemCost = $request->get('item_cost');
@@ -199,11 +255,10 @@ class CustomerController extends Controller
                 $i++;
 
             }
-        }
+        }*/
 
-        //for ($i=0; $i < count($getItemId) -1 ; $i++) { }
-
-        return redirect()->route('customer.index')
+        //return redirect()->route('customer.index')
+        return redirect()->to('customer/edit/'.$id)
 
             ->with('success','Customer has been saved successfully.');
     }

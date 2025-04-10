@@ -149,11 +149,11 @@
                             <div class="hr-line-dashed"></div>
 
                             <div class="form-group">
-                                <div class="col-sm-8">
+                                <div class="col-sm-2">
                                     <a class='btn btn-info btn-sm btn-add-item' id="btn-add-item"><i class='fa fa-plus'></i> Item</a>
                                 </div>
-                                <div class="ibox-tools pull-right">
-                                     {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!} 
+                                <div class="col-sm-1 pull-right">
+                                    <a class='btn btn-danger btn-sm btn-remove-item' id="btn-remove-item"><i class='fa fa-check'></i> Remove</a>
                                 </div>
                             </div>
                                                         
@@ -173,6 +173,9 @@
                                             <th>Active &nbsp; <input type="checkbox" class="largerCheckbox" id="ChkAllSetSRP" /></th>
                                             <th>Set SRP</th>
                                             <th class="text-center">Remove</th>
+                                            <th class="text-center">
+                                                <input type="checkbox" class="largerCheckbox" id="ChkAllRemove" />
+                                            </th>
 
                                         </tr>
 
@@ -187,24 +190,13 @@
                                 
                                 <hr>
                             </div>
-                            <div class="hr-line-dashed"></div>
-                                <div class="row">
-                                    <div class="col-md-12 form-horizontal">
-                             
-                                        <div class="ibox-tools pull-right">
-                                             
-                                                   
-                                        <a class="btn btn-primary btn-danger" href="{{ route('customer.index') }}">Close</a> 
-
-                                                      
-                                                                                    
-                                        {!! Form::submit('Save Changes', ['class' => 'btn btn-primary btn-save']) !!}  
-
-
-                                         </div>
-
-                                    </div>
+                            <div class="form-group">
+                                <div class="col-sm-1 pull-right">
+                                    <a class='btn btn-danger btn-sm btn-remove-item' id="btn-remove-item"><i class='fa fa-check'></i> Remove</a>
                                 </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+
 
                             {!! Form::close() !!}
 
@@ -249,6 +241,18 @@
                 $('.tblChk').prop('checked', true);
             } else {
                 $('.tblChk  ').prop('checked', false);
+            }
+        });
+        
+    });
+    $('#ChkAllRemove').prop('checked', false);
+    $(function() {
+            
+        $('#ChkAllRemove').click(function() {
+            if ($(this).prop('checked')) {
+                $('.chk_remove').prop('checked', true);
+            } else {
+                $('.chk_remove').prop('checked', false);
             }
         });
         
@@ -436,27 +440,31 @@
                         var _description = $row.find( 'td:eq(2)').text();
                         var _unit_code = $row.find( 'td:eq(3)').text();
                         var _srp = $row.find( 'td:eq(4)').text(); 
+                        var _csxid = $('#customer_id').val();
 
                         $.ajax({
-                            url:  '{{ url('customer/cost-items') }}',
+                            url:  '{{ url("customer/cost-items") }}',
                             type: 'POST',
                             dataType: 'json',
                             data: { _token: "{{ csrf_token() }}",
-                            value: _id},  
+                            id: _id, cs_id:_csxid},  
                             success:function(results){
-                                
-                            _unit_cost = results.unit_cost ;
 
+                            _unit_cost = results.UnitCost.unit_cost;
+
+                            _csprice_id = results.cspriceID;
+                            
                             if (!_unit_cost){
                                 _unit_cost = 0.00;
                             }
 
-                            $('#dTable-price-item-table tbody').append("<tr><td>"+_id+"<input type='hidden' name='item_id[]' id='item_id' value="+_id+"></td><td>"+_description+"</td><td>"+_unit_code+"</td><td>"+_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+_srp+"><input type='hidden' name='item_cost[]' value="+_unit_cost+"></td>\
+                            $('#dTable-price-item-table tbody').append("<tr><td>"+_id+"<input type='hidden' name='item_id[]' id='item_id' value="+_id+"></td><td>"+_description+"</td><td>"+_unit_code+"</td><td>"+_srp+"<input type='hidden' name='item_srp[]' id='item_srp' value="+_srp+"><input type='hidden' name='item_cost[]' id='item_cost' value="+_unit_cost+"></td>\
                                 <td><input type='input' size='4' name='amountD[]' class='form-control input-sm text-right' placeholder='0.00' id='amountD'> </td>\
                                 <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD'></td>\
                                 <td class='text-center'><input type='checkbox' name='disc_active[]' id='chk_active' class='chk_active' value='"+_id+"'/></td>\
                                 <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
-                                <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
+                                <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><input type='hidden' name='id[]' id='id' value="+_csprice_id+"><i class='fa fa-minus'></i></td>\
+                                <td class='text-center'><input type='checkbox' class='checkbox checkbox-primary chk_remove' id='chk_remove'>\
                             </td></tr>");
 
 
@@ -468,16 +476,66 @@
         if (_ctr > 0)
         {
             toastr.info('Item has been added','Success!')
-           }
+        }
 
     });
 
 
      // remove item 
     $('#dTable-price-item-table').on('click', '#delete_line', function(){
-        $(this).closest('tr').remove();
-    });
+
+        var _id = $(this).closest( 'tr').find( '#id' ).val();
+
+            $.ajax({
+
+                    url:  '{{ url("customer/doDelete") }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _id}, 
+                    success:function(results){
+
+                            toastr.info(results +'','Successfully Removed')
+
+                    }   
+                }); 
     
+        $(this).closest('tr').remove();
+
+    });
+
+     $(document).on('click', '#btn-remove-item', function() {
+        var $i = 0;
+        $( "#dTable-price-item-table tbody > tr" ).each( function() {
+
+            var $row = $( this );  
+
+            if ($row.find('.chk_remove').is(':checked')) {
+
+                var _id = $row.closest('tr').find('#id').val();
+
+                $.ajax({
+
+                        url:  '{{ url("customer/doDelete") }}',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { _token: "{{ csrf_token() }}",
+                        id: _id}, 
+                        success:function(results){
+                             
+                             $row.closest('tr').remove();
+                             $('#ChkAllRemove').prop('checked', false);
+                             $i++;
+                        }   
+                    });
+            }
+
+         });  
+         if($i > 0)  {
+            toastr.info('Selected item removed!','Success!')
+         }
+     });
+
      $('#dTable-price-item-table').on('click','#chk_active',function(e){
  
         var _chckbox_per = $(this).closest('tr').find('#chk_active').val();
@@ -495,7 +553,10 @@
                 if ( !_perD == false && !_srpD == false ){
 
                     $(this).closest( 'tr').find( '#setSRP' ).val('0');
-                     _results = 0;
+
+                
+                        _results = 0.00;
+           
 
                 }
 
@@ -511,6 +572,7 @@
 
 
                     $(this).closest( 'tr').find( '#setSRP' ).val( _amoundD.toFixed(2));
+
                     _results = _amoundD.toFixed(2);
                     
                 }
@@ -520,7 +582,7 @@
                     var _perAmount = 0.00;
                     var _SetSRP = 0.00;
 
-                        if (isNaN(_perD)){
+                        if (isNaN(_perD) ){
                             _SetSRP = 0.00;
                         }else{
 
@@ -531,32 +593,60 @@
                         }
 
                     $(this).closest( 'tr').find( '#setSRP' ).val( _SetSRP.toFixed(2))   ;
+
                     _results = _SetSRP.toFixed(2);
                 }
 
+                var _id = $(this).closest( 'tr').find( '#id' ).val();
                 var _csx_id = $('#customer_id').val();
                 var _item_id = $(this).closest( 'tr' ).find( '#item_id' ).val();
                 var _item_cost = $(this).closest( 'tr' ).find( '#item_cost' ).val();
                 var _chk_active = $(this).closest('tr').find('#chk_active').val();
                 
-                toastr.info( _results +' - ' + 'doSave is Working','Success!')
+                    if (isNaN( _srpD )){
+                        _srpD = 0.00;
+                    }
+                    if (isNaN( _perD )){
+                        _perD = 0.00;
+                    }
 
-               /* $.ajax({
-                    url:  '{{ url('customer/doSave') }}',
+ 
+                 $.ajax({
+
+                    url:  '{{ url("customer/doUpdate") }}',
                     type: 'POST',
                     dataType: 'json',
                     data: { _token: "{{ csrf_token() }}",
-                    id: _csx_id, item_id: _item_id, item_cost: _item_cost,srp: _srp, srpD: _srpD, perD:_perD , setsrp: _results, chk_active:_chk_active}, 
+                    id:_id,cxid: _csx_id, item_id: _item_id, item_cost: _item_cost, chk_active:_chk_active,srp:_srp, srpD:_srpD, perD: _perD, set_srp :_results}, 
+
                     success:function(results){
 
-                        toastr.info('doSave is Working','Success!')
+                        toastr.info(results +' - Set SRP saved!','Activate!')
 
                     }   
-                });  */ 
-
+                });   
+               
         } else {
+            
+            var _id = $(this).closest( 'tr').find( '#id' ).val();
 
             $(this).closest( 'tr').find( '#setSRP' ).val('0.00');
+
+                $.ajax({
+
+                    url:  '{{ url("customer/doDeactive") }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}",
+                    id: _id}, 
+                    success:function(results){
+
+                        toastr.info('Selected item deactivate','Deactivate!')
+
+                    }   
+                }); 
+
+
         }    
              
      });
@@ -567,7 +657,7 @@
         var _id = $('#customer_id').val();
       
         $.ajax({
-            url:  '{{ url('customer/price') }}',
+            url:  '{{ url("customer/price") }}',
             type: 'POST',
             dataType: 'json',
             data: { _token: "{{ csrf_token() }}",
@@ -581,7 +671,8 @@
                         <td><input type='input' size='4' name='perD[]'  class='form-control input-sm text-right ' placeholder='0.00' id='perD' value="+results[i].perD+"></td>\
                         <td class='text-center chkbx'><input type='checkbox' name='disc_active[]' class='chk_active' id='chk_active' value="+results[i].item_id+"></td>\
                         <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' value="+results[i].setSRP+" readonly></td>\
-                        <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i>\
+                        <td class='text-center'><input type='hidden' name='id[]' id='id' value="+results[i].id+"><div class='btn-group'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
+                        <td class='text-center'><input class='checkbox checkbox-primary chk_remove' id='chk_remove' type='checkbox'>\
                     </td></tr>");
                     
                     if(results[i].disc_active == 1){

@@ -29,7 +29,8 @@ class Factory implements SetInterface
     {
 
      $results = DB::select("
-                SELECT c.item_id,
+                SELECT c.id,
+                        c.item_id,
                          i.name AS item_name,
                          i.description AS item_descript,
                          u.code AS item_units,
