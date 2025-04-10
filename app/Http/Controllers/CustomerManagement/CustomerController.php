@@ -308,8 +308,7 @@ class CustomerController extends Controller
 
                 $customerPrices->item_id                = $getItemId;
 
-               // $customerPrices->unit_cost              = $getItemCost[$i];
-                 $customerPrices->unit_cost              = 0;
+                $customerPrices->unit_cost              = $getItemCost[$i];
 
                 $customerPrices->srp                    = $getItemSrp[$i];
 
