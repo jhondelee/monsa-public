@@ -293,8 +293,7 @@ class CustomerController extends Controller
 
         if (isset($getItemIds)){
 
-            $i = 0;
-            foreach ($getItemIds as $key => $getItemId) {
+           for ($i=0; $i < count($getItemIds); $i++) { 
 
                 if (isset($activated[$i])){
                     $activeDisc = 1;
@@ -344,8 +343,6 @@ class CustomerController extends Controller
 
 
                 $customerPrices->save();
-
-                $i++;
 
             }
         }
