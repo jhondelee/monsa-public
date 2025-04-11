@@ -206,6 +206,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-1 pull-right">
+                                    <a class="btn btn-primary btn-danger" href="{{ route('customer.index') }}">Close</a>
                                     <a class='btn btn-danger btn-sm btn-remove-item' id="btn-remove-item"><i class='fa fa-check'></i> Remove</a>
                                 </div>
                             </div>
