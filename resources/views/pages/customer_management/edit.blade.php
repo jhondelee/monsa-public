@@ -153,14 +153,26 @@
                                     <a class='btn btn-info btn-sm btn-add-item' id="btn-add-item"><i class='fa fa-plus'></i> Item</a>
                                 </div>
                                 <div class="col-sm-1 pull-right">
+                                   
+                                       
+                                    
                                     <a class='btn btn-danger btn-sm btn-remove-item' id="btn-remove-item"><i class='fa fa-check'></i> Remove</a>
                                 </div>
                             </div>
                                                         
-                            <div class="table-responsive">
-                                                         
-                                <table class="table table-bordered" id="dTable-price-item-table">                  
-
+                            <div class="table-responsive"  id="ibox1">
+                                <div class="ibox-content">  
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>  
+                                         
+                                <table class="table table-bordered " id="dTable-price-item-table">                  
+                                 
+                          
                                     <thead> 
                                         
                                         <tr>
@@ -182,12 +194,14 @@
                                     </thead>
 
                                     <tbody>
-                                            
+                                   
 
                                     </tbody>
-
+                                   
+                                 
                                 </table>
-                                
+                          
+                                 </div>
                                 <hr>
                             </div>
                             <div class="form-group">
@@ -218,7 +232,7 @@
   @endsection
 
 @section('scripts')
-
+<script src="js/jquery-3.1.1.min.js"></script>
 <script src="/js/plugins/toastr/toastr.min.js"></script>
 
 <script type="text/javascript">
@@ -265,10 +279,12 @@
 
             if ($(this).prop('checked')) {
 
+                $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+
                  $('.chk_active').prop('checked', true);
 
                    $( "#dTable-price-item-table tbody > tr" ).each( function() {
-
+                            
                         var $row = $( this );  
 
                         if ($row.find('.chk_active').is(':checked')) {
@@ -279,10 +295,13 @@
 
                             var _perD = $row.closest('tr').find('#perD').val();
                         
-                         
+                            var _results = 0;
+
                             if ( _perD == 0  && _srpD == 0 ){
                             
                                 $row.closest('tr').find('#setSRP').val('0.00');
+
+                                _results = 0.00;
                               
                             }
 
@@ -298,6 +317,8 @@
                                                                                                 
 
                                   $row.closest('tr').find('#setSRP').val( _amoundD.toFixed(2) );
+
+                                  _results = _amoundD.toFixed(2);
                                                                 
                             }
 
@@ -317,12 +338,51 @@
                                     }
                                       
                                 $row.closest('tr').find('#setSRP').val( _SetSRP.toFixed(2) );
+
+                                 _results = _SetSRP.toFixed(2);
                                 
                             }
+
+                            var _id = $row.closest( 'tr').find( '#id' ).val();
+                            var _csx_id = $('#customer_id').val();
+                            var _item_id = $row.closest( 'tr' ).find( '#item_id' ).val();
+                            var _item_cost = $row.closest( 'tr' ).find( '#item_cost' ).val();
+                            var _chk_active = $row.closest('tr').find('#chk_active').val();
+                            
+                                if (isNaN( _srpD )){
+                                    _srpD = 0.00;
+                                }
+                                if (isNaN( _perD )){
+                                    _perD = 0.00;
+                                }
+
+             
+                            $.ajax({
+
+                                url:  '{{ url("customer/doUpdate") }}',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: { _token: "{{ csrf_token() }}",
+                                id:_id,cxid: _csx_id, item_id: _item_id, item_cost: _item_cost, chk_active:_chk_active,srp:_srp, srpD:_srpD, perD: _perD, set_srp :_results}, 
+
+                                success:function(results){
+
+                                    //toastr.success(results +' - Set SRP saved!','Activate!')
+
+                                }   
+
+
+                            }); 
+                                                 
                         }
 
-                   });
 
+                   });               
+
+                        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+                        toastr.success('All Set SRP has been activated!','Activate!')
+
+                        
             } else {
 
                 $('.chk_active').prop('checked', false);
@@ -330,9 +390,25 @@
                 $( "#dTable-price-item-table tbody > tr" ).each( function() {
                     var $row = $( this ); 
                     $row.closest('tr').find('#setSRP').val( '0.00');
+
+                    var _id = $row.closest( 'tr').find( '#id' ).val();
+                    $.ajax({
+
+                        url:  '{{ url("customer/doDeactive") }}',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { _token: "{{ csrf_token() }}",
+                        id: _id}, 
+                        success:function(results){
+
+                           // toastr.info('Selected item deactivate','Deactivate!')
+
+                        }   
+                    }); 
                 
                 });
 
+                   toastr.warning('All Set SRP has been deactivated!','Deactivate!')
                     
             }
                             
@@ -464,7 +540,7 @@
                                 <td class='text-center'><input type='checkbox' name='disc_active[]' id='chk_active' class='chk_active' value='"+_id+"'/></td>\
                                 <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' readonly></td>\
                                 <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><input type='hidden' name='id[]' id='id' value="+_csprice_id+"><i class='fa fa-minus'></i></td>\
-                                <td class='text-center'><input type='checkbox' class='checkbox checkbox-primary chk_remove' id='chk_remove'>\
+                                <td class='text-center'><div class='btn-group'><input class='checkbox text-center chk_remove' id='chk_remove' type='checkbox'></div>\
                             </td></tr>");
 
 
@@ -525,9 +601,10 @@
                              
                              $row.closest('tr').remove();
                              $('#ChkAllRemove').prop('checked', false);
-                             $i++;
+                             
                         }   
                     });
+                $i++;
             }
 
          });  
@@ -611,7 +688,7 @@
                     }
 
  
-                 $.ajax({
+                $.ajax({
 
                     url:  '{{ url("customer/doUpdate") }}',
                     type: 'POST',
@@ -621,17 +698,17 @@
 
                     success:function(results){
 
-                        toastr.info(results +' - Set SRP saved!','Activate!')
+                        toastr.success(results +' - Set SRP saved!','Activate!')
 
                     }   
                 });   
                
         } else {
             
-            var _id = $(this).closest( 'tr').find( '#id' ).val();
+            
 
             $(this).closest( 'tr').find( '#setSRP' ).val('0.00');
-
+            var _id = $(this).closest( 'tr').find( '#id' ).val();
                 $.ajax({
 
                     url:  '{{ url("customer/doDeactive") }}',
@@ -672,7 +749,7 @@
                         <td class='text-center chkbx'><input type='checkbox' name='disc_active[]' class='chk_active' id='chk_active' value="+results[i].item_id+"></td>\
                         <td><input type='input' size='4' name='setSRP[]'  class='form-control input-sm text-right setSRP' placeholder='0.00' id='setSRP' value="+results[i].setSRP+" readonly></td>\
                         <td class='text-center'><input type='hidden' name='id[]' id='id' value="+results[i].id+"><div class='btn-group'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
-                        <td class='text-center'><input class='checkbox checkbox-primary chk_remove' id='chk_remove' type='checkbox'>\
+                        <td class='text-center'><div class='btn-group'><input class='checkbox text-center chk_remove' id='chk_remove' type='checkbox'></div>\
                     </td></tr>");
                     
                     if(results[i].disc_active == 1){
