@@ -1,6 +1,16 @@
     <div id="myModal" class="modal fade" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content" id="ibox3">
+            <div class="ibox-content">
+                                    <div class="sk-spinner sk-spinner-wave">
+                                        <label>Loading...</label>
+                                        <div class="sk-rect1"></div>
+                                        <div class="sk-rect2"></div>
+                                        <div class="sk-rect3"></div>
+                                        <div class="sk-rect4"></div>
+                                        <div class="sk-rect5"></div>
+                                    </div> 
+           
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 
@@ -84,6 +94,7 @@
 
             </div>
         </div>
+         </div>
     </div>  
   </div>  
 

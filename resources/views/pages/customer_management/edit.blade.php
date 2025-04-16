@@ -488,7 +488,7 @@
                                 columns: [
                                      {data: null,
                                         render: function(data, type, row){
-                                                return '<input type="checkbox" value="' + row.id + '" class="largerCheckbox tblChk" id="tblChk"/></td>';
+                                                return '<input type="checkbox" value="' + row.id + '" class="largerCheckbox tblChk" id="tblChk" name="tblChk" /></td>';
                                         }
                                     },
                                     {data: 'id',name: 'id'}, 
@@ -531,7 +531,7 @@
                                 columns: [
                                     {data: null,
                                         render: function(data, type, row){
-                                                return '<input type="checkbox" value="' + row.id + '" class="largerCheckbox tblChk" id="tblChk"/></td>';
+                                                return '<input type="checkbox" value="' + row.id + '" class="largerCheckbox tblChk" id="tblChk" name="tblChk" /></td>';
                                         }
                                     },
                                     {data: 'id',name: 'id'}, 
@@ -551,11 +551,18 @@
         var _ctr = 0;
         var _unit_cost = 0;
 
+        $('#ibox3').children('.ibox-content').toggleClass('sk-loading');
+   
+        var $checkboxes = $('.dTable-ItemList-table td input[type="checkbox"]');
+
+        var ctrchk = $checkboxes.filter(':checked').length;
+
         $( ".dTable-ItemList-table tbody > tr" ).each( function() {
 
                 var $row = $( this );   
                     
-                    if($row.find('#tblChk').is(':checked')){                      
+                    if($row.find('#tblChk').is(':checked')){         
+
 
                         _ctr = _ctr + 1;
 
@@ -592,15 +599,24 @@
                             </td></tr>");
 
 
+                            },
+
+                            complete: function(){
+
+
+                                ctrchk--;
+     
+                                if ( ctrchk ==  1){
+                                        $('#ibox3').children('.ibox-content').toggleClass('sk-loading');
+                                        toastr.info('Item has been added','Success!')
                                 }
+                                        
+                            },
+                            
                             });    
                     }
 
             });
-        if (_ctr > 0)
-        {
-            toastr.info('Item has been added','Success!')
-        }
 
     });
 
@@ -622,6 +638,8 @@
                             toastr.info(results +'','Successfully Removed')
 
                     }   
+
+
                 }); 
     
         $(this).closest('tr').remove();
@@ -629,7 +647,15 @@
     });
 
      $(document).on('click', '#btn-remove-item', function() {
-        var $i = 0;
+        
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+   
+        $('#ibox2').children('.ibox-content').toggleClass('sk-loading');
+
+        var $checkboxes = $('#dTable-price-item-table td input[type="checkbox"]');
+
+        var $i = $checkboxes.filter(':checked').length;
+
         $( "#dTable-price-item-table tbody > tr" ).each( function() {
 
             var $row = $( this );  
@@ -650,15 +676,24 @@
                              $row.closest('tr').remove();
                              $('#ChkAllRemove').prop('checked', false);
                              
-                        }   
+                        },   
+                         complete: function(){
+
+
+                                $i--;
+     
+                                if ( $i ==  1){
+                                    $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+                                    $('#ibox2').children('.ibox-content').toggleClass('sk-loading');
+                                        toastr.info('Selected item removed!','Success!')
+                                }
+                                        
+                            }
                     });
-                $i++;
             }
 
          });  
-         if($i > 0)  {
-            toastr.info('Selected item removed!','Success!')
-         }
+
      });
 
      $('#dTable-price-item-table').on('click','#chk_active',function(e){
