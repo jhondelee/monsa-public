@@ -129,7 +129,7 @@ class CustomerController extends Controller
                     $activeDisc = 0;
                 }
 
-
+                
                 $customerPrices = CustomerPrice::findOrfail($request->id);
 
                 $customerPrices->customer_id            = $request->cxid;
@@ -149,13 +149,13 @@ class CustomerController extends Controller
                 $customerPrices->set_srp                = $request->set_srp;
 
                 $customerPrices->save();
+                
 
                 if(isset($request->set_srp)){
                     $results =$request->set_srp;
                 }else{
                     $results =0.00;
                 }
-
         return response()->json($results);
     }
 

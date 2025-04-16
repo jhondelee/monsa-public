@@ -27,8 +27,10 @@
         </div>
 @include('layouts.alert')
 @include('layouts.deletemodal')
-        <div class="wrapper wrapper-content animated fadeInRight">
-
+        <div class="wrapper wrapper-content animated fadeInRight" >
+ 
+                
+                                 
             <div class="row">
 
                 <div class="col-lg-12">
@@ -46,10 +48,23 @@
                         </div>
 
                         <div class="ibox-content">
+                       
 
-                            <div class="form-horizontal m-t-md">
+                        
+                            <div class="form-horizontal m-t-md"  id="ibox1">
 
-  
+                            <div class="ibox-content">
+
+                                <div class="sk-spinner sk-spinner-wave">
+                                        <label>Loading...</label>
+                                        <div class="sk-rect1"></div>
+                                        <div class="sk-rect2"></div>
+                                        <div class="sk-rect3"></div>
+                                        <div class="sk-rect4"></div>
+                                        <div class="sk-rect5"></div>
+                                    </div>
+
+                              
                             {!! Form::model($customers, ['route' => ['customer.update', $customers->id],'id'=>'customer_form']) !!}
 
                                         
@@ -140,12 +155,7 @@
                                 </div>
 
                             </div>
-
-                             
-                            <div class="form-group">
-
-                            </div>
-
+                         
                             <div class="hr-line-dashed"></div>
 
                             <div class="form-group">
@@ -159,17 +169,17 @@
                                     <a class='btn btn-danger btn-sm btn-remove-item' id="btn-remove-item"><i class='fa fa-check'></i> Remove</a>
                                 </div>
                             </div>
-                                                        
-                            <div class="table-responsive"  id="ibox1">
-                                <div class="ibox-content">  
-                                            <div class="sk-spinner sk-spinner-wave">
-                                                <div class="sk-rect1"></div>
-                                                <div class="sk-rect2"></div>
-                                                <div class="sk-rect3"></div>
-                                                <div class="sk-rect4"></div>
-                                                <div class="sk-rect5"></div>
-                                            </div>  
-                                         
+                            </div>                     
+                            <div class="table-responsive" id="ibox2">
+                                <div class="ibox-content">
+                                    <div class="sk-spinner sk-spinner-wave">
+                                        <label>Loading...</label>
+                                        <div class="sk-rect1"></div>
+                                        <div class="sk-rect2"></div>
+                                        <div class="sk-rect3"></div>
+                                        <div class="sk-rect4"></div>
+                                        <div class="sk-rect5"></div>
+                                    </div> 
                                 <table class="table table-bordered " id="dTable-price-item-table">                  
                                  
                           
@@ -200,8 +210,8 @@
                                    
                                  
                                 </table>
-                          
-                                 </div>
+                                </div>
+  
                                 <hr>
                             </div>
                             <div class="form-group">
@@ -217,7 +227,7 @@
                             {!! Form::close() !!}
 
                             </div>
-                                                                     
+                                                                
                         </div>
 
                     </div>
@@ -225,7 +235,7 @@
                 </div>
 
             </div>
-
+          
         </div>
 
 
@@ -279,14 +289,17 @@
 
         $('#ChkAllSetSRP').click(function() {
 
-            if ($(this).prop('checked')) {
+        var _rowCtr = $('#dTable-price-item-table').find('tr').length;
 
-                $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+        $('#ibox2').children('.ibox-content').toggleClass('sk-loading');
+
+            if ($(this).prop('checked')) {
 
                  $('.chk_active').prop('checked', true);
 
                    $( "#dTable-price-item-table tbody > tr" ).each( function() {
-                            
+                        
                         var $row = $( this );  
 
                         if ($row.find('.chk_active').is(':checked')) {
@@ -296,6 +309,8 @@
                             var _srpD = $row.closest('tr').find('#amountD').val();
 
                             var _perD = $row.closest('tr').find('#perD').val();
+
+
                         
                             var _results = 0;
 
@@ -345,11 +360,12 @@
                                 
                             }
 
-                            var _id = $row.closest( 'tr').find( '#id' ).val();
-                            var _csx_id = $('#customer_id').val();
-                            var _item_id = $row.closest( 'tr' ).find( '#item_id' ).val();
-                            var _item_cost = $row.closest( 'tr' ).find( '#item_cost' ).val();
-                            var _chk_active = $row.closest('tr').find('#chk_active').val();
+                          var  _id = $row.closest( 'tr').find( '#id' ).val();
+                          var  _csx_id = $('#customer_id').val();
+                          var  _item_id = $row.closest( 'tr' ).find( '#item_id' ).val();
+                          var  _item_cost = $row.closest( 'tr' ).find( '#item_cost' ).val();
+                          var  _chk_active = $row.closest('tr').find('#chk_active').val();
+                       
                             
                                 if (isNaN( _srpD )){
                                     _srpD = 0.00;
@@ -358,7 +374,7 @@
                                     _perD = 0.00;
                                 }
 
-             
+                        
                             $.ajax({
 
                                 url:  '{{ url("customer/doUpdate") }}',
@@ -371,26 +387,43 @@
 
                                     //toastr.success(results +' - Set SRP saved!','Activate!')
 
-                                }   
+                                }, 
+
+                                complete: function(){
+
+                                    _rowCtr--;
+ 
+                                    if ( _rowCtr ==  1){
+                                            $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+                                            $('#ibox2').children('.ibox-content').toggleClass('sk-loading');
+                                            toastr.success('All Set SRP has been activated!','Activate!')
+                                    }
+                                    
+                                },
+                               
+                                
 
 
                             }); 
-                                                 
+     
                         }
 
 
                    });               
 
-                        $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
-                        toastr.success('All Set SRP has been activated!','Activate!')
+                        
+                     
 
                         
             } else {
 
                 $('.chk_active').prop('checked', false);
 
+                var _rowCtr = $('#dTable-price-item-table').find('tr').length;
+
                 $( "#dTable-price-item-table tbody > tr" ).each( function() {
                     var $row = $( this ); 
+
                     $row.closest('tr').find('#setSRP').val( '0.00');
 
                     var _id = $row.closest( 'tr').find( '#id' ).val();
@@ -405,12 +438,25 @@
 
                            // toastr.info('Selected item deactivate','Deactivate!')
 
-                        }   
+                        },   
+
+
+                        complete: function(){
+
+                            _rowCtr--;
+ 
+                            if ( _rowCtr ==  1){
+                                    $('#ibox1').children('.ibox-content').toggleClass('sk-loading');
+                                    $('#ibox2').children('.ibox-content').toggleClass('sk-loading');
+                                    toastr.warning('All Set SRP has been deactivated!','Deactivate!')
+                            }
+                                    
+                        },
+                               
                     }); 
                 
                 });
-
-                   toastr.warning('All Set SRP has been deactivated!','Deactivate!')
+            
                     
             }
                             
