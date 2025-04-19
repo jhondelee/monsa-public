@@ -197,7 +197,7 @@
                 var _cs = $('#customer_id').val();
             //
                 $.ajax({
-                url:  '{{ url('sales/getcustomeritems') }}',
+                url:  '{{ url("sales/getcustomeritems") }}',
                 type: 'POST',
                 dataType: 'json',
                 data: { _token: "{{ csrf_token() }}",

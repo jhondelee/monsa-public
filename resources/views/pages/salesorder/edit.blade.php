@@ -219,7 +219,7 @@
                 var _cs = $('#customer_id').val();
             //
                 $.ajax({
-                url:  '{{ url('sales/getcustomeritems') }}',
+                url:  '{{ url("sales/getcustomeritems") }}',
                 type: 'POST',
                 dataType: 'json',
                 data: { _token: "{{ csrf_token() }}",
@@ -302,7 +302,7 @@
             var _id = $('#salesorder_id').val();
 
                 $.ajax({
-                url:  '{{ url('sales/getforsoitems') }}',
+                url:  '{{ url("sales/getforsoitems") }}',
                 type: 'POST',
                 dataType: 'json',
                 data: { _token: "{{ csrf_token() }}",
