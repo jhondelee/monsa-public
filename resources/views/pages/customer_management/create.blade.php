@@ -383,6 +383,7 @@
      $('.item_name').on('change', function (e) {
         var itemSelected = this.value;
         $('#ChkAll').prop('checked', false);
+        
 
         toastr.success(itemSelected,'Selected!')
         //

@@ -211,53 +211,7 @@ class CustomerController extends Controller
         $customers->save();
 
         $id= $customers->id;
-        /*
-        $getItemIds = $request->get('item_id');
-        $getItemSrp = $request->get('item_srp');
-        $getItemCost = $request->get('item_cost');
-        $getAmountDisc = $request->get('amountD');
-        $getPercentDisc = $request->get('perD');
-        $activated = $request->get('disc_active');
-        $getSetSRP = $request->get('setSRP');
-
-
-        if (isset($getItemIds)){
-
-            $i = 0;
-            foreach ($getItemIds as $key => $getItemId) {
-
-                if (isset($activated[$i])){
-                    $activeDisc = 1;
-                }else{
-                    $activeDisc = 0;
-                }
-                
-                $customerPrices = New CustomerPrice;
-
-                $customerPrices->customer_id            = $customers->id;
-
-                $customerPrices->item_id                = $getItemId;
-
-                $customerPrices->unit_cost              = $getItemCost[$i];
-
-                $customerPrices->srp                    = $getItemSrp[$i];
-
-                $customerPrices->srp_discounted         = $getAmountDisc[$i];
-
-                $customerPrices->percentage_discount    = $getPercentDisc[$i];              
-
-                $customerPrices->activated_discount     = $activeDisc;
-
-                $customerPrices->set_srp                = $getSetSRP[$i];
-
-                $customerPrices->save();
-
-                $i++;
-
-            }
-        }*/
-
-        //return redirect()->route('customer.index')
+      
         return redirect()->to('customer/edit/'.$id)
 
             ->with('success','Customer has been saved successfully.');

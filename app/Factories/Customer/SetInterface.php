@@ -10,4 +10,6 @@ interface SetInterface {
 
      public function getItemFromCustomer($customerID,$itemID);
 
+     public function getAreasItemSrp($areaID);
+
 }

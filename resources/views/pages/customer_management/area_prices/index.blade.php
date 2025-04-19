@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('pageTitle','Customer')
+@section('pageTitle','Area Prices')
 
 @section('content')
 
@@ -16,7 +16,7 @@
                             <a href="{{route('main')}}">Home</a>
                         </li>
                         <li class="active">
-                            <strong>Customer</strong>
+                            <strong>Area Item Prices</strong>
                         </li>
                        
                     </ol>
@@ -33,14 +33,14 @@
                     <div class="col-lg-12">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>Customer List</h5>
+                                <h5>Area Item Prices List</h5>
           
-                                 @if (!can('customer.create'))
-                                <div class="ibox-tools"> 
-                                    <a href="{{route('customer.create')}}" class="btn btn-primary btn-sm add-modal">
-                                        <i class="fa fa-plus">&nbsp;</i>Customer
+                                 @if (!can('area_prices.create'))
+                                <!--<div class="ibox-tools"> 
+                                    <a href="{{route('area_prices.create')}}" class="btn btn-primary btn-sm add-modal">
+                                        <i class="fa fa-plus">&nbsp;</i>Area Items
                                     </a> 
-                                </div>
+                                </div>-->
                                 @endif  
 
                             </div>
@@ -56,35 +56,29 @@
                                             
                                             <th>Id</th>
                                             <th>Name</th>
-                                            <th>Address</th>
-                                            <th>Area</th>
-                                            <th>Created_by</th>
                                             <th class="text-center">Action</th>
                                            
                                         </tr>
                                         </thead>
                                         <tbody>
 
-                                            @foreach($customers as $customer)
+                                            @foreach($areas as $area)
 
                                                 <tr>
 
                                                     
-                                                    <td>{{$customer->id}}</td>
-                                                    <td>{{$customer->customer_name}}</td>
-                                                    <td>{{$customer->address}}</td>
-                                                    <td>{{$customer->customer_area}}</td>
-                                                    <td>{{$customer->created_by}}</td>
+                                                    <td>{{$area->id}}</td>
+                                                    <td >{{$area->name}}</td>
                                                     <td class="text-center">
-                                                         @if (!can('customer.edit'))
+                                                         @if (!can('area_prices.edit'))
                                                         <div class="btn-group">
-                                                            <a href="{{route('customer.edit',$customer->id)}}" class="btn-primary btn btn-xs"><i class="fa fa-pencil"></i></a>
+                                                            <a href="{{route('area_prices.edit',$area->id)}}" class="btn-danger btn btn-xs"><i class="fa fa-plus"></i></a>
                                                         </div>
                                                         @endif
-                                                        @if (!can('customer.delete'))
-                                                        <div class="btn-group">
-                                                          <a class="btn-primary btn btn-xs delete" onclick="confirmDelete('{{$customer->id}}'); return false;"><i class="fa fa-trash"></i></a>
-                                                        </div>
+                                                        @if (!can('area_prices.delete'))
+                                                        <!--<div class="btn-group">
+                                                          <a class="btn-primary btn btn-xs delete" onclick="confirmDelete('{{$area->id}}'); return false;"><i class="fa fa-trash"></i></a>
+                                                        </div>-->
                                                         @endif
                                                     </td>
 
@@ -151,18 +145,10 @@
          $('#confirmDelete').modal({ backdrop: 'static', keyboard: false })
             .on('click', '#delete-btn', function(){
                 $(this).attr("disabled","disabled");
-                document.location.href="/customer/delete/"+data;
+                document.location.href="/area-prices/delete/"+data;
             });
         }
 
-
-  
-        
-        
-        
-  
-      
-           
     
     
 </script>

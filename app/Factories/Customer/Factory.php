@@ -58,4 +58,28 @@ class Factory implements SetInterface
         return collect($results);
     }
 
+
+    public function getAreasItemSrp($areaID)
+    {
+
+     $results = DB::select("
+                SELECT c.id,
+                        c.item_id,
+                         i.name AS item_name,
+                         i.description AS item_descript,
+                         u.code AS item_units,
+                         ifnull(c.unit_cost,0) AS item_cost,
+                         ifnull(i.srp,0) AS item_srp,
+                         ifnull(c.srp_added,0) AS amountD,
+                         ifnull(c.percentage_added,0) AS perD,
+                         c.activated_added AS disc_active,
+                         ifnull(c.set_srp,0) AS setSRP
+                FROM area_prices c
+                INNER JOIN items i ON c.item_id = i.id
+                INNER JOIN unit_of_measure u ON i.unit_id = u.id
+                WHERE c.area_id = ?;",[$areaID]);
+
+        return collect($results);
+    }
+
 }
