@@ -129,6 +129,11 @@ class CustomerController extends Controller
                     $activeDisc = 0;
                 }
 
+                    $customers = Customer::findorfail($request->cxid);
+
+                    $customers->created_by                  = auth()->user()->id;
+              
+                    $customers->save();
                 
                 $customerPrices = CustomerPrice::findOrfail($request->id);
 
@@ -156,6 +161,7 @@ class CustomerController extends Controller
                 }else{
                     $results =0.00;
                 }
+
         return response()->json($results);
     }
 
@@ -206,7 +212,7 @@ class CustomerController extends Controller
 
         $customers->activated_area_percentage   = $request->activated_area_percentage;
 
-        $customers->created_by                 = auth()->user()->id;
+        $customers->created_by                  = auth()->user()->id;
           
         $customers->save();
 
@@ -267,7 +273,7 @@ class CustomerController extends Controller
 
         $customers->activated_area_percentage   = $request->activated_area_percentage;
 
-        $customers->created_by                 = auth()->user()->id;
+        $customers->created_by                  = auth()->user()->id;
           
         $customers->save();
 
