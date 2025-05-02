@@ -94,8 +94,8 @@
                     <th>#Stock/Unit</th>
                     <th class="text-center">Order Qty</th>
                     <th class="text-center">SRP</th>
-                    <th class="text-center">₱ Discount</th>
-                    <th class="text-center">% Discount</th>
+                    <th class="text-center">₱ Disc./Added</th>
+                    <th class="text-center">% Disc./Added</th>
                     <th class="text-center">Set Price</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">Remove </th>    

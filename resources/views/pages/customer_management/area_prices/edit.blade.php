@@ -248,7 +248,7 @@
                            
                             var _results = 0;
 
-                            if ( _perD == 0  && _srpD == 0 ){
+                             if ( !_perD == false && !_srpD == false ){
                             
                                 $row.closest('tr').find('#setSRP').val('0.00');
 
@@ -256,25 +256,29 @@
                               
                             }
 
-                            if ( _srpD != 0 && _perD == 0 ){
-                                  
-                                var _amoundD=0.00;  
+
+                            if ( !_srpD == false && !_perD == true){
+
+                               var _amoundD=0.00;
+     
+                      
 
                                     if (isNaN( _srpD )){
                                         _srpD = 0.00;
                                     }else{
                                         _amoundD = ( _srp + _srpD );
                                     }
-                                                                                                            
+                
+                                $row.closest('tr').find('#setSRP').val( Math.round(_amoundD.toFixed(2)));
+    
 
-                                  $row.closest('tr').find('#setSRP').val( _amoundD.toFixed(2) );
-
-                                  _results = _amoundD.toFixed(2) ;
-
-                                         
+                                 _results = Math.round(_amoundD.toFixed(2));
+                                
                             }
 
-                            if ( _perD != 0 && _srpD == 0 ){
+                            
+                             if ( !_perD == false && !_srpD == true ){
+
                         
                                 var _perAmount = 0.00;
                                 var _SetSRP = 0.00;
@@ -289,9 +293,9 @@
 
                                     }
                                       
-                                $row.closest('tr').find('#setSRP').val( _SetSRP.toFixed(2) );
+                                $row.closest('tr').find('#setSRP').val( Math.round(_SetSRP.toFixed(2)));
 
-                                 _results = _SetSRP.toFixed(2);
+                                 _results = Math.round(_SetSRP.toFixed(2));
                                 
                             }
 
@@ -668,9 +672,9 @@
                         }
 
 
-                    $(this).closest( 'tr').find( '#setSRP' ).val( _amoundD.toFixed(2));
+                    $(this).closest( 'tr').find( '#setSRP' ).val( Math.round(_amoundD.toFixed(2)));
 
-                    _results = _amoundD.toFixed(2);
+                    _results = Math.round(_amoundD.toFixed(2));
                     
                 }
 
@@ -689,9 +693,9 @@
 
                         }
 
-                    $(this).closest( 'tr').find( '#setSRP' ).val( _SetSRP.toFixed(2))   ;
+                    $(this).closest( 'tr').find( '#setSRP' ).val( Math.round(_SetSRP.toFixed(2)))   ;
 
-                    _results = _SetSRP.toFixed(2);
+                    _results = Math.round(_SetSRP.toFixed(2));
                 }
 
                 var _id = $(this).closest( 'tr').find( '#id' ).val();
