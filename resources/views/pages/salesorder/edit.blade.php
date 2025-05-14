@@ -133,7 +133,7 @@
 
                 $(function() {
                     $.ajax({
-                        url:  '{{ url('sales/additem') }}',
+                        url:  '{{ url("sales/additem") }}',
                         type: 'POST',
                         dataType: 'json',
                         data: { _token: "{{ csrf_token() }}",
@@ -188,7 +188,6 @@
         });
 
           
-//
 
  
         $('.chosen-select').chosen({width: "100%"});

@@ -71,7 +71,7 @@ class Factory implements SetInterface
     public function addInventoryItem(){
           $results = DB::SELECT ( '
                    SELECT i.id, 
-                    concat(i.id," - ",i.description," - ",u.code) as item_name 
+                    concat(i.description," - ",u.code) as item_name 
                     FROM items i
                     LEFT JOIN unit_of_measure u
                     ON i.unit_id = u.id

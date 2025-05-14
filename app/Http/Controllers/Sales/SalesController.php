@@ -54,7 +54,7 @@ class SalesController extends Controller
 
     public function create()
     {
-        
+   
         $items = $this->items->getindex();
 
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
@@ -184,17 +184,67 @@ class SalesController extends Controller
 
     public function getcustomeritems(Request $request)
     {
-       $invenId = Inventory::findOrfail($request->id);     
+       $invenId = Inventory::findOrfail($request->id); 
+       $areas = Customer::where('id',$request->cs)->select('area_id')->first();    
 
        $csPrice = $this->salesorders->getCSitems($request->cs)->where('item_id',$invenId->item_id)->first(); 
+       $addPrice = $this->salesorders->getaddeditemprice($invenId->item_id, $areas->area_id)->first();
+       $newSRP = 0;
+       $noaddedPrice = 0;
 
        if ( !$csPrice  )  {
 
         $csPrice = $this->salesorders->getSetItems($invenId->item_id)->first();
 
-       }    
+            if ( !$addPrice ) {
+                
+                $newSRP = $csPrice->set_srp;
 
-        return response()->json(['invenId' => $invenId, 'csPrice' => $csPrice]);       
+            } else {
+
+                $newSRP = $addPrice->set_srp;
+                $noaddedPrice = 1;
+            }
+           
+
+       } else {
+
+            if ( !$addPrice )  {
+
+                $newSRP = $csPrice->set_srp;
+
+            } else {
+                $noaddedPrice = 1;
+                $unitCost = $csPrice->unit_cost;
+
+                if ($addPrice->dis_amount > 0 ) {
+
+                    $newSRP =  $unitCost + $addPrice->dis_amount;
+
+                }
+
+                if ($addPrice->dis_percent > 0 ) {
+
+                    $addcost = ($addPrice->dis_percent / 100) * $unitCost;
+
+                    $newSRP =  $unitCost + $addcost;
+
+                }
+
+
+            }
+
+       }
+
+
+     
+
+
+
+        
+
+        return response()->json(['invenId' => $invenId, 'csPrice' => $csPrice, 'newSRP' => $newSRP, 
+                                'noaddedPrice' => $noaddedPrice]);       
         
     }
 
@@ -747,9 +797,7 @@ class SalesController extends Controller
     public function printDraft_test($id)
     {
 
-        $salesorders = SalesOrder::find($id);     
-
-        
+        $salesorders = SalesOrder::find($id);         
 
         $pdf = new Fpdf('P');
 
@@ -773,7 +821,7 @@ class SalesController extends Controller
             //$pdf::Text($mid_x - ($pdf::GetStringWidth('TITLE') / 2), 10, 'Sales Order');
 
             $pdf::AddPage(['L', 'A4']);
-            $pdf::SetFontSize(10);
+            $pdf::SetFontSize(9);
         
             $pdf::SetXY($pdf::getX(), $pdf::getY());
             $pdf::cell(10,1,"Sales Order",0,"","L");
@@ -788,7 +836,7 @@ class SalesController extends Controller
 
         foreach ($salesorder_items as $key => $g) {
   
-        $chunks = explode("\n", wordwrap(strip_tags($g->description), $wrapCharacters));
+        $chunks = explode("\n", wordwrap(strip_tags($g->draftname), $wrapCharacters));
         $actionCollect = 1;
         $collectedDescription = "";
 
@@ -855,7 +903,7 @@ class SalesController extends Controller
        
     }
 
-
+    /*
     public function getCreatePDF($flascard_id) {
     $flashcard = Flashcard::where('user_id', auth()->id())->findOrFail($flascard_id);
 
@@ -942,6 +990,6 @@ class SalesController extends Controller
 
         $pdf->Ln(1);
     }
-}
+    }*/
 
 }   

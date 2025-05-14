@@ -76,7 +76,8 @@ class Factory implements SetInterface
                     i.srp,
                     ifnull(c.srp_discounted,0) as dis_amount,
                     ifnull(c.percentage_discount,0) as dis_percent,
-                    c.set_srp
+                    c.set_srp,
+                    i.unit_cost
             FROM customer_prices c
             INNER JOIN items i ON c.item_id = i.id
             INNER JOIN unit_of_measure u ON u.id = i.unit_id
@@ -102,7 +103,6 @@ class Factory implements SetInterface
             WHERE i.id = ?;",[$id]);
 
         return collect($results);
-
     }
 
    public function getForSOitems($id)
@@ -120,7 +120,7 @@ class Factory implements SetInterface
                     s.discount_amount,
                     s.discount_percentage,
                     s.sub_amount,
-                    CONCAT(e.description,' - ',s.order_quantity,u.code) as draftname
+                    CONCAT(e.description,' - ',cast(s.order_quantity  AS INT),' ',u.code) as draftname
                FROM inventory i
                INNER JOIN items e
                ON e.id = i.item_id
@@ -134,7 +134,7 @@ class Factory implements SetInterface
 
     }
 
-        public function employee_agent()
+    public function employee_agent()
     {
        $results = DB::select("
         SELECT e.id, CONCAT(e.firstname ,' ',e.lastname ) AS emp_name FROM agent_team a
@@ -142,4 +142,13 @@ class Factory implements SetInterface
         GROUP BY e.id, CONCAT(e.firstname ,' ',e.lastname )");
         return collect($results);
     } 
+
+    public function getaddeditemprice($itemID,$areaID)
+    {
+       $results = DB::select("
+        SELECT srp_added as dis_amount, percentage_added as dis_percent,set_srp FROM area_prices
+        WHERE item_id = ? AND area_id = ? AND activated_added = 1",[$itemID,$areaID]);
+        return collect($results);
+    } 
 }
+    

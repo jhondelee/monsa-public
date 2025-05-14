@@ -94,8 +94,8 @@
                     <th>#Stock/Unit</th>
                     <th class="text-center">Order Qty</th>
                     <th class="text-center">SRP</th>
-                    <th class="text-center">₱ Disc./Added</th>
-                    <th class="text-center">% Disc./Added</th>
+                    <th class="text-center">₱ Disc.</th>
+                    <th class="text-center">% Disc.</th>
                     <th class="text-center">Set Price</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">Remove </th>    
@@ -116,6 +116,19 @@
                                 <div class="col-md-8 form-horizontal"></div>
                                 
                                 <div class="col-md-4 form-horizontal">
+                                    <!--<div class="form-group">
+                                        <label class="col-md-6 control-label">₱ Added</label>
+                                        <div class="col-md-6">
+                                            {!! Form::text('total_amount_added',null, array('placeholder' => '0.00','class' => 'form-control text-right total_amount_added','id'=>'total_amount_added', 'readonly' => 'true')) !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-6 control-label">% Added</label>
+                                        <div class="col-md-6">
+                                            {!! Form::text('total_percent_added',null, array('placeholder' => '0.00','class' => 'form-control text-right total_percent_added','id'=>'total_percent_added', 'readonly' => 'true')) !!}
+                                        </div>
+                                    </div>-->
                                     <div class="form-group">
                                         <label class="col-md-6 control-label">₱ Discount</label>
                                         <div class="col-md-6">

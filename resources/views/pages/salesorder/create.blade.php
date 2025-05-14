@@ -106,7 +106,7 @@
 
                 $(function() {
                     $.ajax({
-                        url:  '{{ url('sales/additem') }}',
+                        url:  '{{ url("sales/additem") }}',
                         type: 'POST',
                         dataType: 'json',
                         data: { _token: "{{ csrf_token() }}",
@@ -114,7 +114,6 @@
                         success:function(results){
 
        
-//
                             $('#dTable-ItemList-table').DataTable({
                                 destroy: true,
                                 pageLength: 100,
@@ -166,8 +165,6 @@
         });
 
           
-//
-
  
         $('.chosen-select').chosen({width: "100%"});
 
@@ -176,9 +173,12 @@
             var _setQty =  parseFloat($(this).closest( 'tr' ).find( '#setQty' ).val());
             var _unitQty =  parseFloat($(this).closest( 'tr' ).find( '#unitQty' ).val());
             var _itemID =  parseFloat($(this).closest( 'tr' ).find( '#item_id' ).val());
+            var _setSRP = 0.00;
             var _total_amount = 0.00;
             var _total_dis_amount = 0.00;
             var _total_dis_percent = 0.00;
+            var _total_add_amount = 0.00;
+            var _total_add_percent = 0.00;
 
             if ( isNaN( _setQty) || !_setQty ){
 
@@ -204,11 +204,40 @@
                 id: _id, cs: _cs}, 
                 success:function(results){
 
-                            var _Gamount = _setQty * parseFloat( results.csPrice.set_srp );
-                //
+                             if(results.noaddedPrice > 0){
+
+                                 _newSRP = parseFloat(results.newSRP);
+
+                                if (!results.csPrice.dis_amount == false && !results.csPrice.dis_percent == false){
+      
+                                    _setSRP = _newSRP;
+                              
+                                }
+
+                                if (!results.csPrice.dis_amount == false  && results.csPrice.dis_percent > 0){
+
+                                    var _per = ( parseFloat(results.csPrice.dis_percent) / 100 ) * _newSRP ;
+                                    _setSRP = _newSRP - _per;
+
+                                }
+
+                                if (results.csPrice.dis_amount > 0 && !results.csPrice.dis_percent == false ){
+
+                                    _setSRP = _newSRP + parseFloat(results.csPrice.dis_amount);
+                                }
+                                
+                            } else {
+                                
+                                 _newSRP = parseFloat( results.csPrice.srp );
+                                 _setSRP =  parseFloat( results.csPrice.set_srp );
+
+                            }
+             
+                            var _Gamount = _setQty * _setSRP ;
+
                           $('#dTable-selected-item-table tbody').append("<tr><td><input type='text' name='invenId[]' class='form-control input-sm text-center invenId' size='3'  value="+ results.invenId.id +" readonly></td>\
                             <td>"+ results.csPrice.description +"</td>\
-                            <td>"+'('+ results.invenId.unit_quantity +') '+results.csPrice.units+"</td><td><input type='text' name='setQty[]' class='form-control input-sm text-center setQty' size='3'  value="+ _setQty.toFixed(2) +" readonly></td><td><input type='text' name='setPrice[]' class='form-control input-sm text-center setPrice' size='6'  id='setPrice' value="+results.csPrice.srp +" readonly></td><td><input type='text' name='dis_amount[]' class='form-control input-sm text-center dis_amount' size='6'  id='dis_amount' value="+results.csPrice.dis_amount+" readonly></td><td><input type='text' name='dis_percent[]' class='form-control input-sm text-center dis_percent' size='3'  id='dis_percent' value="+results.csPrice.dis_percent+" readonly></td><td><input type='text' name='setSRP[]' class='form-control input-sm text-center setSRP' size='6'  id='setSRP' value="+results.csPrice.set_srp+" readonly></td><td><b><input type='text' name='gAmount[]' class='form-control input-sm text-right gAmount' size='6'  id='gAmount' value="+_Gamount.toFixed(2)+" readonly></b></td>\
+                            <td>"+'('+ results.invenId.unit_quantity +') '+results.csPrice.units+"</td><td><input type='text' name='setQty[]' class='form-control input-sm text-center setQty' size='3'  value="+ _setQty.toFixed(2) +" readonly></td><td><input type='text' name='setPrice[]' class='form-control input-sm text-center setPrice' size='6'  id='setPrice' value="+_newSRP+" readonly></td><td><input type='text' name='dis_amount[]' class='form-control input-sm text-center dis_amount' size='6'  id='dis_amount' value="+results.csPrice.dis_amount+" readonly></td><td><input type='text' name='dis_percent[]' class='form-control input-sm text-center dis_percent' size='3'  id='dis_percent' value="+results.csPrice.dis_percent+" readonly></td><td><input type='text' name='setSRP[]' class='form-control input-sm text-center setSRP' size='8'  id='setSRP' value="+_setSRP.toFixed(2) +" readonly></td><td><b><input type='text' name='gAmount[]' class='form-control input-sm text-right gAmount' size='6'  id='gAmount' value="+_Gamount.toFixed(2)+" readonly></b></td>\
                             <td class='text-center'><a class='btn btn-xs btn-danger' id='delete_line'><i class='fa fa-minus'></i></td>\
                               </tr>");
 
@@ -220,12 +249,20 @@
                                 var _subtotal = $row.find( ".gAmount" ).val();
                                 var _dis_amount = $row.find( ".dis_amount" ).val();
                                 var _dis_percent = $row.find( ".dis_percent" ).val();
+                               // var _add_amount = $row.find( ".add_amount" ).val();
+                                //var _add_percent = $row.find( ".add_percent" ).val();
+                                 
             
                         _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
                         
-                         _total_dis_amount += parseFloat( ('0' + _dis_amount).replace(/[^0-9-\.]/g, ''), 10 );
+                        _total_dis_amount += parseFloat( ('0' + _dis_amount).replace(/[^0-9-\.]/g, ''), 10 );
                            
                         _total_dis_percent += parseFloat( ('0' + _dis_percent).replace(/[^0-9-\.]/g, ''), 10 );
+
+                        //_total_add_amount += parseFloat( ('0' + _add_amount).replace(/[^0-9-\.]/g, ''), 10 );
+
+                       // _total_add_percent += parseFloat( ('0' + _add_percent).replace(/[^0-9-\.]/g, ''), 10 );
+
 
                         });
 
@@ -237,6 +274,12 @@
 
                          _total_dis_percent = _total_dis_percent.toFixed(2);
                         $('#total_percent_discount').val(  _total_dis_percent  );
+
+                        // total_amount_added = _total_add_amount.toFixed(2);
+                        //$('#total_amount_added').val(  _total_add_amount  );
+
+                        // _total_add_percent = _total_add_percent.toFixed(2);
+                       // $('#total_percent_added').val(  _total_add_percent  );
                     }
                 });
             }   

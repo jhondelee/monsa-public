@@ -17,6 +17,8 @@ interface SetInterface {
      public function getForSOitems($id);
 
      public function employee_agent();
+
+     public function getaddeditemprice($itemID,$areaID);
      
 
 }
