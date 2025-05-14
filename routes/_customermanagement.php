@@ -19,7 +19,9 @@ Route::group(['prefix' => 'customer'], function() {
 
     Route::post('doUpdate', 'CustomerController@doUpdate')->name("customer.update"); 
 
-    Route::post('doDelete', 'CustomerController@doDelete')->name("customer.delete"); 
+    Route::post('doDelete', 'CustomerController@doDelete')->name("customer.dodelete"); 
+
+    Route::get('delete/{id}', 'CustomerController@destroy')->name("customer.delete"); 
 
     Route::post('area', 'CustomerController@getAdditionalAreaValue')->name("customer.area");
     

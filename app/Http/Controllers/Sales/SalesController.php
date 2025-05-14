@@ -59,6 +59,8 @@ class SalesController extends Controller
 
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
+        $employee_agent = $this->salesorders->employee_agent()->pluck('emp_name','id');
+
         $employee = $this->user->getemplist()->pluck('emp_name','id');
 
         $customer_id = Customer::pluck('name','id');
@@ -69,7 +71,7 @@ class SalesController extends Controller
 
   
 
-          return view('pages.salesorder.create',compact('employee','creator','customer_id','items','salesorder_status','location'));
+          return view('pages.salesorder.create',compact('employee','employee_agent','creator','customer_id','items','salesorder_status','location'));
     }
 
 
@@ -214,6 +216,8 @@ class SalesController extends Controller
 
         $creator = $this->user->getCreatedbyAttribute(auth()->user()->id);
 
+        $employee_agent = $this->salesorders->employee_agent()->pluck('emp_name','id');
+
         $employee = $this->user->getemplist()->pluck('emp_name','id');
 
         $customer_id = Customer::pluck('name','id');
@@ -226,7 +230,7 @@ class SalesController extends Controller
 
         $deductStatus = $salesorder->inventory_deducted;
 
-        return view('pages.salesorder.edit',compact('salesorder','creator','employee','customer_id','items','salesorder_status','location','deductStatus'));
+        return view('pages.salesorder.edit',compact('salesorder','employee_agent','creator','employee','customer_id','items','salesorder_status','location','deductStatus'));
 
     }
 

@@ -15,6 +15,8 @@ interface SetInterface {
      public function getSetItems($id);
 
      public function getForSOitems($id);
+
+     public function employee_agent();
      
 
 }

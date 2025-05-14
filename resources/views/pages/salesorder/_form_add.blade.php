@@ -25,7 +25,7 @@
 
         <label class="col-sm-2 control-label">Main Agent <span class="text-danger">*</span></label>
         <div class="col-sm-3">
-            {!! Form::select ('employee_id',$employee, null,['placeholder' => 'Select Main Agent...','class'=>'chosen-select','required'=>true])!!}
+            {!! Form::select ('employee_id',$employee_agent, null,['placeholder' => 'Select Main Agent...','class'=>'chosen-select','required'=>true])!!}
         </div>
 
 

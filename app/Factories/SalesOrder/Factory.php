@@ -133,4 +133,13 @@ class Factory implements SetInterface
         return collect($results);
 
     }
+
+        public function employee_agent()
+    {
+       $results = DB::select("
+        SELECT e.id, CONCAT(e.firstname ,' ',e.lastname ) AS emp_name FROM agent_team a
+        LEFT JOIN employees e ON a.employee_id = e.id
+        GROUP BY e.id, CONCAT(e.firstname ,' ',e.lastname )");
+        return collect($results);
+    } 
 }

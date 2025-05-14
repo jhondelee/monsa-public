@@ -120,6 +120,7 @@ class CustomerController extends Controller
         return response()->json($results);
     }
 
+
     public function doUpdate(Request $request)
     {
 
@@ -394,7 +395,7 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
-
+        
         $customers =   Customer::findorfail($id);
 
         $customers->delete();
