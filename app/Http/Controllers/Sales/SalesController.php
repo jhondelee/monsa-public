@@ -204,44 +204,24 @@ class SalesController extends Controller
 
                 $newSRP = $addPrice->set_srp;
                 $noaddedPrice = 1;
+
             }
+
+       } 
+
+        if ( !$addPrice ) {
+
+                
+                 $newSRP = $csPrice->set_srp;
+            } else {
+
+               $newSRP = $addPrice->set_srp;
+                $noaddedPrice = 1;
+
+        }
            
 
-       } else {
 
-            if ( !$addPrice )  {
-
-                $newSRP = $csPrice->set_srp;
-
-            } else {
-                $noaddedPrice = 1;
-                $unitCost = $csPrice->unit_cost;
-
-                if ($addPrice->dis_amount > 0 ) {
-
-                    $newSRP =  $unitCost + $addPrice->dis_amount;
-
-                }
-
-                if ($addPrice->dis_percent > 0 ) {
-
-                    $addcost = ($addPrice->dis_percent / 100) * $unitCost;
-
-                    $newSRP =  $unitCost + $addcost;
-
-                }
-
-
-            }
-
-       }
-
-
-     
-
-
-
-        
 
         return response()->json(['invenId' => $invenId, 'csPrice' => $csPrice, 'newSRP' => $newSRP, 
                                 'noaddedPrice' => $noaddedPrice]);       

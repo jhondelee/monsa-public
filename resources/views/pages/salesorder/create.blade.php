@@ -203,8 +203,8 @@
                 data: { _token: "{{ csrf_token() }}",
                 id: _id, cs: _cs}, 
                 success:function(results){
-
-                             if(results.noaddedPrice > 0){
+                                
+                            if(results.noaddedPrice > 0){
 
                                  _newSRP = parseFloat(results.newSRP);
 
@@ -249,8 +249,7 @@
                                 var _subtotal = $row.find( ".gAmount" ).val();
                                 var _dis_amount = $row.find( ".dis_amount" ).val();
                                 var _dis_percent = $row.find( ".dis_percent" ).val();
-                               // var _add_amount = $row.find( ".add_amount" ).val();
-                                //var _add_percent = $row.find( ".add_percent" ).val();
+
                                  
             
                         _total_amount += parseFloat( ('0' + _subtotal).replace(/[^0-9-\.]/g, ''), 10 );
@@ -258,10 +257,6 @@
                         _total_dis_amount += parseFloat( ('0' + _dis_amount).replace(/[^0-9-\.]/g, ''), 10 );
                            
                         _total_dis_percent += parseFloat( ('0' + _dis_percent).replace(/[^0-9-\.]/g, ''), 10 );
-
-                        //_total_add_amount += parseFloat( ('0' + _add_amount).replace(/[^0-9-\.]/g, ''), 10 );
-
-                       // _total_add_percent += parseFloat( ('0' + _add_percent).replace(/[^0-9-\.]/g, ''), 10 );
 
 
                         });
@@ -275,11 +270,7 @@
                          _total_dis_percent = _total_dis_percent.toFixed(2);
                         $('#total_percent_discount').val(  _total_dis_percent  );
 
-                        // total_amount_added = _total_add_amount.toFixed(2);
-                        //$('#total_amount_added').val(  _total_add_amount  );
-
-                        // _total_add_percent = _total_add_percent.toFixed(2);
-                       // $('#total_percent_added').val(  _total_add_percent  );
+                 
                     }
                 });
             }   
