@@ -115,6 +115,15 @@ $(document).ready(function(){
                                     {data: 'name', title: 'Name'},    
                                     {data: 'description', title: 'Item Description'},
                                     {data: 'unit_code', title: 'Units'},
+                                    {data: 'free', title: 'Availability',
+                                        render: function(data, type, row){
+                                            if(row.free=='1'){
+                                                return '<label class="label label-danger" >Free</label>  '
+                                            }else{
+                                                return '<label class="label label-warning" ></label>';
+                                            }   
+                                        }
+                                    },
                                     {data: 'activated', title: 'Status',
                                         render: function(data, type, row){
                                             if(row.activated=='1'){
@@ -189,6 +198,15 @@ $(document).ready(function(){
                                             {data: 'name', title: 'Name'},    
                                             {data: 'description', title: 'Item Description'},
                                             {data: 'unit_code', title: 'Units'},
+                                            {data: 'free', title: 'Availability',
+                                                render: function(data, type, row){
+                                                    if(row.free=='1'){
+                                                        return '<label class="label label-success" >Free</label>  '
+                                                    }else{
+                                                        return '<label class="label label-warning" ></label>';
+                                                    }   
+                                                }
+                                            },
                                             {data: 'activated', title: 'Status',
                                                 render: function(data, type, row){
                                                     if(row.activated=='1'){

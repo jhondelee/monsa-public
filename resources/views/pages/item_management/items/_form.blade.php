@@ -118,6 +118,20 @@
     </div>
 </div>
 @endif 
+
+<div class="hr-line-dashed"></div>
+<div class="form-group">
+    <label class="col-sm-2 control-label"></label>
+    <div class="col-sm-6">
+        <div class="checkbox checkbox-info">
+            {!! Form::checkbox('free', '1', null, ['id'=>'free']) !!}
+            <label for="free_item">
+                Free Item
+            </label>
+        </div>
+    </div>
+</div>
+
 <div class="hr-line-dashed"></div>
 
 <div class="form-group">

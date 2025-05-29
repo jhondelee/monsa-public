@@ -96,7 +96,7 @@
 
             $(function() {
             $.ajax({
-                url:  '{{ url('order/orderToSupplier') }}',
+                url:  '{{ url("order/orderToSupplier") }}',
                 type: 'POST',
                 dataType: 'json',
                 data: { _token: "{{ csrf_token() }}",
@@ -104,7 +104,7 @@
                 success:function(results){
 
                     toastr.success(sup_name + ' Supplier','Selected!')
-//
+
                     $('#dTable-ItemList-table').DataTable({
                         destroy: true,
                         pageLength: 100,

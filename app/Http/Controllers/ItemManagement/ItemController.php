@@ -78,6 +78,8 @@ class ItemController extends Controller
 
         $item->unit_cost = $request->unit_cost;
 
+        $item->free = $request->free;
+
         $item->activated = $request->activated;
 
         $item->created_by = $employee;
@@ -146,6 +148,8 @@ class ItemController extends Controller
         $item->srp = $request->srp;
 
         $item->unit_cost = $request->unit_cost;
+
+        $item->free = $request->free;
 
         $item->activated = $request->activated;
 
@@ -221,7 +225,7 @@ class ItemController extends Controller
         if (!$request->value==true){
            $results = $this->items->getitemList();
         }else{
-            $results = $this->items->getitemname($request->value);
+           $results = $this->items->getitemname($request->value);
             
         }
 

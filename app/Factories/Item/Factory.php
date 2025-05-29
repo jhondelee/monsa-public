@@ -21,7 +21,8 @@ class Factory implements SetInterface
         (case when ifnull(e.unit_quantity,0) > 0  then CONCAT('(',e.unit_quantity,') ',u.code) ELSE u.code END )as units,
         i.picture,
         i.unit_cost,
-        i.srp, 
+        i.srp,
+        i.free, 
         i.activated
         FROM items i 
         INNER JOIN unit_of_measure u
@@ -48,6 +49,7 @@ class Factory implements SetInterface
         i.picture,
         i.unit_cost,
         i.srp,
+        i.free,
         i.activated
         FROM items i 
         INNER JOIN unit_of_measure u
@@ -71,6 +73,7 @@ class Factory implements SetInterface
         i.picture,
         i.unit_cost,
         i.srp,
+        i.free,
         i.activated
         FROM items i 
         INNER JOIN unit_of_measure u
@@ -104,7 +107,8 @@ class Factory implements SetInterface
             i.name,
             i.description,
             u.code as units,
-            i.picture
+            i.picture,
+            i.free
             FROM items i 
             INNER JOIN unit_of_measure u
             ON i.unit_id = u.id
@@ -121,21 +125,22 @@ class Factory implements SetInterface
     {
 
      $results = DB::select("
-        SELECT i.id,
-        i.code,
-        i.name,
-        i.description,
-        u.code as units,
-        o.quantity,
-        i.unit_cost,
-        o.unit_total_cost
-        FROM items i 
-        INNER JOIN unit_of_measure u
-        ON i.unit_id = u.id
-        INNER JOIN order_items o
-        ON i.id = o.item_id
-        WHERE i.deleted_at is NULL AND o.order_id = ?
-        ORDER BY i.id;",[$id]);
+           SELECT i.id,
+           i.code,
+           i.name,
+           i.description,
+           u.code as units,
+           o.quantity,
+           i.unit_cost,
+           o.unit_total_cost,
+           i.free
+           FROM items i 
+           INNER JOIN unit_of_measure u
+           ON i.unit_id = u.id
+           INNER JOIN order_items o
+           ON i.id = o.item_id
+           WHERE i.deleted_at is NULL AND o.order_id = ?
+           ORDER BY i.id;",[$id]);
 
         return collect($results);
     } 
@@ -152,7 +157,8 @@ class Factory implements SetInterface
         u.code as units,
         i.picture,
         i.unit_cost,
-        i.unit_quantity
+        i.unit_quantity,
+        i.free
         FROM items i 
         INNER JOIN unit_of_measure u
         ON i.unit_id = u.id

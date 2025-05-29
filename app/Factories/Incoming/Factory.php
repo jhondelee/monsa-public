@@ -37,9 +37,10 @@ class Factory implements SetInterface
                 e.description,
                 u.code AS units,
                 e.unit_cost,
-                s.quantity,
+                ifnull(s.quantity,0) as quantity,
                 i.received_quantity,
                 i.unit_total_cost,
+                e.free,
                 n.status
             FROM incomings n
             INNER JOIN incoming_items i
@@ -48,7 +49,7 @@ class Factory implements SetInterface
             ON e.id = i.item_id
             INNER JOIN unit_of_measure u
             ON u.id = e.unit_id
-            INNER JOIN order_items s
+            LEFT JOIN order_items s
             ON s.order_id = n.order_id AND s.item_id = i.item_id
             WHERE i.incoming_id = ?;",[$id]);
 

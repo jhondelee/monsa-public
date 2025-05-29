@@ -122,7 +122,7 @@ class IncomingController extends Controller
 
         for ( $i=0 ; $i < count($item_id) ; $i++ ){
 
-            $items = $this->items->getForPO($request->order_id)->where('id', $item_id[$i])->first();
+            $items = $this->items->getindex()->where('id', $item_id[$i])->first();
 
             $incoming_items                         = New IncomingItem;
 
@@ -254,7 +254,7 @@ class IncomingController extends Controller
 
         for ( $i=0 ; $i < count($item_id) ; $i++ ){
 
-            $items = $this->items->getForPO($request->order_id)->where('id', $item_id[$i])->first();
+            $items = $this->items->getindex()->where('id', $item_id[$i])->first();
 
             $incoming_items                         = New IncomingItem;
 
@@ -304,7 +304,7 @@ class IncomingController extends Controller
 
 
                 // Add to Invetory after posting
-
+                /*
                     $inventory = New Inventory;
                     $inventory->item_id           = $incomItem->item_id;
                     $inventory->unit_quantity     = $incomItem->received_quantity;
@@ -317,7 +317,7 @@ class IncomingController extends Controller
                     $inventory->consumable         = 0;
                     $inventory->created_by        = auth()->user()->id;
                     $inventory->save();
-
+                */
 
             }
 
@@ -340,11 +340,11 @@ class IncomingController extends Controller
     {
         
         $incomings = Incoming::find($id);   
-        
+
         $pdf = new Fpdf('P');
         $pdf::AddPage('P','A4');
-        $pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
-        //$pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
+        //$pdf::Image('/home/u648374046/domains/monsais.net/public_html/public/img/monsa-logo-header.jpg',10, 5, 30.00);
+        $pdf::Image('img/temporary-logo.jpg',5, 5, 40.00);
         $pdf::SetFont('Arial','B',12);
         $pdf::SetY(20);     
 
@@ -451,7 +451,7 @@ class IncomingController extends Controller
         $pdf::SetFont('Arial','B',9);
         $pdf::cell(160,6,"Subtotal:",0,"","R");
         $pdf::SetFont('Arial','B',9);
-        $pdf::cell(25,6,number_format($subtotal_amount,2),0,"","R");
+       // $pdf::cell(25,6,number_format($subtotal_amount,2),0,"","R");
 
 
         $pdf::Ln(20);

@@ -22,6 +22,7 @@
         <div class="col-sm-3">
             <div class="col-md-7"><p class="form-control-static h5" id="po_number"></p></div>
             <input type="hidden" id="po_number_input" name="po_number_input"/>
+            <input type="hidden" name="supplier_id" id="supplier_id" value="">
         </div>
 
         <label class="col-sm-2 control-label">PO Date :</label>
@@ -98,7 +99,11 @@
 
 
     <div class="hr-line-dashed"></div>
-
+    <div class="form-group">
+        <div class="col-sm-3">
+            <a class='btn btn-primary btn-xs btn-show-item' id="btn-show-item"><i class='fa fa-plus'></i> Item</a>
+        </div>
+    </div>
 
                                 
     <div class="table-responsive">

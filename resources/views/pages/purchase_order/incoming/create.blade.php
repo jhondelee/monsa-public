@@ -59,7 +59,7 @@
             </div>
         </div>     
 
-
+  @include('pages.purchase_order.incoming.add_item')
 @endsection
 
 
@@ -108,7 +108,7 @@
                 if(id > 0){
 
                     $.ajax({
-                    url:  '{{ url('incoming/receiving') }}',
+                    url:  '{{ url("incoming/receiving") }}',
                     type: 'POST',
                     dataType: 'json',
                     data: { _token: "{{ csrf_token() }}",
@@ -124,6 +124,7 @@
                          $('#po_number').text(  results.po_details.po_number  );
                          $('#po_date').text(  results.po_details.po_date  );
                          $('#supplier').text(  results.supplier.name  );
+                         $('#supplier_id').val(  results.supplier.id  );
                          $('#prepared_by').text(  results.created_by  );
                          $('#approved_by').text(  results.approved_by  );
                          $('#discount').text( parseFloat( results.po_details.discount).toFixed(2)  );
@@ -266,6 +267,99 @@
                 $('input[name="grand_total_amount"]').val(  _Gtotal_amount  );
             
             });
+
+    $(document).on('click', '.btn-show-item', function() {
+            var id = $('#supplier_id').val();
+            var sup_name = $('#supplier_id :selected').text();
+
+            $('.modal-title').text('Add Item');
+            $('#myModal').modal('show'); 
+
+            $(function() {
+            $.ajax({
+                url:  '{{ url("order/orderToSupplier") }}',
+                type: 'POST',
+                dataType: 'json',
+                data: { _token: "{{ csrf_token() }}",
+                id: id}, 
+                success:function(results){
+
+                    
+
+                    $('#dTable-ItemList-table').DataTable({
+                        destroy: true,
+                        pageLength: 100,
+                        responsive: true,
+                        fixedColumns: true,
+                        autoWidth: true,
+                        data: results,
+                        dom: '<"html5buttons"B>lTfgitp',
+                        buttons: [],
+                        columns: [
+                            {data: id ,title: 'Id', 
+                                render: function(data,type,row){
+                                return '<input type="text" name="item_id[]" class="form-control input-sm text-center item_id" size="4"  readonly="true" id ="item_id" value="'+ row.id +'">';
+                                }
+                            },  
+                            {data: 'description', title: 'Description'},                               
+                            {data: 'units', title: 'Units'},
+                            {data: 'status', title: 'Status',
+                                render: function(data, type, row){
+                                    if(row.status=='In Stock'){
+                                        return '<label class="label label-success" >In Stock</label>  '
+                                    }else{
+                                        if(row.status=='Reorder'){
+                                            return '<label class="label label-warning" >Reorder</label>'
+                                        }else{
+                                            return '<label class="label label-danger" >Critical</label>';
+                                        }
+                                        
+                                    }   
+                                }
+                            },
+                            {data: 'id', title: 'Action',
+                                render: function(data,type,row) {
+                                     return '<a class="btn-primary btn btn-xs btn-add-items" onclick="confirmAddItem('+ row.id +'); return false;"><i class="fa fa-plus"></i></a>';
+                                }
+                            }
+                            ]
+                    });
+                }
+            });
+        });
+    });
+
+  function confirmAddItem(data) {   
+            var id = data;
+            $.ajax({
+            url:  '{{ url("order/getitems") }}',
+            type: 'POST',
+            dataType: 'json',
+            data: { _token: "{{ csrf_token() }}",
+            id: id}, 
+            success:function(results){
+                                               
+                $('#dTable-receive-item-table tbody').append("<tr><td><input type='text' name='item_id[]' class='form-control input-sm text-center item_id' required=true size='4'  value="+ results.id +" readonly></td>\
+                        <td>"+ results.description +"</td>\
+                        <td class='text-center'>"+ results.units +"</td>\
+                        <td>\
+                        <input type='text' name='quantity[]' class='form-control input-sm text-center quantity' required=true size='4'  placeholder='0.00'  id ='quantity'>\
+                        </td>\
+                         <td>\
+                        <input type='text' name='received_qty[]' class='form-control input-sm text-center received_qty' required=true size='4'  placeholder='0.00'  id ='received_qty'>\
+                        </td>\
+                         <td>\
+                        <input type='text' name='item_unit_cost[]' class='form-control input-sm text-right item_unit_cost' size='4'  placeholder='0.00'  id ='item_unit_cost' value ="+ results.unit_cost + ">\
+                        </td>\
+                        <td>\
+                        <input type='text' name='total_amount[]' class='form-control input-sm text-right total_amount' required=true size='4'  placeholder='0.00'  id ='total_amount'>\
+                        </td>\
+                    </tr>"); 
+
+                    toastr.success(results.description +' has been added','Success!')
+                }
+            })
+        }
 
 </script>
 
