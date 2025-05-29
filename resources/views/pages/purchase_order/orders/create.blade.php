@@ -262,7 +262,7 @@
         function confirmAddItem(data) {   
             var id = data;
             $.ajax({
-            url:  '{{ url('order/getitems') }}',
+            url:  '{{ url("order/getitems") }}',
             type: 'POST',
             dataType: 'json',
             data: { _token: "{{ csrf_token() }}",

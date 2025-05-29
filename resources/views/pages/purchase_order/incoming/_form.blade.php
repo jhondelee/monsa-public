@@ -63,6 +63,10 @@
             </div>
         </div>
 
+        <label class="col-sm-2 control-label">Warehouse <span class="text-danger">*</span></label>
+        <div class="col-sm-3">
+                 {!! Form::select ('location',$location, null,['placeholder' => 'Choose Location...','class'=>'chosen-select','required'=>true,'id'=>'location'])!!}
+        </div>
     </div>
 
     <div class="form-group">
@@ -169,7 +173,7 @@
                 <div class="form-group">
                     <label class="col-md-6 control-label">Total Amount</label>
                         <div class="col-md-6">
-                            {!! Form::text('grand_total_amount',number_format($incomings->total_amount,2), array('placeholder' => '0.00','class' => 'form-control text-right _grand_total_amount','id'=>'_grand_total_amount', 'readonly' => 'true' )) !!}
+                            {!! Form::text('grand_total_amount',$incomings->total_amount, array('placeholder' => '0.00','class' => 'form-control text-right _grand_total_amount','id'=>'_grand_total_amount', 'readonly' => 'true' )) !!}
                         </div>
                 </div>
             </div>  

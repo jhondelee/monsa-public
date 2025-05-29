@@ -56,6 +56,10 @@
             <div class="col-md-7"><p class="form-control-static h5" id="supplier"></p></div>
         </div>
 
+        <label class="col-sm-2 control-label">Warehouse <span class="text-danger">*</span></label>
+        <div class="col-sm-3">
+                 {!! Form::select ('location',$location, null,['placeholder' => 'Choose Location...','class'=>'chosen-select','required'=>true,'id'=>'location'])!!}
+        </div>
     </div>
 
 

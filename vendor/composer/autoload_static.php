@@ -460,6 +460,7 @@ class ComposerStaticInitComposerPhar1505141966
         'App\\AgentCommissionItem' => __DIR__ . '/../..' . '/app/AgentCommissionItem.php',
         'App\\AgentTeam' => __DIR__ . '/../..' . '/app/AgentTeam.php',
         'App\\Area' => __DIR__ . '/../..' . '/app/Area.php',
+        'App\\AreaPrices' => __DIR__ . '/../..' . '/app/AreaPrices.php',
         'App\\AssignArea' => __DIR__ . '/../..' . '/app/AssignArea.php',
         'App\\Brochure' => __DIR__ . '/../..' . '/app/Brochure.php',
         'App\\CommissionRate' => __DIR__ . '/../..' . '/app/CommissionRate.php',

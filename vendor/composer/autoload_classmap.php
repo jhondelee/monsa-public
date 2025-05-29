@@ -10,6 +10,7 @@ return array(
     'App\\AgentCommissionItem' => $baseDir . '/app/AgentCommissionItem.php',
     'App\\AgentTeam' => $baseDir . '/app/AgentTeam.php',
     'App\\Area' => $baseDir . '/app/Area.php',
+    'App\\AreaPrices' => $baseDir . '/app/AreaPrices.php',
     'App\\AssignArea' => $baseDir . '/app/AssignArea.php',
     'App\\Brochure' => $baseDir . '/app/Brochure.php',
     'App\\CommissionRate' => $baseDir . '/app/CommissionRate.php',

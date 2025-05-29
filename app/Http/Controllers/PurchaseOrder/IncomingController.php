@@ -14,7 +14,9 @@ use App\Order;
 use App\OrderItems;
 use App\Incoming;
 use App\IncomingItem;
-use App\UnitOfMeasure; 
+use App\UnitOfMeasure;
+use App\WarehouseLocation;
+use App\Inventory;
 use App\Supplier; 
 use App\User as Users;
 use Carbon\Carbon;
@@ -53,7 +55,9 @@ class IncomingController extends Controller
 
         $received_by = $this->user->getemplist()->pluck('emp_name','id');
 
-        return view('pages.purchase_order.incoming.create',compact('received_by','po_number'));
+        $location = WarehouseLocation::pluck('name','id');
+
+        return view('pages.purchase_order.incoming.create',compact('received_by','po_number','location'));
     }
 
 
@@ -96,6 +100,8 @@ class IncomingController extends Controller
         $incomings->dr_date         = $request->dr_date;
 
         $incomings->notes           = $request->notes;
+
+        $incomings->location        = $request->location;
 
         $incomings->discount        = $request->discount_input;
 
@@ -186,7 +192,9 @@ class IncomingController extends Controller
 
         $incoming_items   = $this->incomings->getIncomingItems($id);
 
-        return view('pages.purchase_order.incoming.edit',compact('supplier','received_by','incomings','po_details','created_by','approved_by','incoming_items'));
+        $location = WarehouseLocation::pluck('name','id');
+
+        return view('pages.purchase_order.incoming.edit',compact('supplier','received_by','incomings','po_details','created_by','approved_by','incoming_items','location'));
     }
 
 
@@ -212,8 +220,10 @@ class IncomingController extends Controller
 
         $incomings->notes           = $request->notes;
 
-        $incomings->discount        = $request->discount_input;
+        $incomings->location        = $request->location;
 
+        $incomings->discount        = $request->discount_input;
+  
         $incomings->total_amount    = $request->grand_total_amount;
 
         $incomings->received_by     = $request->received_by;
@@ -221,8 +231,9 @@ class IncomingController extends Controller
         $incomings->status          = 'RECEIVING';
 
         $incomings->save();
-        
+
         $incoming_id            = $incomings->id;
+
         $item_id                = $request->get('item_id');
         $received_qty           = $request->get('received_qty');
         $item_unit_cost         = $request->get('item_unit_cost');
@@ -279,17 +290,37 @@ class IncomingController extends Controller
 
         $incomings->save();
 
-           $itemid =  IncomingItem::where('incoming_id',$id)->pluck('item_id');
+           $itemid =  IncomingItem::where('incoming_id',$id)->pluck('id');
 
             for ( $i=0 ; $i < count($itemid) ; $i++ ){
 
-                $items              = Item::findOrfail($itemid[$i]);
+                $incomItem = IncomingItem::findOrfail($itemid[$i]);
 
+                $items              = Item::findOrfail($incomItem->item_id);
+                 
                 $items->unit_cost   = $items->unit_cost;
 
                 $items->save();
 
+
+                // Add to Invetory after posting
+
+                    $inventory = New Inventory;
+                    $inventory->item_id           = $incomItem->item_id;
+                    $inventory->unit_quantity     = $incomItem->received_quantity;
+                    $inventory->onhand_quantity   = 0;
+                    $inventory->unit_cost         = $items->unit_cost;
+                    $inventory->location          = $incomings->location;
+                    $inventory->received_date     = $incomings->dr_date;
+                    $inventory->expiration_date   = null;
+                    $inventory->status            = 'In Stock';
+                    $inventory->consumable         = 0;
+                    $inventory->created_by        = auth()->user()->id;
+                    $inventory->save();
+
+
             }
+
 
         $purchseOrder = Order::findOrfail($incomings->order_id);
 
@@ -342,6 +373,7 @@ class IncomingController extends Controller
         $pdf::cell(30,6,': '.$po_date->format('M d, Y'),0,"","L");
         
 
+
         $orders = Order::find($incomings->order_id);
 
         $pdf::Ln(6);    
@@ -351,6 +383,12 @@ class IncomingController extends Controller
         $pdf::SetFont('Arial','',9);
         $supplier = Supplier::find($orders->supplier_id);
         $pdf::cell(40,6,': '.$supplier->name,0,"","L");
+        $pdf::SetFont('Arial','B',9);
+        $pdf::SetXY($pdf::getX(), $pdf::getY());
+        $pdf::cell(100,6,"Location",0,"","R");
+        $pdf::SetFont('Arial','',9);
+        $location = WarehouseLocation::findOrfail($incomings->location);
+        $pdf::cell(30,6,': '.$location->name,0,"","L");
 
         $pdf::Ln(6);
         $pdf::SetFont('Arial','B',9);
@@ -365,6 +403,7 @@ class IncomingController extends Controller
         $pdf::cell(20,6,"Remarks",0,"","L");
         $pdf::SetFont('Arial','',9);
         $pdf::cell(40,6,': '.$incomings->notes,0,"","L");
+
 
 
         //Column Name

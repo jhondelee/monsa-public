@@ -39,7 +39,7 @@
                     </td>
                     <td>{{$inventory->description}}</td>
                     <td>{{$inventory->units}}</td>
-                    <td>{{$inventory->onhand_quantity}}</td>
+                    <td>{{$inventory->unit_quantity}}</td>
                     <td>{{$inventory->srp}}</td>
                     <td>{{$inventory->location}}</td>
                     <td>@if ($inventory->status =="In Stock")

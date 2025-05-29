@@ -18,9 +18,9 @@ class Factory implements SetInterface
             e.id as item_id,
             e.name,
             e.description,
-            CONCAT('(',i.unit_quantity,') ',u.code) AS units,
+            u.code AS units,
             e.srp,
-            i.onhand_quantity,
+            i.unit_quantity,
             w.name as location,
             e.picture,
             i.`status`
