@@ -424,12 +424,18 @@ class IncomingController extends Controller
         $incoming_items   = $this->incomings->getIncomingItems($id);
         $ctr_item   = 0;
         $subtotal_amount = 0;
+        $item_name ="";
         foreach ($incoming_items as $key => $value) {
+            if($value->free == 1){
+                $item_name = $value->description.' '."(Free)";
+            }else{
+                $item_name = $value->description;
+            }
 
             $pdf::Ln(5);
             $pdf::SetFont('Arial','',9);
             $pdf::cell(10,6,$ctr_item = $ctr_item +1 ,0,"","C");
-            $pdf::cell(75,6,$value->description,0,"","L");
+            $pdf::cell(75,6,$item_name,0,"","L");
             $pdf::cell(10,6,$value->units,0,"","C");
             $pdf::cell(25,6,number_format($value->quantity,2),0,"","C");
             $pdf::cell(25,6,number_format($value->received_quantity,2),0,"","C");

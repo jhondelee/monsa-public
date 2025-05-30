@@ -138,7 +138,7 @@
                     <td>
                         <input type='input' name='item_id[]' class='form-control input-sm text-center item_id' size='2' value="{{$incoming_item->id}}" readonly>
                     </td>
-                    <td>{{$incoming_item->description}}</td>
+                    <td>{{$incoming_item->description}} @if($incoming_item->free == 1)<label class='label label-danger'>FREE</label> @endif</td>
                     <td>{{$incoming_item->units}}</td>
 
                     <td class='text-center'>

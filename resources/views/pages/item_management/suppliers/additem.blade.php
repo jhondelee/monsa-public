@@ -109,7 +109,7 @@
                                  $('#dTable-components-item-table tbody').append("<tr>\
                                 <td><input type='text' name='id[]' class='form-control input-sm text-center id' required=true size='4'  value="+ results[i].id +" readonly></td>\
                                 <td>"+ results[i].name +"</td>\
-                                <td>"+ results[i].description +" "+  _av +"</td>\
+                                <td>"+ results[i].description +" "+ _av +"</td>\
                                 <td>"+ results[i].units +" </td>\
                                 <td style='text-align:center;'>\
                                     <div class='checkbox checkbox-success'>\

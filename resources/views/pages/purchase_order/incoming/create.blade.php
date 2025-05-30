@@ -301,7 +301,15 @@
                                 return '<input type="text" name="item_id[]" class="form-control input-sm text-center item_id" size="4"  readonly="true" id ="item_id" value="'+ row.id +'">';
                                 }
                             },  
-                            {data: 'description', title: 'Description'},                               
+                            {data: 'description', title: 'Description',
+                                     render: function(data, type, row){
+                                        if(row.free=='1'){
+                                            return '<label class="label label-danger" >Free</label>  '
+                                        }else{
+                                            return '<label class="label label-warning" ></label>';
+                                        }   
+                                    }
+                            },                               
                             {data: 'units', title: 'Units'},
                             {data: 'status', title: 'Status',
                                 render: function(data, type, row){

@@ -49,6 +49,7 @@ class Factory implements SetInterface
                 i.id,
                 i.name,
                 i.description,
+                i.free,
                 (case when ifnull(e.unit_quantity,0) > 0  then CONCAT('(',e.unit_quantity,') ',u.code) ELSE u.code END ) AS  units,
                 IFNULL(e.onhand_quantity,0) as onhand_quantity,
                 (case when e.unit_quantity != 0 OR NULL then 'In Stock' ELSE 'Out of Stock'  END ) AS  status

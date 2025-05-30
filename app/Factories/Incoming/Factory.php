@@ -36,7 +36,7 @@ class Factory implements SetInterface
                 e.name,
                 e.description,
                 u.code AS units,
-                e.unit_cost,
+                i.unit_cost,
                 ifnull(s.quantity,0) as quantity,
                 i.received_quantity,
                 i.unit_total_cost,
