@@ -70,12 +70,12 @@
         <div class="col-sm-3">
             <div class="input-group date">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                {!! Form::text('dr_date',null, ['class'=>'form-control', 'id'=>'dr_date']) !!}
+                {!! Form::text('dr_date',null, ['class'=>'form-control','required'=>true , 'id'=>'dr_date']) !!}
             </div>
         </div>
       <label class="col-sm-2 control-label">DR Number <span class="text-danger">*</span></label>
         <div class="col-sm-3">
-           {!! Form::text('dr_number',null, ['class'=>'form-control dr_number' ,'id'=>'dr_number']) !!}
+           {!! Form::text('dr_number',null, ['class'=>'form-control dr_number' ,'required'=>true  ,'id'=>'dr_number']) !!}
         </div>
 
     </div>

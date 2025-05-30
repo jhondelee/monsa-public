@@ -302,13 +302,14 @@
                                 }
                             },  
                             {data: 'description', title: 'Description',
-                                     render: function(data, type, row){
+                                    render: function(data, type, row){
                                         if(row.free=='1'){
-                                            return '<label class="label label-danger" >Free</label>  '
+                                            return row.description +'  <label class="label label-danger" >Free</label> '
                                         }else{
-                                            return '<label class="label label-warning" ></label>';
+                                            return row.description +'<label class="label label-warning" ></label>';
                                         }   
                                     }
+
                             },                               
                             {data: 'units', title: 'Units'},
                             {data: 'status', title: 'Status',
@@ -346,18 +347,24 @@
             data: { _token: "{{ csrf_token() }}",
             id: id}, 
             success:function(results){
-                                               
+                var _free="";
+                var _unitCost= results.unit_cost;
+                if(results.free =='1'){
+                    _free = ' <label class="label label-danger " >FREE</label>';
+                    _unitCost = 0;
+                }
+                         
                 $('#dTable-receive-item-table tbody').append("<tr><td><input type='text' name='item_id[]' class='form-control input-sm text-center item_id' required=true size='4'  value="+ results.id +" readonly></td>\
-                        <td>"+ results.description +"</td>\
+                        <td>"+ results.description +"  "+ _free + "</td>\
                         <td class='text-center'>"+ results.units +"</td>\
                         <td>\
-                        <input type='text' name='quantity[]' class='form-control input-sm text-center quantity' required=true size='4'  placeholder='0.00'  id ='quantity'>\
+                        <input type='text' name='quantity[]' class='form-control input-sm text-center quantity' required=true size='4'  value='0'   id ='quantity'>\
                         </td>\
                          <td>\
                         <input type='text' name='received_qty[]' class='form-control input-sm text-center received_qty' required=true size='4'  placeholder='0.00'  id ='received_qty'>\
                         </td>\
                          <td>\
-                        <input type='text' name='item_unit_cost[]' class='form-control input-sm text-right item_unit_cost' size='4'  placeholder='0.00'  id ='item_unit_cost' value ="+ results.unit_cost + ">\
+                        <input type='text' name='item_unit_cost[]' class='form-control input-sm text-right item_unit_cost' size='4'  placeholder='0.00'  id ='item_unit_cost' value ="+ _unitCost + ">\
                         </td>\
                         <td>\
                         <input type='text' name='total_amount[]' class='form-control input-sm text-right total_amount' required=true size='4'  placeholder='0.00'  id ='total_amount'>\
