@@ -10,15 +10,19 @@
        <div>
             <div>
 
-                <h1 class="logo-name text-center">
-                  
-                        <img alt="image" width="200" height="200" class="img-responsive" src="/img/temporary-logo.jpg"/>
-                  
+                <h1 class="logo-name">
+
+                    <center>
+
+                        <img alt="image" width="150" height="150" class="img-responsive " src="/img/temporary-logo.jpg"/>
+
+                    </center>
+
                 </h1>
 
             </div>
 
-            <h3>Sales and Inventory System</h3>
+            <h3><b>Sales and Inventory System</b>   </h3>
 
             @include('layouts.alert2')
 
