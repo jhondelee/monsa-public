@@ -10,7 +10,7 @@
        <div>
             <div>
 
-                <h1 class="logo-name">
+                <h1 class="logo-name text-center">
                   
                         <img alt="image" width="200" height="200" class="img-responsive" src="/img/temporary-logo.jpg"/>
                   
