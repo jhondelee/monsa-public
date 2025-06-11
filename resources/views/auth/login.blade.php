@@ -12,7 +12,7 @@
 
                 <h1 class="logo-name">
                   
-                        <img alt="image" width="500" height="500" class="img-responsive" src="/img/temporary-logo.jpg"/>
+                        <img alt="image" width="200" height="200" class="img-responsive" src="/img/temporary-logo.jpg"/>
                   
                 </h1>
 
