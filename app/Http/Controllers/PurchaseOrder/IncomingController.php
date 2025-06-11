@@ -410,12 +410,12 @@ class IncomingController extends Controller
             $pdf::Ln(15);
             $pdf::SetFont('Arial','B',9);
             $pdf::cell(10,6,"No.",0,"","C");
-            $pdf::cell(75,6,"Item Description",0,"","L");
-            $pdf::cell(10,6,"Unit",0,"","C");
-            $pdf::cell(25,6,"Order Qty",0,"","C");
-            $pdf::cell(25,6,"Rec'd Qty",0,"","C");
-            $pdf::cell(15,6,"Unit Cost",0,"","R");
-            $pdf::cell(25,6,"Amount",0,"","R");
+            $pdf::cell(80,6,"Item Description",0,"","L");
+            $pdf::cell(25,6,"Unit",0,"","C");
+            $pdf::cell(35,6,"Order Qty",0,"","C");
+            $pdf::cell(35,6,"Rec'd Qty",0,"","C");
+           // $pdf::cell(15,6,"Unit Cost",0,"","R");
+           // $pdf::cell(25,6,"Amount",0,"","R");
 
          $pdf::Ln(1);
         $pdf::SetFont('Arial','',9);
@@ -435,13 +435,13 @@ class IncomingController extends Controller
             $pdf::Ln(5);
             $pdf::SetFont('Arial','',9);
             $pdf::cell(10,6,$ctr_item = $ctr_item +1 ,0,"","C");
-            $pdf::cell(75,6,$item_name,0,"","L");
-            $pdf::cell(10,6,$value->units,0,"","C");
-            $pdf::cell(25,6,number_format($value->quantity,2),0,"","C");
-            $pdf::cell(25,6,number_format($value->received_quantity,2),0,"","C");
-            $pdf::cell(15,6,number_format($value->unit_cost,2),0,"","R");
-            $pdf::cell(25,6,number_format($value->unit_total_cost,2),0,"","R");
-            $subtotal_amount = $subtotal_amount + $value->unit_total_cost;
+            $pdf::cell(80,6,$item_name,0,"","L");
+            $pdf::cell(25,6,$value->units,0,"","C");
+            $pdf::cell(35,6,number_format($value->quantity,2),0,"","C");
+            $pdf::cell(35,6,number_format($value->received_quantity,2),0,"","C");
+           // $pdf::cell(15,6,number_format($value->unit_cost,2),0,"","R");
+            //$pdf::cell(25,6,number_format($value->unit_total_cost,2),0,"","R");
+           // $subtotal_amount = $subtotal_amount + $value->unit_total_cost;
         }
 
         $pdf::Ln(5);
