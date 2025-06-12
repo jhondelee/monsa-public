@@ -113,7 +113,7 @@ class InventoryController extends Controller
 
         $items = $this->items->getiteminfo($request->item_name)->first();
 
-        $item_unit_qty = $items->unit_quantity * $request->quantity;
+        $item_unit_qty = $request->quantity;
 
         $inventory = New Inventory;
         $inventory->item_id           = $request->item_name;
@@ -387,14 +387,11 @@ class InventoryController extends Controller
 
         $items =Item::findorfail($request->item_rtn_id);
 
-        $itemUnitQty = $request->unti_qty * $items->unit_quantity;
-
-
         $inventories = Inventory::findorfail($request->inven_id);
 
         $inventories->unit_quantity =  $inventories->unit_quantity - $request->unti_qty;
 
-        $inventories->onhand_quantity = $inventories->onhand_quantity - $itemUnitQty;
+        $inventories->onhand_quantity =  $inventories->unit_quantity - $request->unti_qty;
 
         $inventories->save();
 
@@ -427,7 +424,7 @@ class InventoryController extends Controller
 
         $items = $this->items->getiteminfo($request->item_id)->first();
 
-        $item_unit_qty = $items->unit_quantity * $request->unti_qty_i;
+        //$item_unit_qty = $items->unit_quantity * $request->unti_qty_i;
 
 
         $inventory = New Inventory;
@@ -436,7 +433,7 @@ class InventoryController extends Controller
 
         $inventory->unit_quantity     = $request->unti_qty_i;
 
-        $inventory->onhand_quantity   = $item_unit_qty;
+        $inventory->onhand_quantity   = $request->unti_qty_i;
 
         $inventory->unit_cost         = $items->unit_cost;
 
@@ -457,7 +454,7 @@ class InventoryController extends Controller
       
         $untiQTY = $inventories->unit_quantity - $request->unti_qty_i;
 
-        $onHndQTY = $inventories->onhand_quantity -  $item_unit_qty;
+        $onHndQTY = $inventories->onhand_quantity -  $request->unti_qty_i;
 
         $inventories->unit_quantity =  $untiQTY;
 
