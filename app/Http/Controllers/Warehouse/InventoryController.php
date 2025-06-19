@@ -211,7 +211,7 @@ class InventoryController extends Controller
             $pdf::cell(55,6,$value->name,0,"","L");
 
             $pdf::cell(20,6,$value->units,0,"","C");
-            $pdf::cell(30,6,number_format($value->onhand_quantity,2),0,"","C");
+            $pdf::cell(30,6,number_format($value->unit_quantity,2),0,"","C");
              $pdf::cell(33,6,$value->location,0,"","C");
             $pdf::cell(30,6,($value->status),0,"","C");
         }
@@ -306,7 +306,7 @@ class InventoryController extends Controller
         $pdf::cell(30,6,"_________________________________________________________________________________________________________",0,"","L");
         
         $inventories = $this->inventory->getinventory();
-
+        
         foreach ($inventories as $key => $value) {
 
             $pdf::Ln(5);
