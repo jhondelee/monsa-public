@@ -106,27 +106,61 @@ class InventoryController extends Controller
         $this->validate($request, [
             'item_name'     => 'required',
             'quantity'      => 'required',
-            'received_date' => 'required',
             'location'      => 'required',
             'created_by'   => 'required'
         ]);
 
-        $items = $this->items->getiteminfo($request->item_name)->first();
 
-        $item_unit_qty = $request->quantity;
+        $ifexistItem = Inventory::where('item_id', $request->item_name)->where('location', $request->location)->first();
 
-        $inventory = New Inventory;
-        $inventory->item_id           = $request->item_name;
-        $inventory->unit_quantity     = $request->quantity;
-        $inventory->onhand_quantity   = $item_unit_qty;
-        $inventory->unit_cost         = $request->unit_cost;
-        $inventory->location          = $request->location;
-        $inventory->received_date     = $request->received_date;
-        $inventory->expiration_date   = $request->expiry_date;
-        $inventory->status            = 'In Stock';
-        $inventory->consumable         = 0;
-        $inventory->created_by        = $request->created_by;
-        $inventory->save();
+        if(!$ifexistItem)
+
+            {
+
+                $inventory = New Inventory;
+                $inventory->item_id           = $request->item_name;
+                $inventory->unit_quantity     = $request->quantity;
+                $inventory->onhand_quantity   = 0;
+                $inventory->unit_cost         = $request->unit_cost;
+                $inventory->location          = $request->location;
+                $inventory->received_date     = $request->received_date;
+                $inventory->expiration_date   = $request->expiry_date;
+                $inventory->status            = 'In Stock';
+                $inventory->consumable         = 0;
+                $inventory->created_by        = $request->created_by;
+                $inventory->save();
+
+            } else {
+
+                $inventory = Inventory::findorfail($ifexistItem->id);
+             
+                    $newQty = $inventory->unit_quantity + $request->quantity;
+
+                $inventory->unit_quantity = $newQty;
+
+                $inventory->unit_cost         = $request->unit_cost;
+
+                $inventory->save();
+
+            }
+                            /*
+                            $items = $this->items->getiteminfo($request->item_name)->first();
+
+                            $item_unit_qty = $request->quantity;
+
+                            $inventory = New Inventory;
+                            $inventory->item_id           = $request->item_name;
+                            $inventory->unit_quantity     = $request->quantity;
+                            $inventory->onhand_quantity   = $item_unit_qty;
+                            $inventory->unit_cost         = $request->unit_cost;
+                            $inventory->location          = $request->location;
+                            $inventory->received_date     = $request->received_date;
+                            $inventory->expiration_date   = $request->expiry_date;
+                            $inventory->status            = 'In Stock';
+                            $inventory->consumable         = 0;
+                            $inventory->created_by        = $request->created_by;
+                            $inventory->save();
+                            */
 
         return redirect()->route('inventory.index')
 

@@ -45,7 +45,7 @@ class Factory implements SetInterface
             e.id as item_id,
             e.name,
             e.description,
-            CONCAT('(',i.unit_quantity,') ',u.code) AS units,
+            u.code AS units,
             e.srp,
             i.onhand_quantity,
             w.name as location,
@@ -108,8 +108,9 @@ class Factory implements SetInterface
                     SELECT  e.id,
                             a.name AS location,
                             i.code,
-                           CONCAT("(",e.unit_quantity,") ",u.code) AS units,
+                           u.code AS units,
                            e.onhand_quantity,
+                           e.unit_quantity,
                            e.received_date
                     FROM  inventory e
                     INNER JOIN items i
@@ -132,7 +133,7 @@ class Factory implements SetInterface
             e.id as item_id,
             e.name,
             e.description,
-            CONCAT('(',i.unit_quantity,') ',u.code) AS units,
+            u.code AS units,
             e.srp,
             i.onhand_quantity,
             w.name as location,
@@ -179,7 +180,7 @@ class Factory implements SetInterface
             e.id as item_id,
             e.name,
             e.description,
-            CONCAT('(',SUM(i.unit_quantity),') ',u.code) AS units,
+            u.code AS units,
             e.srp,
             SUM(i.onhand_quantity) AS onhand_quantity,
             i.`status`
@@ -260,7 +261,7 @@ class Factory implements SetInterface
             e.id as item_id,
             e.name,
             e.description,
-            CONCAT('(',i.unit_quantity,') ',u.code) AS units,
+            u.code AS units,
             e.srp,
             i.onhand_quantity,
             w.name as location,
