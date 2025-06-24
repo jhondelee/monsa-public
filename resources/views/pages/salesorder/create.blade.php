@@ -273,9 +273,12 @@
                          _total_dis_amount = _total_dis_amount.toFixed(2);
                         $('#total_amount_discount').val(  _total_dis_amount  );
 
-                        _total_dis_percent = _total_actual_amount - _total_amount;
 
-                         _total_dis_percent = _total_dis_percent.toFixed(2);
+                        if(_total_dis_percent > 0){
+                            _total_dis_percent = _total_actual_amount - _total_amount;
+                        }
+                        
+                        _total_dis_percent = _total_dis_percent.toFixed(2);
                         $('#total_percent_discount').val(  _total_dis_percent  );
 
                  
@@ -320,7 +323,7 @@
                 if(_total_dis_percent > 0){
                     _total_dis_percent = _total_actual_amount - _total_amount;
                 }
-                
+
                 _total_dis_percent = _total_dis_percent.toFixed(2);
                 $('#total_percent_discount').val(  _total_dis_percent  );
 
