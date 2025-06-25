@@ -245,7 +245,6 @@
 
                         toastr.info(results.csPrice.description  +' has been added','Success!')
 
-                        toastr.info(_setSRP  +' has been added','Success!')
 
                         $( "#dTable-selected-item-table tbody > tr" ).each( function() {
                                 var $row = $( this );
@@ -323,7 +322,7 @@
                 if(_total_dis_amount > 0){
                     _total_dis_amount = _total_actual_amount - _total_amount;
                 }
-                
+
                 _total_dis_amount = _total_dis_amount.toFixed(2);
                 $('#discount_amount').val(  _total_dis_amount  );
 
