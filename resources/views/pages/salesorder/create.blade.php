@@ -270,6 +270,10 @@
                         _total_amount = _total_amount.toFixed(2);
                         $('#total_sales').val(  _total_amount  );
 
+                        if(_total_dis_amount > 0){
+                            _total_dis_amount = _total_actual_amount - _total_amount;
+                        }
+
                         _total_dis_amount = _total_dis_amount.toFixed(2);
                         $('#total_amount_discount').val(  _total_dis_amount  );
 
@@ -316,6 +320,10 @@
                 _total_amount = _total_amount.toFixed(2);
                 $('#total_sales').val(  _total_amount  );
 
+                if(_total_dis_amount > 0){
+                    _total_dis_amount = _total_actual_amount - _total_amount;
+                }
+                
                 _total_dis_amount = _total_dis_amount.toFixed(2);
                 $('#discount_amount').val(  _total_dis_amount  );
 
