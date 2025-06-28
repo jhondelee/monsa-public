@@ -256,20 +256,20 @@
                         _total_dis_percent += parseFloat( ('0' + _dis_percent).replace(/[^0-9-\.]/g, ''), 10 );
 
                         });
-                                   
+                        
+                        _total_actual_amount = _total_actual_amount.toFixed(2);
+                        $('#total_subamount').val(  _total_actual_amount  );
+
                          _total_amount = _total_amount.toFixed(2);
                         $('#total_sales').val(  _total_amount  );
 
-                        if(_total_dis_amount > 0){
+
                             _total_dis_amount = _total_actual_amount - _total_amount;
-                        }
+
 
                          _total_dis_amount = _total_dis_amount.toFixed(2);
                         $('#total_amount_discount').val(  _total_dis_amount  );
 
-                        if(_total_dis_percent > 0){
-                            _total_dis_percent = _total_actual_amount - _total_amount;
-                        }
                         
 
                          _total_dis_percent = _total_dis_percent.toFixed(2);
@@ -308,19 +308,19 @@
 
                     });
 
+                _total_actual_amount = _total_actual_amount.toFixed(2);
+                $('#total_subamount').val(  _total_actual_amount  );
+
                 _total_amount = _total_amount.toFixed(2);
                 $('#total_sales').val(  _total_amount  );
 
-                if(_total_dis_amount > 0){
-                    _total_dis_amount = _total_actual_amount - _total_amount;
-                }
+
+                _total_dis_amount = _total_actual_amount - _total_amount;
+                
 
                 _total_dis_amount = _total_dis_amount.toFixed(2);
                 $('#total_amount_discount').val(  _total_dis_amount  );
 
-                if(_total_dis_percent > 0){
-                    _total_dis_percent = _total_actual_amount - _total_amount;
-                }
           
                 _total_dis_percent = _total_dis_percent.toFixed(2);
                 $('#total_percent_discount').val(  _total_dis_percent  );
