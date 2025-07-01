@@ -256,26 +256,26 @@ class Factory implements SetInterface
    public function showstatus($status)
     {
      $results = DB::select("
-       SELECT
-            i.id,
-            e.id as item_id,
-            e.name,
-            e.description,
-            u.code AS units,
-            e.srp,
-            i.onhand_quantity,
-            w.name as location,
-            e.picture,
-            i.`status`
-        FROM inventory i
-        INNER JOIN items e
-        ON i.item_id = e.id AND e.activated = 1
-        INNER JOIN unit_of_measure u
-        ON u.id = e.unit_id
-        INNER JOIN warehouse_location w
-        ON w.id = i.location
-        WHERE  e.deleted_at is NULL AND i.consumable = 0
-        AND i.unit_quantity > 0 AND i.`status` = ? ",[$status]);
+           SELECT
+                i.id,
+                e.id as item_id,
+                e.name,
+                e.description,
+                u.code AS units,
+                e.srp,
+                i.onhand_quantity,
+                w.name as location,
+                e.picture,
+                i.`status`
+            FROM inventory i
+            INNER JOIN items e
+            ON i.item_id = e.id AND e.activated = 1
+            INNER JOIN unit_of_measure u
+            ON u.id = e.unit_id
+            INNER JOIN warehouse_location w
+            ON w.id = i.location
+            WHERE  e.deleted_at is NULL AND i.consumable = 0
+            AND i.unit_quantity > 0 AND i.`status` = ? ",[$status]);
 
         return collect($results);
     } 

@@ -53,7 +53,7 @@ class SalesPaymentController extends Controller
     {
 
         $results =  SalesOrder::where('so_number',$request->id)->first();
-
+        
         return response()->json($results); 
       
     }
