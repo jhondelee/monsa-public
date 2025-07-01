@@ -221,7 +221,7 @@ class SalesPaymentController extends Controller
                     ->with('success','Customer Amount Due has been Completed!');
         } else {
 
-            return redirect()->route('sales_payment.collect',$request->sales_payment_id)
+            return redirect()->route('sales_payment.update',$request->sales_payment_id)
 
                     ->with('success','Payment terms has been added successfully.');
 
