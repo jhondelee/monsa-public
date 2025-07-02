@@ -121,6 +121,7 @@
                             buttons: [],
                             columns: [
                                     {data: 'so_number', name: 'so_number'},
+                                    {data: 'cs_name', name: 'cs_name'},
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
                                     {data: 'rate', name: 'rate'},

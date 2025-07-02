@@ -191,7 +191,7 @@
                 }
                 if ( _tyep =='Fully Paid' ){
 
-                    $('#payment_status').val('Completed');
+                    $('#payment_status').val('Existing Balance');
 
                 }
                 if ( !_tyep ){
