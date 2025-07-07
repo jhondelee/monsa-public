@@ -133,12 +133,12 @@ class InventoryController extends Controller
             } else {
 
                 $inventory = Inventory::findorfail($ifexistItem->id);
-             
+           
                     $newQty = $inventory->unit_quantity + $request->quantity;
 
                 $inventory->unit_quantity = $newQty;
 
-                $inventory->unit_cost         = $request->unit_cost;
+                $inventory->unit_cost   = $request->unit_cost;
 
                 $inventory->save();
 
@@ -457,42 +457,52 @@ class InventoryController extends Controller
 
 
         $items = $this->items->getiteminfo($request->item_id)->first();
+        
+         $ifexistItem = Inventory::where('item_id', $items->id)->where('location', $request->inv_loc)->first();
 
-        //$item_unit_qty = $items->unit_quantity * $request->unti_qty_i;
+        if(!$ifexistItem)
+
+            {
 
 
-        $inventory = New Inventory;
+                $inventory = New Inventory;
 
-        $inventory->item_id           = $request->item_id;
+                $inventory->item_id           = $request->item_id;
+                $inventory->unit_quantity     = $request->unti_qty_i;
+                $inventory->onhand_quantity   = 0;
+                $inventory->unit_cost         = $items->unit_cost;
+                $inventory->location          = $request->inv_loc;
+                $inventory->received_date     = $request->return_date;
+                $inventory->status            = 'In Stock';
+                $inventory->consumable         = 0;
+                $inventory->created_by        = $request->return_by;
 
-        $inventory->unit_quantity     = $request->unti_qty_i;
+                $inventory->save();
 
-        $inventory->onhand_quantity   = $request->unti_qty_i;
+            } else {
 
-        $inventory->unit_cost         = $items->unit_cost;
+                $inventory = Inventory::findorfail($ifexistItem->id);
+                
+                    $newQty = $inventory->unit_quantity + $request->unti_qty_i;
 
-        $inventory->location          = $request->inv_loc;
+                $inventory->unit_quantity = $newQty;
 
-        $inventory->received_date     = $request->return_date;
+                $inventory->unit_cost   = $request->unit_cost;
 
-        $inventory->status            = 'In Stock';
+                $inventory->save();
 
-        $inventory->consumable         = 0;
+            }
+                   
 
-        $inventory->created_by        = $request->return_by;
-
-        $inventory->save();
-
+        //Less into return
 
         $inventories = Inventory::findorfail($request->inven_item_id);
       
         $untiQTY = $inventories->unit_quantity - $request->unti_qty_i;
 
-        $onHndQTY = $inventories->onhand_quantity -  $request->unti_qty_i;
-
         $inventories->unit_quantity =  $untiQTY;
 
-        $inventories->onhand_quantity = $onHndQTY;
+        $inventories->onhand_quantity = 0;
 
         $inventories->save();
    
