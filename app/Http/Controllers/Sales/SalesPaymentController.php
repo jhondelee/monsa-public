@@ -147,7 +147,7 @@ class SalesPaymentController extends Controller
         $salespayments = SalesPayment::findOrfail($request->sales_payment_id);
 
         $total_paid =  $this->salespayment->totalpaid($request->sales_payment_id)->first();
-
+ 
         $totalSales = $salespayments->sales_total ;
 
         $totalPayment = $total_paid->amount +  $request->amount_collected;
