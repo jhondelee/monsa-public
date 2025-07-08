@@ -132,7 +132,7 @@
                                     <div class="form-group">
                                         <label class="col-md-6 control-label">Subtotal</label>
                                         <div class="col-md-6">
-                                            {!! Form::text('total_subamount',null, array('placeholder' => '0.00','class' => 'form-control text-right total_subamount','id'=>'total_subamount', 'readonly' => 'true')) !!}
+                                            {!! Form::text('total_subamount',$subAmount, array('placeholder' => '0.00','class' => 'form-control text-right total_subamount','id'=>'total_subamount', 'readonly' => 'true')) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">

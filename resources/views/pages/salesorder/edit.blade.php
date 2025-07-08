@@ -259,7 +259,7 @@
                         
                         _total_actual_amount = _total_actual_amount.toFixed(2);
                         $('#total_subamount').val(  _total_actual_amount  );
-
+                   
                          _total_amount = _total_amount.toFixed(2);
                         $('#total_sales').val(  _total_amount  );
 
