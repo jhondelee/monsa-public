@@ -1,4 +1,4 @@
-<div id="myModal" class="modal fade" aria-hidden="true">
+    <div id="myModal" class="modal fade" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,41 +12,13 @@
                      
                         <div class="table-responsive">
                             <div class="scroll_content" style="width:100%; height:350px; margin: 0;padding: 0;overflow-y: scroll">
-                            <table class="table table-bordered dataTables-add-items" id="dTable-ItemList-table">
+                            <table class="table table-bordered dataTables-add-items" id="dTable-ItemList-table"  style="width:100%">
                                 <thead> 
-                                    <tr>
-                                        
-                                        <th class="text-center">Item#</th>
-                                        <th class="text-center">Name</th>
-                                        <th class="text-center">Unit</th>
-                                        <th class="text-center">Unit Cost</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
+                                  
                                 </thead>
                                 
                                     <tbody >
-                                           @foreach($items as $item)
-
-                                                <tr>
-
-                                                    <td class="text-center">{{$item->id}}</td>
-                                                    <td>{{$item->name}}</td>
-                                                    <td class="text-center">{{$item->units}}</td>
-                                                    <td class="text-right">{{$item->unit_cost}}</td>
-                                                    <td class="text-right">?</td>
-                                                    <td class="text-right">?</td>
-                                                    <td class="text-center">
-                                                        <div class="btn-group">
-                                                        <a class="btn-primary btn btn-xs btn-add-items" onclick="confirmAddItem('{{$item->id}}'); return false;"><i class="fa fa-plus"></i></a>
-
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-
-                                            @endforeach 
+                                           
                                     </tbody>
                                 
                             </table> 

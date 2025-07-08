@@ -280,8 +280,6 @@ class ReturnsController extends Controller
                    $lessReturn =  $salesORder->total_sales - $returns->amount;
 
                    $salesORder->total_sales     =  $lessReturn;
-                   
-                   $salesORder->total_sales    =  $lessReturn;
 
                    $salesORder->save();
 
