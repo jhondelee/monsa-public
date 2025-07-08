@@ -11,18 +11,14 @@
             <div>
 
                 <h1 class="logo-name">
-
-                    <center>
-                        
-                        <img alt="image" width="150" height="150" class="img-responsive " src="/img/temporary-logo.jpg"/>
-
-                    </center>
-
+                  
+                        <img alt="image" width="500" height="500" class="img-responsive" src="/img/temporary-logo.jpg"/>
+                  
                 </h1>
 
             </div>
 
-            <h3><b>Sales and Inventory System</b>   </h3>
+            <h3>Monsa Sales and Inventory System</h3>
 
             @include('layouts.alert2')
 

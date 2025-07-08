@@ -58,7 +58,6 @@
                 <tr>
 
                     <th class="text-center">SO Number</th>
-                    <th>Customer</th>
                     <th>SO Date</th>
                     <th>SO Status</th>
                     <th class="text-center">Rate</th>

@@ -148,7 +148,6 @@
                             buttons: [],
                             columns: [
                                     {data: 'so_number', name: 'so_number'},
-                                    {data: 'cs_name', name: 'cs_name'},
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
                                     {data: 'rate', name: 'rate'},
@@ -221,7 +220,6 @@
                             buttons: [],
                             columns: [
                                     {data: 'so_number', name: 'so_number'},
-                                    {data: 'cs_name', name: 'cs_name'},
                                     {data: 'so_date', name: 'so_date'},
                                     {data: 'so_status', name: 'so_status'},
                                     {data: 'rate', name: 'rate'},
@@ -251,13 +249,12 @@
 
                             });
 
-
                             $('#total_sales_amount').val( _total_amount );
 
                             _total_amount = _total_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
                             $('#total_sales').val(  _total_amount  ); 
 
-                            _total_com = _total_com.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
                             $('#total_commission').val( _total_com );
                             
 
