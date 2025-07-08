@@ -362,8 +362,6 @@
 
  
         $('.chosen-select').chosen({width: "100%"});
-
-
         
         function confirmPost(data,model) {   
          $('#confirmPost').modal({ backdrop: 'static', keyboard: false })
